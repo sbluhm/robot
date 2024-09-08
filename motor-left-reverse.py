@@ -2,13 +2,13 @@ import RPi.GPIO as IO
 import time                        
 IO.setwarnings(False)          
 IO.setmode (IO.BCM)         
-IO.setup(12,IO.OUT)        
+IO.setup(13,IO.OUT)        
 #Reverse Pin
-IO.setup(5, IO.OUT)
+IO.setup(6, IO.OUT)
 # Reverse HIGH
-IO.output(5, False)
+IO.output(6, True)
 
-p = IO.PWM(12,1000)         
+p = IO.PWM(13,1000)         
 p.start(0)
 while 1:                              
     for x in range (50,100,10):                      

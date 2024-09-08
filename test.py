@@ -5,45 +5,43 @@ import RPi.GPIO as IO
 
 IO.setwarnings(False)          
 IO.setmode (IO.BCM)         
+#Right PWM Pin
 IO.setup(12,IO.OUT)
+#Left PWM Pin
 IO.setup(13,IO.OUT)
 #Left Reverse Pin
 IO.setup(5, IO.OUT)
-#Left Reverse HIGH
-IO.output(5, False)
 #Right Reverse Pin
 IO.setup(6, IO.OUT)
-#Right Reverse HIGH
-#IO.output(6, False)
 
-def forward(time=0.5, speed=50):
-    #Left Reverse HIGH
-    IO.output(5, False)
-    #Right Reverse HIGH
-    IO.output(6, True)
-    o.ChangeDutyCycle(speed)
-    p.ChangeDutyCycle(speed)
-    time.sleep(time)
-
-def reverse(time=0.5, speed=50):
+def forward(speed=20, runtime=0.5):
     #Left Reverse HIGH
     IO.output(5, True)
     #Right Reverse HIGH
     IO.output(6, False)
-    o.ChangeDutyCycle(speed)
-    p.ChangeDutyCycle(speed)
-    time.sleep(time)
+    right.ChangeDutyCycle(speed)
+    left.ChangeDutyCycle(speed)
+    time.sleep(runtime)
+
+def reverse(speed=20, runtime=0.5):
+    #Left Reverse HIGH
+    IO.output(5, False)
+    #Right Reverse HIGH
+    IO.output(6, True)
+    right.ChangeDutyCycle(speed)
+    left.ChangeDutyCycle(speed)
+    time.sleep(runtime)
 
 def idle():
     speed=0
-    o.ChangeDutyCycle(speed)
-    p.ChangeDutyCycle(speed)
+    right.ChangeDutyCycle(speed)
+    left.ChangeDutyCycle(speed)
 
 
-o = IO.PWM(12,1500)
-p = IO.PWM(13,1500)         
-o.start(0)
-p.start(0)
+right = IO.PWM(12,1500)
+left = IO.PWM(13,1500)         
+right.start(0)
+left.start(0)
 
 
 
@@ -73,14 +71,13 @@ try:
             curses.flushinp()
         elif char == curses.KEY_UP:
             forward()
-            screen.addstr(0, 0, f'Forward ')
+            screen.addstr(0, 0, 'Forward     ')
             curses.flushinp()
         elif char == curses.KEY_DOWN:
-            reverse()
-            screen.addstr(0, 0, 'down     ')
+            reverse(50)
+            screen.addstr(0, 0, 'Reverse     ')
             curses.flushinp()
-        else:
-            idle()
+        idle()
 finally:
     # shut down cleanly
     curses.nocbreak()
