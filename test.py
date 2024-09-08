@@ -11,7 +11,7 @@ IO.setup(12,IO.OUT)
 #Left PWM Pin
 IO.setup(13,IO.OUT)
 #Left Reverse Pin
-IO.setup(5, IO.OUT
+IO.setup(5, IO.OUT)
 #Left brake pin
 IO.setup(26, IO.OUT)
 
@@ -54,10 +54,6 @@ def idle():
     left.ChangeDutyCycle(speed)
 
 def stop():
-    #Left Reverse HIGH
-    IO.output(5, True)
-    #Right Reverse HIGH
-    IO.output(6, False)
     right.ChangeDutyCycle(0)
     left.ChangeDutyCycle(0)
     IO.output(25, True)
@@ -100,9 +96,14 @@ try:
             screen.addstr(0, 0, 'Forward     ')
             curses.flushinp()
         elif char == curses.KEY_DOWN:
-            reverse(50)
+            reverse(100)
             screen.addstr(0, 0, 'Reverse     ')
             curses.flushinp()
+        elif char == ord('s'):
+            screen.addstr(0, 0, 'Braking     ')
+            stop()
+            curses.flushinp()
+            time.sleep(5)
         idle()
 finally:
     # shut down cleanly
