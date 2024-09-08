@@ -1,3 +1,4 @@
+# https://pinout.xyz/pinout/pin37_gpio26/
 import curses
 import time
 
@@ -10,15 +11,25 @@ IO.setup(12,IO.OUT)
 #Left PWM Pin
 IO.setup(13,IO.OUT)
 #Left Reverse Pin
-IO.setup(5, IO.OUT)
+IO.setup(5, IO.OUT
+#Left brake pin
+IO.setup(26, IO.OUT)
+
 #Right Reverse Pin
 IO.setup(6, IO.OUT)
+#Right brake pin
+IO.setup(25, IO.OUT)
+
 
 def forward(speed=20, runtime=0.5):
     #Left Reverse HIGH
     IO.output(5, True)
     #Right Reverse HIGH
     IO.output(6, False)
+    #Release brakes
+    IO.output(25, False)
+    IO.output(26, False)
+
     right.ChangeDutyCycle(speed)
     left.ChangeDutyCycle(speed)
     time.sleep(runtime)
@@ -28,14 +39,29 @@ def reverse(speed=20, runtime=0.5):
     IO.output(5, False)
     #Right Reverse HIGH
     IO.output(6, True)
+    IO.output(25, False)
+    IO.output(26, False)
+
     right.ChangeDutyCycle(speed)
     left.ChangeDutyCycle(speed)
     time.sleep(runtime)
 
 def idle():
+    IO.output(25, False)
+    IO.output(26, False)
     speed=0
     right.ChangeDutyCycle(speed)
     left.ChangeDutyCycle(speed)
+
+def stop():
+    #Left Reverse HIGH
+    IO.output(5, True)
+    #Right Reverse HIGH
+    IO.output(6, False)
+    right.ChangeDutyCycle(0)
+    left.ChangeDutyCycle(0)
+    IO.output(25, True)
+    IO.output(26, True) 
 
 
 right = IO.PWM(12,1500)
