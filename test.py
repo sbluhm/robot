@@ -46,6 +46,26 @@ def reverse(speed=20, runtime=0.5):
     left.ChangeDutyCycle(speed)
     time.sleep(runtime)
 
+def cw(speed=50, runtime=0.5):
+    #Left Reverse HIGH
+    IO.output(5, False)
+    #Right Reverse HIGH
+    IO.output(6, False)
+    right.ChangeDutyCycle(speed)
+    left.ChangeDutyCycle(speed)
+    time.sleep(runtime)
+
+def ccw(speed=50, runtime=0.5):
+    #Left Reverse HIGH
+    IO.output(5, True)
+    #Right Reverse HIGH
+    IO.output(6, True)
+    right.ChangeDutyCycle(speed)
+    left.ChangeDutyCycle(speed)
+    time.sleep(runtime)
+
+
+
 def idle():
     IO.output(25, False)
     IO.output(26, False)
@@ -86,21 +106,23 @@ try:
             break
         elif char == curses.KEY_RIGHT:
             # print doesn't work with curses, use addstr instead
-            screen.addstr(0, 0, 'right')
+            screen.addstr(0, 0, 'Clockwise         ')
+            cw()
             curses.flushinp()
         elif char == curses.KEY_LEFT:
-            screen.addstr(0, 0, 'left ')
+            screen.addstr(0, 0, 'Counter Clockwise ')
+            ccw()
             curses.flushinp()
         elif char == curses.KEY_UP:
             forward()
-            screen.addstr(0, 0, 'Forward     ')
+            screen.addstr(0, 0, 'Forward           ')
             curses.flushinp()
         elif char == curses.KEY_DOWN:
             reverse(100)
-            screen.addstr(0, 0, 'Reverse     ')
+            screen.addstr(0, 0, 'Reverse           ')
             curses.flushinp()
         elif char == ord('s'):
-            screen.addstr(0, 0, 'Braking     ')
+            screen.addstr(0, 0, 'Braking           ')
             stop()
             curses.flushinp()
             time.sleep(5)
