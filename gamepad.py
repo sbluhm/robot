@@ -17,6 +17,8 @@ def main():
     if Gamepad.available():
         gamepad = gamepadType()
         print('Gamepad connected. Using Gamepad')
+    else:
+        print("Gamepad not found.")
 
     # Set some initial state
     speed = 0.0
@@ -31,13 +33,14 @@ def main():
         # Steering control (not inverted)
         steering = gamepad.axis(joystickSteering)
 
+        motor.vdrive(speed,steering)
 
-        if speed > 0:
-            motor.forward(speed*maxspeed)
-        elif speed < 0:
-            motor.reverse(speed*-1*maxspeed)
-        else:
-            motor.idle()
+#        if speed > 0:
+#            motor.forward(speed*maxspeed)
+#        elif speed < 0:
+#            motor.reverse(speed*-1*maxspeed)
+#        else:
+#            motor.idle()
     time.sleep(0.1)
 
 if __name__ == "__main__":

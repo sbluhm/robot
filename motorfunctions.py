@@ -22,6 +22,63 @@ left = IO.PWM(13,1500)
 right.start(0)
 left.start(0)
 
+# Vector Drive
+def vdrive(y,x,scale = 20):
+    wmax = 2  # maximale Leistung (beide motoren auf vollgas)
+    g = 2 # gewichtung des verhältnisses bewegung/einlenken
+
+    w = y * wmax   # die leistung die beide motoren liefern sollen
+    if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
+        r = -x
+        l = x
+    else:
+        t = w / (g+abs(x))
+        if x >= 0:
+            r = t
+            l = w - t
+        else:
+            r = w - t
+            l = t
+    if l > 1:
+        r = r / l
+        l = 1
+    elif r > 1:
+        l = l / r
+        r = 1
+    leftwheel(l*scale)
+    rightwheel(r*scale)
+   
+
+def leftwheel(vector):
+    # Release brakes
+
+    # Set direction
+    IO.output(25, False)
+    if vector > 0:
+        IO.output(5, True)
+    else:
+        IO.output(5, False)
+
+    # Power
+    left.ChangeDutyCycle(abs(vector))
+
+    print(f"Left Motor ({vector} %)")
+
+def rightwheel(vector):
+    # Release brakes
+
+    # Set direction
+    IO.output(26, False)
+    if vector > 0:
+        IO.output(6, False)
+    else:
+        IO.output(6, True)
+
+    # Power
+    right.ChangeDutyCycle(abs(vector))
+
+    print(f"Right Motor ({vector} %)")
+
 
 def forward(speed=20, runtime=0.5):
     #Left Reverse HIGH
