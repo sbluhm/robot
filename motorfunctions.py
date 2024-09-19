@@ -28,7 +28,7 @@ def vdrive(y,x,scale = 20):
     g = 2 # gewichtung des verhältnisses bewegung/einlenken
 
     w = y * wmax   # die leistung die beide motoren liefern sollen
-    if y == 0i:         # voller einschlag falls nur links/rechts betätigt wird
+    if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
         l = x
         r = -x
     else:
