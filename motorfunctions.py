@@ -24,41 +24,27 @@ left.start(0)
 
 # Vector Drive
 def vdrive(y,x,scale = 20):
-    wmax = 2  # maximale Leistung (beide motoren auf vollgas)
-    g = 2 # gewichtung des verhältnisses bewegung/einlenken
-
-    w = y * wmax   # die leistung die beide motoren liefern sollen
+    print(f"Input Vorwärts: {y}, Seitwärts: {x}")
     if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
         l = x
         r = -x
     else:
-#        t = w / (g+abs(x))
         if x >= 0:
             l = y
             r = y-x*y
-#            r = t
-#            l = w - t
         else:
-#            r = w - t
-#            l = t
             r = y
             l = y+x*y
 
-#    if l > 1:
-#        r = r / l
-#        l = 1
-#    elif r > 1:
-#        l = l / r
-#        r = 1
     leftwheel(l*scale)
     rightwheel(r*scale)
-   
+    time.sleep(0.5) 
 
 def leftwheel(vector):
     # Release brakes
+    IO.output(25, False)
 
     # Set direction
-    IO.output(25, False)
     if vector > 0:
         IO.output(5, True)
     else:
@@ -71,9 +57,9 @@ def leftwheel(vector):
 
 def rightwheel(vector):
     # Release brakes
+    IO.output(26, False)
 
     # Set direction
-    IO.output(26, False)
     if vector > 0:
         IO.output(6, False)
     else:
