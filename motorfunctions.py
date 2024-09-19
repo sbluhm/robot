@@ -28,23 +28,28 @@ def vdrive(y,x,scale = 20):
     g = 2 # gewichtung des verhältnisses bewegung/einlenken
 
     w = y * wmax   # die leistung die beide motoren liefern sollen
-    if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
-        r = -x
+    if y == 0i:         # voller einschlag falls nur links/rechts betätigt wird
         l = x
+        r = -x
     else:
-        t = w / (g+abs(x))
+#        t = w / (g+abs(x))
         if x >= 0:
-            r = t
-            l = w - t
+            l = x
+            r = y-x+y
+#            r = t
+#            l = w - t
         else:
-            r = w - t
-            l = t
-    if l > 1:
-        r = r / l
-        l = 1
-    elif r > 1:
-        l = l / r
-        r = 1
+#            r = w - t
+#            l = t
+            r = x
+            l = y+y*y
+
+#    if l > 1:
+#        r = r / l
+#        l = 1
+#    elif r > 1:
+#        l = l / r
+#        r = 1
     leftwheel(l*scale)
     rightwheel(r*scale)
    
