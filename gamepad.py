@@ -13,12 +13,15 @@ def main():
     joystickSpeed = 'LEFT-Y'
     joystickSteering = 'L2'
 
+
+
     # Wait for a connection
-    if Gamepad.available():
-        gamepad = gamepadType()
-        print('Gamepad connected. Using Gamepad')
-    else:
-        print("Gamepad not found.")
+    if not Gamepad.available():
+        print('Please connect your gamepad...')
+        while not Gamepad.available():
+            time.sleep(1.0)
+    gamepad = gamepadType()
+    print('Gamepad connected')
 
     # Set some initial state
     speed = 0.0
