@@ -34,14 +34,14 @@ def vdrive(y,x,scale = 20):
     else:
 #        t = w / (g+abs(x))
         if x >= 0:
-            l = x
+            l = y
             r = y-x*y
 #            r = t
 #            l = w - t
         else:
 #            r = w - t
 #            l = t
-            r = x
+            r = y
             l = y+x*y
 
 #    if l > 1:
