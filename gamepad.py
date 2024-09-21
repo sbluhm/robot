@@ -38,12 +38,6 @@ def main():
 
         motor.vdrive(speed,steering)
 
-#        if speed > 0:
-#            motor.forward(speed*maxspeed)
-#        elif speed < 0:
-#            motor.reverse(speed*-1*maxspeed)
-#        else:
-#            motor.idle()
     time.sleep(0.1)
 
 if __name__ == "__main__":
