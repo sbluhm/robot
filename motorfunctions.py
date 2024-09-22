@@ -45,10 +45,10 @@ def leftwheel(vector):
     IO.output(25, False)
 
     # Set direction
-    if vector > 0:
-        IO.output(5, True)
+    if vector < 0:
+        IO.output(6, True)
     else:
-        IO.output(5, False)
+        IO.output(6, False)
 
     # Power
     left.ChangeDutyCycle(abs(vector))
@@ -60,10 +60,10 @@ def rightwheel(vector):
     IO.output(26, False)
 
     # Set direction
-    if vector > 0:
-        IO.output(6, False)
+    if vector < 0:
+        IO.output(5, False)
     else:
-        IO.output(6, True)
+        IO.output(5, True)
 
     # Power
     right.ChangeDutyCycle(abs(vector))
