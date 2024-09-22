@@ -13,32 +13,36 @@ def main():
     joystickSpeed = 'LEFT-Y'
     joystickSteering = 'L2'
 
-
-
-    # Wait for a connection
-    if not Gamepad.available():
-        print('Please connect your gamepad...')
-        while not Gamepad.available():
-            time.sleep(1.0)
-    gamepad = gamepadType()
-    print('Gamepad connected')
-
     # Set some initial state
     speed = 0.0
     steering = 0.0
 
-    # Start the background updating
-    gamepad.startBackgroundUpdates()
-
     done = False
     while not done:
-        speed = -gamepad.axis(joystickSpeed)
-        # Steering control (not inverted)
-        steering = gamepad.axis(joystickSteering)
+        try:
+            if gamepad.isConnected():
+#                print("Gamepad Connected and functional")
+                speed = -gamepad.axis(joystickSpeed)
+            # Steering control (not inverted)
+                steering = gamepad.axis(joystickSteering)
+            else:
+#                print("Gamepad configured but disconnected")
+                gamepad.disconnect()
+        except:
+            speed = 0.0
+            steering = 0.0
+#            print("gamepad not functional")
+            if  Gamepad.available():
+#                print("Configuring gamepad")
+                gamepad = gamepadType()
+                gamepad.startBackgroundUpdates()
+                speed = -gamepad.axis(joystickSpeed)
+                steering = gamepad.axis(joystickSteering)
+
 
         motor.vdrive(speed,steering)
 
-#    time.sleep(0.1)
+#        time.sleep(0.5)
 
 if __name__ == "__main__":
     main()
