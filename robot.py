@@ -44,11 +44,11 @@ def main():
         elif char == curses.KEY_RIGHT:
             # print doesn't work with curses, use addstr instead
             screen.addstr(0, 0, 'Clockwise         ')
-            speed, steering = 0, 1
+            speed, steering = 0.2, 1
             curses.flushinp()
         elif char == curses.KEY_LEFT:
             screen.addstr(0, 0, 'Counter Clockwise ')
-            speed, steering = 0, -1
+            speed, steering = 0.2, -1
             curses.flushinp()
         elif char == curses.KEY_UP:
             screen.addstr(0, 0, 'Forward           ')
@@ -60,7 +60,7 @@ def main():
             curses.flushinp()
         elif char == ord('s'):
             screen.addstr(0, 0, 'Braking           ')
-            stop()
+            speed, steering = 0, 0
             curses.flushinp()
         else:
             try:
