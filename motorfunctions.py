@@ -24,7 +24,7 @@ left.start(0)
 
 # Vector Drive
 def vdrive(y,x,scale = 20):
-    print(f"Input Vorwärts: {y}, Seitwärts: {x}")
+#    print(f"Input Vorwärts: {y}, Seitwärts: {x}")
     if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
         l = x
         r = -x
@@ -38,7 +38,7 @@ def vdrive(y,x,scale = 20):
 
     leftwheel(l*scale)
     rightwheel(r*scale)
-    time.sleep(0.5) 
+#    time.sleep(0.5) 
 
 def leftwheel(vector):
     # Release brakes
@@ -53,7 +53,7 @@ def leftwheel(vector):
     # Power
     left.ChangeDutyCycle(abs(vector))
 
-    print(f"Left Motor ({vector} %)")
+#    print(f"Left Motor ({vector} %)")
 
 def rightwheel(vector):
     # Release brakes
@@ -68,7 +68,7 @@ def rightwheel(vector):
     # Power
     right.ChangeDutyCycle(abs(vector))
 
-    print(f"Right Motor ({vector} %)")
+#    print(f"Right Motor ({vector} %)")
 
 
 def forward(speed=20, runtime=0.5):
