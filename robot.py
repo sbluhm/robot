@@ -52,11 +52,11 @@ def main():
             curses.flushinp()
         elif char == curses.KEY_UP:
             screen.addstr(0, 0, 'Forward           ')
-            speed, steering = 20, 0
+            speed, steering = 0.2, 0
             curses.flushinp()
         elif char == curses.KEY_DOWN:
             screen.addstr(0, 0, 'Reverse           ')
-            speed, steering = -20, 0
+            speed, steering = -0.2, 0
             curses.flushinp()
         elif char == ord('s'):
             screen.addstr(0, 0, 'Braking           ')
