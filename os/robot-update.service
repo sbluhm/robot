@@ -1,0 +1,13 @@
+[Unit]
+Description=Robot updated
+#After=network.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/root/robot/os/90-update.sh
+RemainAfterExit=true
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
