@@ -6,7 +6,7 @@ IO.setmode (IO.BCM)
 
 #Ready LED
 LED=27
-IO.setupLED, IO.OUT)
+IO.setup(LED, IO.OUT)
 IO.output(LED, False)
 
 def systemready():
