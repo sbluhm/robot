@@ -39,6 +39,7 @@ systemctl enable robot-update.service
 systemctl enable robot.service
 systemctl start robot.service
 chmod a+x robot.py
+chmod a+x gamepad.py
 chmod a+x install.sh
 # this should be a dynamic link
 
