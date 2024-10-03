@@ -17,7 +17,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 
 ## Install
 sudo apt update
-sudo apt upgrade
+#sudo apt upgrade -y
 #sudo apt install ros-humble-ros-base
 #sudo apt install ros-dev-tools
 
@@ -38,8 +38,9 @@ systemctl daemon-reload
 systemctl enable robot-update.service
 systemctl enable robot.service
 systemctl start robot.service
-
+chmod a+x robot.py
+chmod a+x install.sh
 # this should be a dynamic link
 
 # Video
-pip install python3-opencv
+#pip install python3-opencv
