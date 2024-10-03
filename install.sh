@@ -33,8 +33,12 @@ sudo apt upgrade
 #do_i2c 0
 #cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
 cp /root/robot/os/robot-update.service /etc/systemd/system
+cp /root/robot/os/robot.service /etc/systemd/system
 systemctl daemon-reload
-systemctl enable robot-update.service 
+systemctl enable robot-update.service
+systemctl enable robot.service
+systemctl start robot.service
+
 # this should be a dynamic link
 
 # Video
