@@ -5,6 +5,7 @@ import Gamepad
 import time
 
 import motorfunctions as motor
+import displayfunctions as display
 
 maxspeed = 20
 
@@ -22,11 +23,13 @@ def main():
         try:
             if gamepad.isConnected():
 #                print("Gamepad Connected and functional")
+                display.systemready()
                 speed = -gamepad.axis(joystickSpeed)
             # Steering control (not inverted)
                 steering = gamepad.axis(joystickSteering)
             else:
 #                print("Gamepad configured but disconnected")
+                display.waiting()
                 gamepad.disconnect()
         except:
             speed = 0.0
@@ -34,6 +37,7 @@ def main():
 #            print("gamepad not functional")
             if  Gamepad.available():
 #                print("Configuring gamepad")
+                display.systemready()
                 gamepad = gamepadType()
                 gamepad.startBackgroundUpdates()
                 speed = -gamepad.axis(joystickSpeed)
