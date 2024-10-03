@@ -5,14 +5,15 @@ IO.setwarnings(False)
 IO.setmode (IO.BCM)
 
 #Ready LED
-IO.setup(17, IO.OUT)
-IO.output(5, False)
+LED=27
+IO.setupLED, IO.OUT)
+IO.output(LED, False)
 
 def systemready():
-    IO.output(5, True)
+    IO.output(LED, True)
 
 def waiting():
-    IO.output(5, True)
+    IO.output(LED, True)
     time.sleep(0.5)
-    IO.output(5, False)
-    
+    IO.output(LED, False)
+    time.sleep(0.5)    
