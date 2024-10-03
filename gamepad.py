@@ -34,6 +34,7 @@ def main():
         except:
             speed = 0.0
             steering = 0.0
+            display.waiting()
 #            print("gamepad not functional")
             if  Gamepad.available():
 #                print("Configuring gamepad")
