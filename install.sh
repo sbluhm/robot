@@ -30,24 +30,34 @@ sudo apt-get install git
 cd 
 git clone https://github.com/osrf/docker_images/
 cd docker_images/ros/humble/ubuntu/jammy/perception
+
+cat >> Dockerfile << EOF
+RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
+    ros-humble-joy \
+    python3-rpi.gpio \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
+RUN git clone https://github.com/sbluhm/robot /root/robot
+RUN cd /root/robot/ros2 && colcon build
+
+EOF
+
 docker build -t ros_docker .
 
 # Start container
-#sudo docker run -it --net=host ros_docker
 sudo docker run -it --net=host --privileged  ros_docker
-apt update
-#apt upgrade
 
 # Joypad
-apt -y install ros-humble-joy
-# https://index.ros.org/p/joy/github-ros-drivers-joystick_drivers/#humble
-export ROS_DOMAIN_ID=10
-ros2 run joy joy_enumerate_devices # show devices
-ros2 run joy joy_node
+#apt -y install ros-humble-joy
+## https://index.ros.org/p/joy/github-ros-drivers-joystick_drivers/#humble
+#export ROS_DOMAIN_ID=10
+#ros2 run joy joy_enumerate_devices # show devices
+#ros2 run joy joy_node
 #ros2 topic echo /joy # test joystick
 
-# RPi Ports
-apt install python3-rpi.gpio
+## RPi Ports
+#apt install python3-rpi.gpio
 
 
 # Start Node from host
