@@ -46,6 +46,10 @@ ros2 run joy joy_enumerate_devices # show devices
 ros2 run joy joy_node
 #ros2 topic echo /joy # test joystick
 
+# RPi Ports
+apt install python3-rpi.gpio
+
+
 # Start Node from host
 docker run -it --rm osrf/ros:foxy-desktop ros2 run demo_nodes_cpp talker
 
