@@ -7,4 +7,8 @@ def generate_launch_description():
             package='joy',
             executable='joy_node',
             name='joy_node'),
+        launch_ros.actions.Node(
+            package='zs_x11',
+            executable='zs_x11',
+            name='zs_x11'),
   ])
