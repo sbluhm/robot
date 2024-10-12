@@ -22,8 +22,7 @@ class MotorControllerROSWrapper(Node):
         pub_msg.x = joy_msg.axes[2]
         pub_msg.y = joy_msg.axes[1]
         self.drive_vector_pub.publish(pub_msg)
-        self.get_logger().info('Submitted from Joy to Drive')
-
+#        self.get_logger().info('Submitted from Joy to Drive')
 
 def main(args=None):
     rclpy.init(args=args)
