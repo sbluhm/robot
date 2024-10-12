@@ -27,20 +27,23 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 # Setup Docker container
 sudo apt-get install git
-cd 
+cd /tmp 
 git clone https://github.com/osrf/docker_images/
 cd docker_images/ros/humble/ubuntu/jammy/perception
 
 cat >> Dockerfile << EOF
+SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
+    vim \
     ros-humble-joy \
     python3-rpi.gpio \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN git clone https://github.com/sbluhm/robot /root/robot
-RUN cd /root/robot/ros2 && colcon build
-
+RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
+RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
+RUN echo "ros2 launch robot_launcher robot_launch.py" > /start.sh && chmod a+x /start.sh
 EOF
 
 docker build -t ros_docker .
@@ -56,25 +59,12 @@ sudo docker run -it --net=host --privileged  ros_docker
 #ros2 run joy joy_node
 #ros2 topic echo /joy # test joystick
 
-## RPi Ports
-#apt install python3-rpi.gpio
 
 
 # Start Node from host
-docker run -it --rm osrf/ros:foxy-desktop ros2 run demo_nodes_cpp talker
+sudo docker run  --net=host --privileged -it ros_docker ros2 launch robot_launcher robot_launch.py
 
-## Setup sources
-sudo apt install software-properties-common
-sudo add-apt-repository universe
-sudo apt update && sudo apt install curl -y
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-## Install
-sudo apt update
-#sudo apt upgrade -y
-#sudo apt install ros-humble-ros-base
-#sudo apt install ros-dev-tools
 
 #/boot/config.txt
 # hdmi_force_hotplug=1
