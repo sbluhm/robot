@@ -19,7 +19,7 @@ class MotorControllerROSWrapper(Node):
 
     def callback_joy(self, joy_msg):
         pub_msg = Vector()
-        pub_msg.x = joy_msg.axes[2]
+        pub_msg.x = -1*joy_msg.axes[2]
         pub_msg.y = joy_msg.axes[1]
         self.drive_vector_pub.publish(pub_msg)
 #        self.get_logger().info('Submitted from Joy to Drive')
