@@ -43,7 +43,7 @@ RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN git clone https://github.com/sbluhm/robot /root/robot
 RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
-RUN echo "ros2 launch robot_launcher robot_launch.py" > /start.sh && chmod a+x /start.sh
+RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
 EOF
 
 docker build -t ros_docker .
