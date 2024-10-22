@@ -23,11 +23,12 @@ right.start(0)
 left.start(0)
 
 class MotorDriver:
-    def __init__(self, max_speed=50):
+    def __init__(self, max_speed=50, scale_speed=50):
         """
         Init communication, set default settings, ...
         """
         self.max_speed = max_speed
+        self.scale_speed = scale_speed
         self.current_speed = 0
         self.voltage = 12
         self.temperature = 47
@@ -64,7 +65,7 @@ class MotorDriver:
             'voltage': self.voltage
         }
 # Vector Drive
-    def vdrive(self,y,x,scale = 20):
+    def vdrive(self,y,x,scale = self.scale_speed):
         if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
             l = x
             r = -x

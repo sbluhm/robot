@@ -15,6 +15,7 @@ class MotorDriverROSWrapper(Node):
     def __init__(self):
         super().__init__('zs_x11_driver')
         self.declare_parameter('~max_speed', 8)
+        self.declare_parameter('~scale_speed', 50)
         self.declare_parameter('~publish_current_speed_frequency', 5.0)
         self.declare_parameter('~publish_motor_status_frequency', 1.0)
 
@@ -22,10 +23,11 @@ class MotorDriverROSWrapper(Node):
         self.publisher_ = self.create_publisher(String, 'topic', 10)
 
         max_speed = self.get_parameter('~max_speed').get_parameter_value().double_value
+        scale_speed = self.get_parameter('~scale_speed').get_parameter_value().integer_value
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
 
-        self.motor = MotorDriver(max_speed=max_speed)
+        self.motor = MotorDriver(max_speed=max_speed, scale_speed=scale_speed)
         self.drive_vector_last_message = time.time()
         self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector', self.callback_drive_vector, 10)
         self.drive_vector_sub
