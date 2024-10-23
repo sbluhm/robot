@@ -6,7 +6,7 @@ IO.setmode (IO.BCM)
 IO.setup(8,IO.OUT)        
 
 
-p = IO.PWM(8,1000)
+p = IO.PWM(8,50000)
 #IN1
 IO.setup(7, IO.OUT)
 IO.output(7, False)

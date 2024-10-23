@@ -11,7 +11,11 @@ def generate_launch_description():
             package='zs_x11',
             executable='zs_x11',
             name='zs_x11'),
-       launch_ros.actions.Node(
+        launch_ros.actions.Node(
+            package='l298n',
+            executable='l298n',
+            name='l298n'),
+        launch_ros.actions.Node(
             package='motorcontroller',
             executable='motorcontroller',
             name='motorcontroller'),
