@@ -31,11 +31,15 @@ cd /tmp
 git clone https://github.com/osrf/docker_images/
 cd docker_images/ros/humble/ubuntu/jammy/perception
 
+
+# ggfs wird ros-humble-image-transport-plugins benötigt
 cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim \
     ros-humble-joy \
+    v4l-utils \
+    ros-humble-v4l2-camera \
     python3-rpi.gpio \
     && rm -rf /var/lib/apt/lists/*
 
@@ -90,3 +94,5 @@ chmod a+x install.sh
 
 # Video
 #pip install python3-opencv
+# Test devices on Pi
+# v4l2-ctl --list-devices
