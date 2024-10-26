@@ -15,15 +15,15 @@ class ImuDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('lsm6ds3_driver')
-        self.declare_parameter('~gyro_range", LSM6DS3.GYR_250_DEG_S);
-        self.declare_parameter('~accel_range", LSM6DS3.ACC_2_G);
-        self.declare_parameter('~dlpf_bandwidth", LSM6DS3.DLPF_260_HZ);
-        self.declare_parameter('~gyro_x_offset", 0.0);
-        self.declare_parameter('~gyro_y_offset", 0.0);
-        self.declare_parameter('~gyro_z_offset", 0.0);
-        self.declare_parameter('~accel_x_offset", 0.0);
-        self.declare_parameter('~accel_y_offset", 0.0);
-        self.declare_parameter('~accel_z_offset", 0.0);
+        self.declare_parameter('~gyro_range', LSM6DS3.GYR_250_DEG_S);
+        self.declare_parameter('~accel_range', LSM6DS3.ACC_2_G);
+        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.DLPF_260_HZ);
+        self.declare_parameter('~gyro_x_offset', 0.0);
+        self.declare_parameter('~gyro_y_offset', 0.0);
+        self.declare_parameter('~gyro_z_offset', 0.0);
+        self.declare_parameter('~accel_x_offset', 0.0);
+        self.declare_parameter('~accel_y_offset', 0.0);
+        self.declare_parameter('~accel_z_offset', 0.0);
 
         self.publisher_ = self.create_publisher(Stringi, 'topic', 10)
 
@@ -53,19 +53,19 @@ class ImuDriverROSWrapper(Node):
         message = Imu()
 # use TIMESTAMP0_REG
 
-	message.header.stamp = time.time()
-	message.header.frame_id = "base_link";
-	message.linear_acceleration_covariance = [0,0,0];
-	message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = LSM6DS3.getAccData();
-	message.angular_velocity_covariance[0] = 0;
-	message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = LSM6DS3.getGyroData();
-	// Invalidate quaternion
-	message.orientation_covariance[0] = -1;
-	message.orientation.x = 0;
-	message.orientation.y = 0;
-	message.orientation.z = 0;
-	message.orientation.w = 0;
-	self.imu_pub.publish(message)
+        message.header.stamp = time.time()
+        message.header.frame_id = "base_link";
+        message.linear_acceleration_covariance = [0,0,0];
+        message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = LSM6DS3.getAccData();
+        message.angular_velocity_covariance[0] = 0;
+        message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = LSM6DS3.getGyroData();
+# Invalidate quaternion
+        message.orientation_covariance[0] = -1;
+        message.orientation.x = 0;
+        message.orientation.y = 0;
+        message.orientation.z = 0;
+        message.orientation.w = 0;
+        self.imu_pub.publish(message)
 
 
 def main(args=None):
