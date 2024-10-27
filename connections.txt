@@ -1,0 +1,41 @@
+# Used Raspi Connections
+01 - 3v3 lsm6ds3 vcc
+02 - 5v Raspberry Power in orange
+03 - SDA lsm6ds3 smbus data
+04 5v
+05 - SCL lsm6ds3 smbus clock
+06 - GND Raspberry ground gelb
+07 
+08
+09 - GND lsm6ds3 ground
+10
+11
+12
+13 - GPIO27 status led anode
+14 - GND status led ground
+15
+16
+17
+18
+19
+20
+21 - GPI9 - l298n/irf3205 orange
+22 - GPIO25 righz ZS_x11 brake
+23 - GPIO11 l298b/irf3205 rot
+24 - GPIO8 l298n/irf3205 blau
+25 GND
+26 - GPIO7 l298n/irf3205 grün
+27 - GPIO0 l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
+28 - GPIO1 l298n/delete? gelb
+29 - GPIO5 left zs_x11 reverse
+30 - GND right zs_x11 ground
+31 - GPIO7 right zs_x11 reverse
+32 - PWM0 right zs_x11 speed
+33 - PWM1 left zs_x11 speed
+34 - GND left zs_x11 ground
+35
+36
+37 - GPIO26 left zs_x11 brake
+38
+39
+40

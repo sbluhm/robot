@@ -36,7 +36,7 @@ class MotorDriverROSWrapper(Node):
     def publish_current_speed_a(self, event=None):
         msg = Int32()
         msg.data = int(self.motor.get_speed_a())
-        self.current_speed_a_pub.publish_a(msg)
+        self.current_speed_a_pub.publish(msg)
 
     def stop_a(self):
         self.get_logger().info('Stopping')
