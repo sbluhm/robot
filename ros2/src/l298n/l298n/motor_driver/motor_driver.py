@@ -12,7 +12,7 @@ IO.output(7, False)
 #IN02
 IO.setup(1, IO.OUT)
 IO.output(1, False)
-
+motor_a.start(0)
 
 
 class MotorDriver:
@@ -32,7 +32,6 @@ class MotorDriver:
             self.current_speed_a = speed
         else:
             self.current_speed_a = self.max_speed_a
-        motor_a.start(0)
         motor_a.ChangeDutyCycle(self.current_speed_a)
         if self.current_speed_a > 0:
             IO.output(1, True)
