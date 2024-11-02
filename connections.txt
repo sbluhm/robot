@@ -2,7 +2,7 @@
 01 - 3v3 lsm6ds3 vcc
 02 - 5v Raspberry Power in orange
 03 - SDA lsm6ds3 smbus data
-04 5v
+04 - 5v irf3205 blau
 05 - SCL lsm6ds3 smbus clock
 06 - GND Raspberry ground gelb
 07 
@@ -11,31 +11,31 @@
 10
 11
 12
-13 - GPIO27 status led anode
-14 - GND status led ground
+13 - GPIO27 status led anode grün
+14 - GND status led ground weiss
 15
 16
 17
 18
-19
+19 - GPIO10 - irf3205 grün
 20
-21 - GPI9 - l298n/irf3205 orange
-22 - GPIO25 righz ZS_x11 brake
-23 - GPIO11 l298b/irf3205 rot
-24 - GPIO8 l298n/irf3205 blau
-25 GND
-26 - GPIO7 l298n/irf3205 grün
+21 - GPIO9 - l298n/irf3205 PWM1 gelb 
+22 - GPIO25 right ZS_x11 brake
+23 - GPIO11 l298b/irf3205 PWM2 rot
+24 - GPIO8 l298n/irf3205 DIR2 orange
+25 - GND irf3205 braun
+26 - GPIO7 l298n/irf3205 DIR1 grün
 27 - GPIO0 l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
 28 - GPIO1 l298n/delete? gelb
-29 - GPIO5 left zs_x11 reverse
-30 - GND right zs_x11 ground
-31 - GPIO7 right zs_x11 reverse
-32 - PWM0 right zs_x11 speed
-33 - PWM1 left zs_x11 speed
-34 - GND left zs_x11 ground
+29 - GPIO5 right zs_x11 reverse weiss
+30 - GND right zs_x11 ground grau
+31 - GPIO7 right zs_x11 reverse grau
+32 - PWM0 right zs_x11 speed lila
+33 - PWM1 left zs_x11 speed weiss
+34 - GND left zs_x11 ground schwarz
 35
 36
-37 - GPIO26 left zs_x11 brake
+37 - GPIO26 left zs_x11 brake lila
 38
 39
 40
