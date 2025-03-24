@@ -23,7 +23,7 @@ right.start(0)
 left.start(0)
 
 class MotorDriver:
-    def __init__(self, max_speed=50, scale_speed=50):
+    def __init__(self, max_speed=100, scale_speed=100):
         """
         Init communication, set default settings, ...
         """

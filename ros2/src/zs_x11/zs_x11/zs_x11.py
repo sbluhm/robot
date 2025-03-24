@@ -14,8 +14,8 @@ class MotorDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('zs_x11_driver')
-        self.declare_parameter('~max_speed', 8)
-        self.declare_parameter('~scale_speed', 50)
+        self.declare_parameter('~max_speed', 100)
+        self.declare_parameter('~scale_speed', 100)
         self.declare_parameter('~publish_current_speed_frequency', 5.0)
         self.declare_parameter('~publish_motor_status_frequency', 1.0)
 
