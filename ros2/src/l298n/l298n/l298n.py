@@ -53,7 +53,7 @@ class MotorDriverROSWrapper(Node):
         return response
 
 
-def main():
+def main(args=None):
     rclpy.init(args=args)
 
     motor_driver_wrapper = MotorDriverROSWrapper()
