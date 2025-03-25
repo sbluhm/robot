@@ -22,7 +22,7 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='v4l2_camera',
             executable='v4l2_camera_node',
-            name='v4l2_camera'
+            name='v4l2_camera',
             arguments=['-p', 'image_size:="[640,480]"',
                 '-p', 'camera_frame_id:=camera_optical_link',
                 '-p', 'brightness:=128'
