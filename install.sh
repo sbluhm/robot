@@ -1,6 +1,8 @@
 # Installing ROS
 # Only works on 64bit OS (Raspberry OS 64bit)
 
+sudo apt autoremove
+
 ## Set locale
 if [[ $(locale | grep UTF-8) ]]; then
 apt update && sudo apt install locales
@@ -12,7 +14,7 @@ fi
 
 # Install docker
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-sudp apt update
+sudo apt update
 sudo apt upgrade
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -53,7 +55,7 @@ EOF
 docker build -t ros_docker .
 
 # Start container
-sudo docker run -it --net=host --privileged  ros_docker
+sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged  ros_docker
 
 # Joypad
 #apt -y install ros-humble-joy
@@ -96,3 +98,24 @@ chmod a+x install.sh
 #pip install python3-opencv
 # Test devices on Pi
 # v4l2-ctl --list-devices
+# Stream latency free
+# apt install v4l-utils ffmpeg netcat-openbsd
+# ffmpeg -i /dev/video0 -codec copy - | nc -l 9999
+
+# on fedora
+
+#dnf install kernel-devel kernel-headers dkms v4l-utils
+#git clone https://github.com/umlaeute/v4l2loopback.git
+#cd v4l2loopback
+#make
+#sudo cp -R . /usr/src/v4l2loopback-1.1
+#sudo dkms add -m v4l2loopback -v 1.1
+#sudo dkms build -m v4l2loopback -v 1.1
+#sudo dkms install -m v4l2loopback -v 1.1
+# import dkms key into safeboot
+#sudo mokutil --import /var/lib/dkms/mok.pub
+
+#reboot now
+#after reboot execute the following commands
+#sudo depmod -a
+#sudo modprobe v4l2loopback card_label="Camera" 
