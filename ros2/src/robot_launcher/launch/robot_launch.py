@@ -1,7 +1,15 @@
+from ament_index_python.packages import get_package_share_directory
+
 import launch
 import launch_ros.actions
+import os
 
 def generate_launch_description():
+    config = os.path.join(
+        get_package_share_directory('robot_launcher'),
+        'config',
+        'drivespecs.yaml')
+
     return launch.LaunchDescription([
         launch_ros.actions.Node(
             package='joy',
@@ -10,7 +18,8 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
-            name='zs_x11'),
+            name='zs_x11',
+            parameters=[config]),
         launch_ros.actions.Node(
             package='l298n',
             executable='l298n',
