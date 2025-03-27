@@ -50,6 +50,8 @@ RUN git clone https://github.com/sbluhm/robot /root/robot
 RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
 RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
+RUN echo "cd /root/robot && git pull" > /update && chmod a+x /update
+RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build" >> /update
 EOF
 
 # Delete the build cache before building
