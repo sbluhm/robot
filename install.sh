@@ -52,6 +52,8 @@ RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' 
 RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
 EOF
 
+# Delete the build cache before building
+docker builder prune --all
 docker build -t ros_docker .
 
 # Start container
@@ -68,7 +70,7 @@ sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged  ros_doc
 
 
 # Start Node from host
-sudo docker run  --net=host --privileged -it ros_docker ros2 launch robot_launcher robot_launch.py
+sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_docker ros2 launch robot_launcher robot_launch.py
 
 
 
