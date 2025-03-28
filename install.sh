@@ -56,8 +56,8 @@ RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon bui
 EOF
 
 # Delete the build cache before building
-docker builder prune --all
-docker build -t ros_docker .
+sudo docker builder prune --all
+sudo docker build -t ros_docker .
 
 # Start container
 sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker
