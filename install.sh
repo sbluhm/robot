@@ -41,16 +41,17 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-reco
     vim \
     ros-humble-joy \
     v4l-utils \
-    ros-humble-v4l2-camera \
-    python3-rpi.gpio \
-    && rm -rf /var/lib/apt/lists/*
-
+    ros-humble-v4l2-camera
+RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
+RUN rm -rf /var/lib/apt/lists/*
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN git clone https://github.com/sbluhm/robot /root/robot
 RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
 RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
 RUN echo "cd /root/robot && git pull" > /update && chmod a+x /update
+RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi; fi
+
 RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build" >> /update
 EOF
 
@@ -59,7 +60,7 @@ docker builder prune --all
 docker build -t ros_docker .
 
 # Start container
-sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged  ros_docker
+sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker
 
 # Joypad
 #apt -y install ros-humble-joy
@@ -68,6 +69,7 @@ sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged  ros_doc
 #ros2 run joy joy_enumerate_devices # show devices
 #ros2 run joy joy_node
 #ros2 topic echo /joy # test joystick
+#sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker ros2 run joy joy_node
 
 
 
