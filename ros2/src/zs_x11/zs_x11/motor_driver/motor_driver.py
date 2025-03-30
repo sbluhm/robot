@@ -17,8 +17,8 @@ IO.setup(6, IO.OUT)
 #Right brake pin
 IO.setup(25, IO.OUT)
 
-right = IO.PWM(12,15000)
-left = IO.PWM(13,15000)
+right = IO.PWM(12,10000)
+left = IO.PWM(13,10000)
 right.start(0)
 left.start(0)
 
