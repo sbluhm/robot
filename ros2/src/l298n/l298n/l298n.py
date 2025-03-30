@@ -27,7 +27,7 @@ class MotorDriverROSWrapper(Node):
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
 
-        self.motor = MotorDriver(max_speed_a=max_speed_a, step_speed_a=self.step_speed_a)
+        self.motor = MotorDriver(max_speed_a=max_speed_a)
         self.speed_command_sub_a = self.create_subscription(Int32, 'speed_command_a', self.callback_speed_command_a, 10)
         self.speed_command_sub_a  # prevent unused variable warning
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor_a', self.callback_stop_a)

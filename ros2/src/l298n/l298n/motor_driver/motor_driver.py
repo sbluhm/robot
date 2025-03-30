@@ -16,12 +16,11 @@ motor_a.start(0)
 
 
 class MotorDriver:
-    def __init__(self, max_speed_a=100, scale_speed_a=100, max_speed_b=100, scale_speed_b=100):
+    def __init__(self, max_speed_a=50, max_speed_b=100, scale_speed_b=100):
         """
         Init communication, set default settings, ...
         """
         self.max_speed_a = max_speed_a
-        self.scale_speed_a = scale_speed_a
         self.current_speed_a = 0
 
     def set_speed_a(self, speed):
