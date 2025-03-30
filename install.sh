@@ -71,6 +71,16 @@ sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_dock
 #ros2 topic echo /joy # test joystick
 #sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker ros2 run joy joy_node
 
+# PS4 controller
+# sudo bluetoothctl
+#agent on
+#discoverable on
+#pairable on
+#default-agent
+#scan on
+#connect CONTROLLER_MAC_ADDRESS
+#trust CONTROLLER_MAC_ADDRESS
+# systemctl enable --now bluetooth 
 
 
 # Start Node from host
