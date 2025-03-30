@@ -22,7 +22,7 @@ class MotorDriverROSWrapper(Node):
 
         self.publisher_ = self.create_publisher(String, 'topic', 10)
 
-        max_speed_a = self.get_parameter('~max_speed_a').get_parameter_value().double_value
+        max_speed_a = self.get_parameter('~max_speed_a').get_parameter_value().integer_value
         self.step_speed_a = self.get_parameter('~step_speed_a').get_parameter_value().integer_value
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
