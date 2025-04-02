@@ -6,7 +6,8 @@ After=syslog.target
 Type=simple
 User=root
 WorkingDirectory=/tmp
-ExecStart=/root/robot/gamepad.py
+#ExecStart=/root/robot/gamepad.py
+ExecStart=sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged ros_docker ros2 launch robot_launcher robot_launch.py
 SyslogIdentifier=robot
 StandardOutput=syslog
 StandardError=syslog
