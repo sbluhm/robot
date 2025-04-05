@@ -1,11 +1,12 @@
 # Installing ROS
 # Only works on 64bit OS (Raspberry OS 64bit)
 
-sudo apt autoremove
+sudo apt -y autoremove
+apt-get -y update
 
 ## Set locale
 if [[ $(locale | grep UTF-8) ]]; then
-apt update && sudo apt install locales
+sudo apt-get -y install locales
 locale-gen de_DE de_DE.UTF-8
 update-locale LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8
 export LANG=de_DE.UTF-8
@@ -13,10 +14,9 @@ fi
 
 
 # Install docker
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-sudo apt update
-sudo apt upgrade
-sudo apt-get install ca-certificates curl
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
+sudo apt-get -y upgrade
+sudo apt-get -y install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -24,11 +24,10 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Setup Docker container
-sudo apt-get install git
+sudo apt-get -y install git
 cd /tmp 
 git clone https://github.com/osrf/docker_images/
 cd docker_images/ros/humble/ubuntu/jammy/perception
@@ -37,7 +36,7 @@ cd docker_images/ros/humble/ubuntu/jammy/perception
 # ggfs wird ros-humble-image-transport-plugins benötigt
 cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
-RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
+RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim \
     ros-humble-joy \
     v4l-utils \
@@ -45,7 +44,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y --no-install-reco
 RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
 RUN rm -rf /var/lib/apt/lists/*
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
-RUN git clone https://github.com/sbluhm/robot /root/robot
+RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
 RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
 RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
@@ -55,8 +54,8 @@ RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /roo
 RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build" >> /update
 EOF
 
-# Delete the build cache before building
-sudo docker builder prune --all
+# Delete the build cache before building to force OS update
+#sudo docker builder prune --all
 sudo docker build -t ros_docker .
 
 # Start container
@@ -90,9 +89,8 @@ sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_doc
 
 #/boot/config.txt
 # hdmi_force_hotplug=1
-# apt update
-# apt upgrade
-# apt-get install i2c-tools pip
+# apt-get -y upgrade
+# apt-get -y install i2c-tools pip
 # pip install smbus2
 
 # Enable i2c
@@ -115,7 +113,7 @@ chmod a+x install.sh
 # Test devices on Pi
 # v4l2-ctl --list-devices
 # Stream latency free
-# apt install v4l-utils ffmpeg netcat-openbsd
+# apt-get -y install v4l-utils ffmpeg netcat-openbsd
 # ffmpeg -i /dev/video0 -codec copy - | nc -l 9999
 
 # on fedora
