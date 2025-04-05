@@ -5,7 +5,7 @@ IO.setmode (IO.BCM)
 
 IO.setup(8,IO.OUT)
 
-motor_a = IO.PWM(8,10000)
+motor_a = IO.PWM(8,8000)
 #IN01
 IO.setup(7, IO.OUT)
 IO.output(7, False)
@@ -33,7 +33,7 @@ class MotorDriver:
             self.current_speed_a = self.max_speed_a
         motor_a.ChangeDutyCycle(self.current_speed_a)
         print(f"Current brush speed = {self.current_speed_a}")
-        if self.current_speed_a > 0:
+        if self.current_speed_a < 0:
             IO.output(1, True)
             IO.output(7, False)
         else:
