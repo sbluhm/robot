@@ -12,6 +12,10 @@ def generate_launch_description():
 
     return launch.LaunchDescription([
         launch_ros.actions.Node(
+            package='status_led',
+            executable='status_led',
+            name='status_led'),
+        launch_ros.actions.Node(
             package='joy',
             executable='joy_node',
             name='joy_node'),
