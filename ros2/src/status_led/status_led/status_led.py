@@ -18,6 +18,7 @@ class StatusLedROSWrapper(Node):
 
     def __init__(self):
         super().__init__('status_led')
+        self.joy_last_message = 0
 
         self.led_flash()
 
@@ -27,10 +28,11 @@ class StatusLedROSWrapper(Node):
         self.timer = self.create_timer(1, self.timer_check_system_status)
 
     def callback_joy(self, joy_msg):
+        self.joy_last_message = time.time()
         self.led_on()
 
     def timer_check_system_status(self):
-        if self.joy_sub + 1 <= time.time():
+        if self.joy_last_message + 1 <= time.time():
             self.led_flash()
 
     def led_flash(self):
