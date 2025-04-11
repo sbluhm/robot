@@ -5,7 +5,7 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 from std_msgs.msg import Int32
-from std_msgs.msg import Imu
+from sensor_msgs.msg import Imu
 from std_srvs.srv import Trigger
 import time
 from custom_interfaces.msg import Vector

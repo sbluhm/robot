@@ -40,7 +40,8 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     vim \
     ros-humble-joy \
     v4l-utils \
-    ros-humble-v4l2-camera
+    ros-humble-v4l2-camera \
+    python3-smbus2
 RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
 RUN rm -rf /var/lib/apt/lists/*
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
@@ -50,7 +51,7 @@ RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' 
 RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
 RUN echo "cd /root/robot && git pull" > /update && chmod a+x /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi; fi
-
+RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/smbus2; cp /root/robot/os/smbus2/* /lib/python3.10/smbus2; fi
 RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build" >> /update
 EOF
 
@@ -60,6 +61,8 @@ sudo docker build -t ros_docker .
 
 # Start container
 sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker
+#sudo docker exec -it `sudo docker ps | grep ros_docker | sed 's/ .*//'` bash
+
 
 # Joypad
 #apt -y install ros-humble-joy
@@ -92,6 +95,7 @@ sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_doc
 # apt-get -y upgrade
 # apt-get -y install i2c-tools pip
 # pip install smbus2
+# sudo dnf install i2c-tools
 
 # Enable i2c
 #. raspi-config nonint
@@ -132,4 +136,13 @@ chmod a+x install.sh
 #reboot now
 #after reboot execute the following commands
 #sudo depmod -a
-#sudo modprobe v4l2loopback card_label="Camera" 
+#sudo modprobe v4l2loopback card_label="Camera"
+
+
+#if which udevadm > /dev/null; then
+#  set +e # Disable exit on error
+#  udevadm control --reload-rules
+#  service udev restart
+#  udevadm trigger
+#  set -e # Re-enable exit on error
+#fi 
