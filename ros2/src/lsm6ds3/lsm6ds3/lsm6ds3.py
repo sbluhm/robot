@@ -15,9 +15,10 @@ class ImuDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('lsm6ds3_driver')
-        self.declare_parameter('~gyro_range', LSM6DS3.GYR_250_DEG_S);
-        self.declare_parameter('~accel_range', LSM6DS3.ACC_2_G);
-        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.DLPF_260_HZ);
+        self.declare_parameter('~gyro_range', LSM6DS3.GYRO_SCALE_250DPS);
+        self.declare_parameter('~accel_range', LSM6DS3.ACC_SCALE_2G);
+#        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.DLPF_260_HZ);
+        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.GYRO_ODR_208_HZ);
         self.declare_parameter('~gyro_x_offset', 0.0);
         self.declare_parameter('~gyro_y_offset', 0.0);
         self.declare_parameter('~gyro_z_offset', 0.0);
