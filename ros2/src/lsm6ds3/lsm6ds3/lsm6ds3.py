@@ -62,11 +62,11 @@ class ImuDriverROSWrapper(Node):
         message.angular_velocity_covariance[0] = 0;
         message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = self.imu.getGyroData();
 # Invalidate quaternion
-        message.orientation_covariance[0] = -1;
-        message.orientation.x = 0;
-        message.orientation.y = 0;
-        message.orientation.z = 0;
-        message.orientation.w = 0;
+        message.orientation_covariance[0] = -1.0;
+        message.orientation.x = 0.0;
+        message.orientation.y = 0.0;
+        message.orientation.z = 0.0;
+        message.orientation.w = 0.0;
         self.imu_pub.publish(message)
 
 
