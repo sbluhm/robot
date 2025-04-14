@@ -57,10 +57,10 @@ class ImuDriverROSWrapper(Node):
 
         message.header.stamp = self.get_clock().now().to_msg()
         message.header.frame_id = "base_link";
-        message.linear_acceleration_covariance = [0,0,0];
-        message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = LSM6DS3.getAccData();
+        message.linear_acceleration_covariance = [ 0.0, 0.0, 0.0,  0.0, 0.0, 0.0,  0.0, 0.0, 0.0 ]
+        message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = self.imu.getAccData();
         message.angular_velocity_covariance[0] = 0;
-        message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = LSM6DS3.getGyroData();
+        message.angular_velocity.x, message.angular_velocity.y, message.angular_velocity.z = self.imu.getGyroData();
 # Invalidate quaternion
         message.orientation_covariance[0] = -1;
         message.orientation.x = 0;
