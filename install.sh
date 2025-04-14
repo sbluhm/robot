@@ -2,7 +2,7 @@
 # Only works on 64bit OS (Raspberry OS 64bit)
 
 sudo apt -y autoremove
-apt-get -y update
+sudo apt-get -y update
 
 ## Set locale
 if [[ $(locale | grep UTF-8) ]]; then
@@ -46,9 +46,9 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     python3-smbus2
 RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
+RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
-RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
 RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi; fi
