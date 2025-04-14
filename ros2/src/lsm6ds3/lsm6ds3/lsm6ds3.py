@@ -1,4 +1,4 @@
-from .imu_driver.lsm6ds3 import LSM6DS3
+from .imu_driver.lsm6ds3 import *
 
 import rclpy
 from rclpy.node import Node
@@ -15,10 +15,10 @@ class ImuDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('lsm6ds3_driver')
-        self.declare_parameter('~gyro_range', LSM6DS3.GYRO_SCALE_250DPS);
-        self.declare_parameter('~accel_range', LSM6DS3.ACC_SCALE_2G);
-#        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.DLPF_260_HZ);
-        self.declare_parameter('~dlpf_bandwidth', LSM6DS3.GYRO_ODR_208_HZ);
+        self.declare_parameter('~gyro_range', GYRO_SCALE_250DPS);
+        self.declare_parameter('~accel_range', ACC_SCALE_2G);
+#        self.declare_parameter('~dlpf_bandwidth', DLPF_260_HZ);
+        self.declare_parameter('~dlpf_bandwidth', GYRO_ODR_208_HZ);
         self.declare_parameter('~gyro_x_offset', 0.0);
         self.declare_parameter('~gyro_y_offset', 0.0);
         self.declare_parameter('~gyro_z_offset', 0.0);
@@ -26,10 +26,11 @@ class ImuDriverROSWrapper(Node):
         self.declare_parameter('~accel_y_offset', 0.0);
         self.declare_parameter('~accel_z_offset', 0.0);
 
-        self.publisher_ = self.create_publisher(Stringi, 'topic', 10)
+        self.publisher_ = self.create_publisher(String, 'topic', 10)
 
         gyroRange = self.get_parameter('~gyro_range').get_parameter_value().integer_value
         accelerometerRange = self.get_parameter('~accel_range').get_parameter_value().integer_value
+# division by 0
         publish_ims_frequency = 1.0/self.get_parameter('~gyro_range').get_parameter_value().integer_value
   
         # LPF1_BW_SEL, FTYPE
@@ -54,7 +55,7 @@ class ImuDriverROSWrapper(Node):
         message = Imu()
 # use TIMESTAMP0_REG
 
-        message.header.stamp = time.time()
+        message.header.stamp = self.get_clock().now().to_msg()
         message.header.frame_id = "base_link";
         message.linear_acceleration_covariance = [0,0,0];
         message.linear_acceleration.x, message.linear_acceleration.y, message.linear_acceleration.z = LSM6DS3.getAccData();
