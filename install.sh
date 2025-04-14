@@ -37,6 +37,7 @@ if [[ `uname -m` == "x86_64" ]]; then
 else
   cd docker_images/ros/humble/ubuntu/jammy/perception
 fi
+git checkout Dockerfile
 
 # ggfs wird ros-humble-image-transport-plugins benötigt
 cat >> Dockerfile << EOF
