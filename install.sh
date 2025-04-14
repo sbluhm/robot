@@ -63,7 +63,7 @@ EOF
 sudo docker build -t ros_docker .
 
 # Start container
-sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker
+#sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker
 #sudo docker exec -it `sudo docker ps | grep ros_docker | sed 's/ .*//'` bash
 
 
@@ -89,7 +89,7 @@ sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_dock
 
 
 # Start Node from host
-sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_docker ros2 launch robot_launcher robot_launch.py
+#sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_docker ros2 launch robot_launcher robot_launch.py
 
 
 
