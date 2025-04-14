@@ -30,6 +30,8 @@ sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plug
 sudo apt-get -y install git
 cd /tmp 
 git clone https://github.com/osrf/docker_images/
+#git submodule init
+#git submodule update
 cd docker_images/ros/humble/ubuntu/jammy/perception
 
 
@@ -43,16 +45,14 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     ros-humble-v4l2-camera \
     python3-smbus2
 RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
-RUN rm -rf /var/lib/apt/lists/*
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
+RUN ln -s /root/robot/os/update.sh /update
+RUN ln -s /root/robot/os/start.sh /start
+RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
 RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
-RUN source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build
-RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh 
-RUN echo "ros2 launch robot_launcher robot_launch.py" > /start && chmod a+x /start
-RUN echo "cd /root/robot && git pull" > /update && chmod a+x /update
+RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi; fi
-RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/smbus2; cp /root/robot/os/smbus2/* /lib/python3.10/smbus2; fi
-RUN echo "source /opt/ros/humble/setup.bash && cd /root/robot/ros2 && colcon build" >> /update
+RUN rm -rf /var/lib/apt/lists/*
 EOF
 
 # Delete the build cache before building to force OS update
