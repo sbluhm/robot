@@ -103,6 +103,8 @@ sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged -it ros_doc
 # Enable i2c
 #. raspi-config nonint
 #do_i2c 0
+
+
 #cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
 cp /root/robot/os/robot-update.service /etc/systemd/system
 cp /root/robot/os/robot.service /etc/systemd/system
