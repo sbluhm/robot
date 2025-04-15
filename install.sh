@@ -1,33 +1,37 @@
 # Installing ROS
+ROS_DISTRO=humble
+
 # Only works on 64bit OS (Raspberry OS 64bit)
+if [[ `uname -m` != "x86_64" ]]; then
+  sudo apt -y autoremove
+  sudo apt-get -y update
 
-sudo apt -y autoremove
-sudo apt-get -y update
+  ## Set locale
+  if [[ $(locale | grep UTF-8) ]]; then
+  sudo apt-get -y install locales
+  locale-gen de_DE de_DE.UTF-8
+  update-locale LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8
+  export LANG=de_DE.UTF-8
+  fi
 
-## Set locale
-if [[ $(locale | grep UTF-8) ]]; then
-sudo apt-get -y install locales
-locale-gen de_DE de_DE.UTF-8
-update-locale LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8
-export LANG=de_DE.UTF-8
+
+  # Install docker
+  for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
+  sudo apt-get -y upgrade
+  sudo apt-get -y install ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  # Setup Docker container
+  sudo apt-get -y install git
 fi
 
-
-# Install docker
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
-sudo apt-get -y upgrade
-sudo apt-get -y install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Setup Docker container
-sudo apt-get -y install git
 cd /tmp 
 git clone https://github.com/osrf/docker_images/
 #git submodule init
@@ -38,6 +42,9 @@ else
   cd docker_images/ros/humble/ubuntu/jammy/perception
 fi
 git checkout Dockerfile
+
+# Dev environment:
+# ros-humble-robot-localization
 
 # ggfs wird ros-humble-image-transport-plugins benötigt
 cat >> Dockerfile << EOF
@@ -55,9 +62,22 @@ RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
 RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
 RUN /update
-RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi; fi
-RUN rm -rf /var/lib/apt/lists/*
 EOF
+
+# Install additional packages on dev machine for navigation simulation
+if [[ `uname -m` == "x86_64" ]]; then
+cat >> Dockerfile << EOF
+RUN mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi
+RUN apt-get install -y --no-install-recommends \
+    ros-dev-tools \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-turtlebot3-gazebo
+EOF
+fi
+
+# Don't clear apt cache
+#RUN rm -rf /var/lib/apt/lists/*
 
 # Delete the build cache before building to force OS update
 #sudo docker builder prune --all
