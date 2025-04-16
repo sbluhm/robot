@@ -68,8 +68,8 @@ class MotorDriver:
     def vdrive(self,y,x):
         scale = self.scale_speed
         if y == 0:         # voller einschlag falls nur links/rechts betätigt wird
-            l = x * scale
-            r = -x * scale
+            l = x 
+            r = -x
         else:
             if x >= 0:
                 l = y
