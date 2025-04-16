@@ -10,6 +10,7 @@ def generate_launch_description():
     pkg_share = FindPackageShare(package='bluhmbot_description').find('bluhmbot_description')
     default_model_path = os.path.join(pkg_share, 'src', 'description', 'bluhmbot_description.urdf')
     default_rviz_config_path = os.path.join(pkg_share, 'rviz', 'config.rviz')
+    world_path=os.path.join(pkg_share, 'world/my_world.sdf')
 
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
@@ -47,7 +48,7 @@ def generate_launch_description():
         DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path, description='Absolute path to rviz config file'),
         DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                             description='Flag to enable use_sim_time'),
-        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so'], output='screen'),
+        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', world_path], output='screen'),
         joint_state_publisher_node,
         robot_state_publisher_node,
         spawn_entity,
