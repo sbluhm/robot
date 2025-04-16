@@ -73,7 +73,8 @@ RUN apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-turtlebot3-gazebo \
-    ros-${ROS_DISTRO}-joint-state-publisher
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-robot-localization
 EOF
 fi
 
