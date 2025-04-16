@@ -3,9 +3,11 @@ ROS_DISTRO=humble
 
 # Only works on 64bit OS (Raspberry OS 64bit)
 if [[ `uname -m` != "x86_64" ]]; then
+  echo "Update OS"
   sudo apt -y autoremove
   sudo apt-get -y update
 
+  echo "Set locale"
   ## Set locale
   if [[ $(locale | grep UTF-8) ]]; then
   sudo apt-get -y install locales
@@ -16,8 +18,9 @@ if [[ `uname -m` != "x86_64" ]]; then
 
 
   # Install docker
+  echo "Remove Docker"
   for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get -y remove $pkg; done
-  sudo apt-get -y upgrade
+  echo "Install Docker"
   sudo apt-get -y install ca-certificates curl
   sudo install -m 0755 -d /etc/apt/keyrings
   sudo curl -fsSL https://download.docker.com/linux/raspbian/gpg -o /etc/apt/keyrings/docker.asc
@@ -29,9 +32,11 @@ if [[ `uname -m` != "x86_64" ]]; then
   sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
   # Setup Docker container
+  echo "Install Git"
   sudo apt-get -y install git
 fi
 
+echo "Updating Docker Container"
 cd /tmp 
 git clone https://github.com/osrf/docker_images/
 #git submodule init
@@ -129,7 +134,7 @@ sudo docker build -t ros_docker .
 
 # Don't run this on Fedora
 if [[ `uname -m` != "x86_64" ]]; then
-
+  echo "Installing service"
   #cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
   cp /root/robot/os/robot-update.service /etc/systemd/system
   cp /root/robot/os/robot.service /etc/systemd/system
