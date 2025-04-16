@@ -127,18 +127,21 @@ sudo docker build -t ros_docker .
 #. raspi-config nonint
 #do_i2c 0
 
+# Don't run this on Fedora
+if [[ `uname -m` != "x86_64" ]]; then
 
-#cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
-cp /root/robot/os/robot-update.service /etc/systemd/system
-cp /root/robot/os/robot.service /etc/systemd/system
-systemctl daemon-reload
-systemctl enable robot-update.service
-systemctl enable robot.service
-systemctl start robot.service
-chmod a+x robot.py
-chmod a+x gamepad.py
-chmod a+x install.sh
-# this should be a dynamic link
+  #cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
+  cp /root/robot/os/robot-update.service /etc/systemd/system
+  cp /root/robot/os/robot.service /etc/systemd/system
+  systemctl daemon-reload
+  systemctl enable robot-update.service
+  systemctl enable robot.service
+  systemctl start robot.service
+  chmod a+x robot.py
+  chmod a+x gamepad.py
+  chmod a+x install.sh
+  # this should be a dynamic link
+fi
 
 # Video
 #pip install python3-opencv
