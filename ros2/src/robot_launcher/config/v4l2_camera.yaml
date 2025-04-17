@@ -1,0 +1,12 @@
+/v4l2_camera:
+  ros__parameters:
+    brightness: 128
+    contrast: 128
+    saturation: 128
+    gain: 0
+    white_balance_temperature: 4000
+    sharpness: 128
+    backlight_compensation: 1
+    focus_absolute: 0
+    zoom_absolute: 100
+    auto_exposure: 3
