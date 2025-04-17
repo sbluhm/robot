@@ -73,7 +73,7 @@ def main(args=None):
   
   # Spin the node so the callback function is called.
   # Publish any pending messages to the topics.
-  rclpy.spin(battery_management)
+  rclpy.spin(battery_state_pub)
   
   # Destroy the node explicitly
   # (optional - otherwise it will be done automatically
