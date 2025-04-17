@@ -9,7 +9,7 @@ if [ $? -gt 0 ]; then
     # i2cdetect -l
     sudo docker run -it --net=host --privileged --env="DISPLAY=$DISPLAY" --volume="${XAUTHORITY}:/root/.Xauthority" --hostname=ros2-$(hostname) ros_docker_${ROS_DISTRO}
   else
-    sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker_ROS_${DISTRO}
+    sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker_${ROS_DISTRO}
   fi
 else
   echo "Connecting to existing container..."
