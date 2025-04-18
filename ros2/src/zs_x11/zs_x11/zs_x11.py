@@ -30,7 +30,7 @@ class MotorDriverROSWrapper(Node):
 
         self.motor = MotorDriver(max_speed=max_speed, scale_speed=scale_speed)
         self.drive_vector_last_message = time.time()
-        self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector', self.callback_drive_vector, 10)
+        self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector_DISABLED', self.callback_drive_vector, 10)
         self.drive_vector_sub
         self.drive_twist_sub = self.create_subscription(Twist, 'cmd_vel', self.callback_drive_twist, 10)
         self.drive_twist_sub
@@ -75,9 +75,9 @@ class MotorDriverROSWrapper(Node):
         self.motor.vdrive(msg.y, msg.x)
 
     def callback_drive_twist(self, msg):
-        self.get_logger().info(f"Received Drive Vector: {msg}")
+        self.get_logger().info(f"Received Drive Twist: {msg}")
         self.drive_vector_last_message = time.time()
-#        self.motor.vdrive(msg.y, msg.x)
+        self.motor.twistdrive(msg.linear.x, msg.angular.z)
 
 
     def callback_stop(self, request, response):

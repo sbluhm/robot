@@ -29,6 +29,7 @@ class MotorDriver:
         """
         self.max_speed = max_speed
         self.scale_speed = scale_speed
+        self.wheelbase = 213
         self.current_speed = 0
         self.voltage = 12
         self.temperature = 47
@@ -80,6 +81,13 @@ class MotorDriver:
 
         self.leftwheel(l*scale)
         self.rightwheel(r*scale)
+
+    def twistdrive(self,linearx,angularz):
+        l = linearx - angularz*self.wheelbase/2
+        r = linearx + angularz*self.wheelbase/2
+
+        self.leftwheel(l)
+        self.rightwheel(r)
 
     def leftwheel(self, vector):
         # Release brakes
