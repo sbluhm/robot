@@ -6,11 +6,11 @@ import os
 
 def generate_launch_description():
     drive_config = os.path.join(
-        get_package_share_directory('robot_launcher'),
+        get_package_share_directory('bluhmbot'),
         'config',
         'drivespecs.yaml')
     c920_config = os.path.join(
-        get_package_share_directory('robot_launcher'),
+        get_package_share_directory('bluhmbot'),
         'config',
         'v4l2_camera.yaml')
     return launch.LaunchDescription([
