@@ -10,8 +10,6 @@ class MotorControllerROSWrapper(Node):
     def __init__(self):
         super().__init__('motor_controller')
 
-        self.publisher_ = self.create_publisher(String, 'topic', 10)
-
         self.joy_sub = self.create_subscription(Joy, 'joy', self.callback_joy, 10)
         self.joy_sub  # prevent unused variable warning
 
