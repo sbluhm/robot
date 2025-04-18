@@ -5,14 +5,18 @@ import launch_ros.actions
 import os
 
 def generate_launch_description():
-    drive_config = os.path.join(
-        get_package_share_directory('bluhmbot'),
-        'config',
-        'drivespecs.yaml')
     c920_config = os.path.join(
         get_package_share_directory('bluhmbot'),
         'config',
         'v4l2_camera.yaml')
+    drive_config = os.path.join(
+        get_package_share_directory('bluhmbot'),
+        'config',
+        'drivespecs.yaml')
+    joystick_config = os.path.join(
+        get_package_share_directory('bluhmbot'),
+        'config',
+        'joystick.yaml')
     return launch.LaunchDescription([
         launch_ros.actions.Node(
             package='status_led',
