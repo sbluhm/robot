@@ -10,7 +10,7 @@ if [[ `uname -m` != "x86_64" ]]; then
 
   echo "Set locale"
   ## Set locale
-  if [[ $(locale | grep UTF-8) ]]; then
+  if [[ ! $(locale | grep UTF-8) ]]; then
   sudo apt-get -y install locales
   locale-gen de_DE de_DE.UTF-8
   update-locale LC_ALL=de_DE.UTF-8 LANG=de_DE.UTF-8
