@@ -151,6 +151,8 @@ fi
 
 # Video
 #pip install python3-opencv
+# ros2 launch v4l2_camera v4l2_camera_launch.py camera_params:=$(cat camera_params.yaml)
+# ros2 run v4l2_camera v4l2_camera_node --ros-args --params-file ~/robot/ros2/src/robot_launcher/config/v4l2_camera.yaml
 # Test devices on Pi
 # v4l2-ctl --list-devices
 # Stream latency free

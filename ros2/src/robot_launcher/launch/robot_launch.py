@@ -39,6 +39,14 @@ def generate_launch_description():
             package='v4l2_camera',
             executable='v4l2_camera_node',
             name='v4l2_camera',
-            parameters=[c920_config]),
+            parameters=[c920_config],
+            remappings=[
+                ('/camera_info', '/camera/camera_info'),
+                ('/image_raw', '/camera/image_raw'),
+                ('/image_raw/compressed', '/camera/image_raw/compressed'),
+                ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
+                ('/image_raw/theora', '/camera/image_raw/theora'),
+                ('/image_raw/zstd', '/camera/image_raw/zstd'),
+            ]),
   ])
 
