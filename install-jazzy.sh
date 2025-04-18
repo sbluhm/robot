@@ -63,6 +63,8 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     python3-smbus2
 RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
+RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
+RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
