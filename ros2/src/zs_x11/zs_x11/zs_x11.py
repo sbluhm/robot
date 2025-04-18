@@ -6,6 +6,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Int32
 from std_srvs.srv import Trigger
+from geometry_msgs.msg import Twist
 import time
 from custom_interfaces.msg import Vector
 from diagnostic_msgs.msg import DiagnosticStatus
@@ -31,6 +32,8 @@ class MotorDriverROSWrapper(Node):
         self.drive_vector_last_message = time.time()
         self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector', self.callback_drive_vector, 10)
         self.drive_vector_sub
+        self.drive_twist_sub = self.create_subscription(Twist, 'vmd_vel', self.callback_drive_twist, 10)
+        self.drive_twist_sub
         self.speed_command_sub = self.create_subscription(Int32, 'speed_command', self.callback_speed_command, 10)
         self.speed_command_sub  # prevent unused variable warning
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
@@ -70,6 +73,11 @@ class MotorDriverROSWrapper(Node):
         self.get_logger().info(f"Received Drive Vector: {msg.x}, {msg.y}")
         self.drive_vector_last_message = time.time()
         self.motor.vdrive(msg.y, msg.x)
+
+    def callback_drive_twist(self, msg):
+        self.get_logger().info(f"Received Drive Vector: {msg}")
+        self.drive_vector_last_message = time.time()
+#        self.motor.vdrive(msg.y, msg.x)
 
 
     def callback_stop(self, request, response):
