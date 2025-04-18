@@ -23,6 +23,10 @@ def generate_launch_description():
             executable='battery_management_node',
             name='battery_management_node'),
         launch_ros.actions.Node(
+            package='lsm6ds3',
+            executable='lsm6ds3_node',
+            name='lsm6ds3_node'),
+        launch_ros.actions.Node(
             package='joy',
             executable='joy_node',
             name='joy_node'),
