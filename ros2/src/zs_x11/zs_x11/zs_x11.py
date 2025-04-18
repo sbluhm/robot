@@ -75,7 +75,7 @@ class MotorDriverROSWrapper(Node):
         self.motor.vdrive(msg.y, msg.x)
 
     def callback_drive_twist(self, msg):
-        self.get_logger().info(f"Received Drive Twist: {msg}")
+        self.get_logger().info(f"Received Drive Twist: {msg.linear.x} / {msg.angular.z}")
         self.drive_vector_last_message = time.time()
         self.motor.twistdrive(msg.linear.x, msg.angular.z)
 
