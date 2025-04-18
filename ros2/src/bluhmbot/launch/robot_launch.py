@@ -31,6 +31,12 @@ def generate_launch_description():
             executable='joy_node',
             name='joy_node'),
         launch_ros.actions.Node(
+            package='teleop_twist_joy',
+            executable='teleop_node',
+            name='teleop_twist_joy_node',
+            parameters=[joystick_config],
+            ),
+        launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
             name='zs_x11',
