@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lsm6ds3 = lsm6ds3.lsm6ds3:main'
+            'lsm6ds3_node = lsm6ds3.lsm6ds3:main'
         ],
     },
 )
