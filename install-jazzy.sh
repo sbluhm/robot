@@ -61,21 +61,19 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     python3-smbus2
-RUN apt-get install -y --no-install-recommends python3-rpi.gpio ||:
+RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi.gpio; fi
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
-RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
-RUN /update
 EOF
 
 # Install additional packages on dev machine for navigation simulation
 if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
-RUN mkdir -p  /lib/python3.10/RPi; cp /root/robot/os/RPi/* /lib/python3.10/RPi
+RUN mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-${ROS_DISTRO}-nav2-bringup \
@@ -85,6 +83,13 @@ RUN apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-robot-localization
 EOF
 fi
+
+cat >> Dockerfile << EOF
+RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
+RUN /update
+EOF
+
+
 
 # Don't clear apt cache
 #RUN rm -rf /var/lib/apt/lists/*
