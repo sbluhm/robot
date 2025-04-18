@@ -57,7 +57,7 @@ cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim \
-    ros-${ROS_DISTRO}-joy \
+    ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     python3-smbus2
