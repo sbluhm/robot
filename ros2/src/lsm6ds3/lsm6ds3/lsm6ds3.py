@@ -31,7 +31,8 @@ class ImuDriverROSWrapper(Node):
         gyroRange = self.get_parameter('~gyro_range').get_parameter_value().integer_value
         accelerometerRange = self.get_parameter('~accel_range').get_parameter_value().integer_value
 # division by 0
-        publish_ims_frequency = 1.0/self.get_parameter('~gyro_range').get_parameter_value().integer_value
+#        publish_ims_frequency = 1.0/self.get_parameter('~gyro_range').get_parameter_value().integer_value
+        publish_ims_frequency 1.0
   
         # LPF1_BW_SEL, FTYPE
         dlpfBandwidth = self.get_parameter('~dlpf_bandwidth').get_parameter_value().integer_value
