@@ -32,7 +32,7 @@ class MotorDriverROSWrapper(Node):
         self.drive_vector_last_message = time.time()
         self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector', self.callback_drive_vector, 10)
         self.drive_vector_sub
-        self.drive_twist_sub = self.create_subscription(Twist, 'vmd_vel', self.callback_drive_twist, 10)
+        self.drive_twist_sub = self.create_subscription(Twist, 'cmd_vel', self.callback_drive_twist, 10)
         self.drive_twist_sub
         self.speed_command_sub = self.create_subscription(Int32, 'speed_command', self.callback_speed_command, 10)
         self.speed_command_sub  # prevent unused variable warning
