@@ -49,6 +49,11 @@ class PidVelocity(Node):
         self.prev_encoder = 0
 
         ### get parameters ####
+        topic_wheel = self.declare_parameter('wheel_topic', "wheel").value
+        topic_wheel_vtarget = self.declare_parameter('wheel_vtarget_topic', "wheel_vtarget").value
+        topic_motor_cmd = self.declare_parameter('motor_cmd_topic', "motor_cmd").value
+        topic_wheel_vel = self.declare_parameter('wheel_vel_topic', "wheel_vel").value
+
         self.Kp = self.declare_parameter('Kp', 10.0).value
         self.Ki = self.declare_parameter('Ki', 10.0).value
         self.Kd = self.declare_parameter('Kd', 0.001).value
@@ -72,10 +77,10 @@ class PidVelocity(Node):
             self.nodename, self.Kp, self.Ki, self.Kd, self.ticks_per_meter))
 
         # subscribers/publishers
-        self.create_subscription(Int16, 'wheel', self.wheel_callback, 10)
-        self.create_subscription(Float32, 'wheel_vtarget', self.target_callback, 10)
-        self.pub_motor = self.create_publisher(Float32, 'motor_cmd', 10)
-        self.pub_vel = self.create_publisher(Float32, 'wheel_vel', 10)
+        self.create_subscription(Int16, topic_wheel, self.wheel_callback, 10)
+        self.create_subscription(Float32, topic_wheel_vtarget, self.target_callback, 10)
+        self.pub_motor = self.create_publisher(Float32, topic_motor_cmd, 10)
+        self.pub_vel = self.create_publisher(Float32, topic_wheel_vel, 10)
 
         self.ticks_since_target = self.timeout_ticks
         self.wheel_prev = self.wheel_latest
