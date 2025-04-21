@@ -24,7 +24,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'battery_management_node = battery_management.battery_management:main'
+            'battery_management_node = battery_management.battery_management:main',
             'pid_velocity_node = differential_drive.pid_velocity:main'
         ],
     },
