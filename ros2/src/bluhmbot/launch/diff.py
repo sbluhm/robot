@@ -41,7 +41,7 @@ def generate_launch_description():
             parameters=[joystick_config],
             ),
         launch_ros.actions.Node(
-            package='bluhmbot,
+            package='bluhmbot',
             executable='twist_to_motors_node',
             name='twist_to_motors_node',
             parameters=[
