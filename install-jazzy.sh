@@ -73,7 +73,6 @@ EOF
 # Install additional packages on dev machine for navigation simulation
 if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
-RUN mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-${ROS_DISTRO}-nav2-bringup \
@@ -87,6 +86,7 @@ fi
 cat >> Dockerfile << EOF
 RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
 RUN /update
+RUN if [[ `uname -m` != "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
 
 
