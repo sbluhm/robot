@@ -41,9 +41,14 @@ def generate_launch_description():
             parameters=[joystick_config],
             ),
         launch_ros.actions.Node(
-            package='joy',
-            executable='joy_node',
-            name='joy_node'),
+            package='bluhmbot,
+            executable='twist_to_motors_node',
+            name='twist_to_motors_node',
+            parameters=[
+                {"twist_topic": "cmd_vel"},
+                {"lwheel_vtarget_topic": "lwheel_vtarget"},
+                {"rwheel_vtarget_topic": "rwheel_vtarget"},
+            ]),
         launch_ros.actions.Node(
             package='bluhmbot',
             executable='pid_velocity_node',

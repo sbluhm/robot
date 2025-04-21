@@ -31,6 +31,12 @@ class TwistToMotors(Node):
     def __init__(self):
         super(TwistToMotors, self).__init__("twist_to_motors")
         self.nodename = "twist_to_motors"
+
+        ### get parameters ####
+        topic_twist = self.declare_parameter('wheel_topic', "cmd_vel").value
+        topic_lwheel_vtarget = self.declare_parameter('lwheel_vtarget_topic', "lwheel_vtarget").value
+        topic_lwheel_vtarget = self.declare_parameter('rwheel_vel_topic', "rwheel_vtarget").value
+
         self.get_logger().info("%s started" % self.nodename)
 
         self.w = self.declare_parameter("base_width", 0.2).value
@@ -38,9 +44,9 @@ class TwistToMotors(Node):
         self.dr = 0
         self.ticks_since_target = 0
 
-        self.pub_lmotor = self.create_publisher(Float32, 'lwheel_vtarget', 10)
-        self.pub_rmotor = self.create_publisher(Float32, 'rwheel_vtarget', 10)
-        self.create_subscription(Twist, 'twist', self.twist_callback, 10)
+        self.pub_lmotor = self.create_publisher(Float32, topic_lwheel_vtarget, 10)
+        self.pub_rmotor = self.create_publisher(Float32, topic_rwheel_vtarget, 10)
+        self.create_subscription(Twist, topic_twist, self.twist_callback, 10)
 
         self.rate_hz = self.declare_parameter("rate_hz", 50).value
         
