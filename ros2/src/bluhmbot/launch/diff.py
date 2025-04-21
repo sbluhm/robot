@@ -45,15 +45,25 @@ def generate_launch_description():
             executable='joy_node',
             name='joy_node'),
         launch_ros.actions.Node(
-            package='bluhm',
+            package='bluhmbot',
             executable='pid_velocity_node',
-            name='left_pid_velocity'),
+            name='left_pid_velocity',
             parameters=[
-                {"wheel_topic": "leftwheel"},
+                {"wheel_topic": "lwheel"},
                 {"wheel_vtarget_topic": "lwheel_vtarget"},
                 {"motor_cmd_topic": "lmotor_cmd"},
                 {"wheel_vel_topic": "lwheel_vel"}
-            ]
+            ]),
+        launch_ros.actions.Node(
+            package='bluhmbot',
+            executable='pid_velocity_node',
+            name='right_pid_velocity',
+            parameters=[
+                {"wheel_topic": "rwheel"},
+                {"wheel_vtarget_topic": "rwheel_vtarget"},
+                {"motor_cmd_topic": "rmotor_cmd"},
+                {"wheel_vel_topic": "rwheel_vel"}
+            ]),
         launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
@@ -67,6 +77,5 @@ def generate_launch_description():
             package='motorcontroller',
             executable='motorcontroller',
             name='motorcontroller'),
-            ]),
   ])
 
