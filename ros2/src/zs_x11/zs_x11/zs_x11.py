@@ -21,22 +21,30 @@ class MotorDriverROSWrapper(Node):
         self.declare_parameter('~publish_current_speed_frequency', 5.0)
         self.declare_parameter('~publish_motor_status_frequency', 1.0)
 
+        topic_wheel = self.declare_parameter('wheel_topic', "wheel").value
+        topic_motor_cmd = self.declare_parameter('motor_cmd_topic', "motor_cmd").value
+        pin_pwm = self.declare_parameter('pwm_pin', 13).value
+        pin_reverse = self.declare_parameter('reverse_pin', 5).value
+        pin_brake = self.declare_parameter('brake_pin', 26).value
+
+
         max_speed = self.get_parameter('~max_speed').get_parameter_value().double_value
         scale_speed = self.get_parameter('~scale_speed').get_parameter_value().integer_value
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
 
-        self.motor = MotorDriver(max_speed=max_speed, scale_speed=scale_speed)
+        self.motor = MotorDriver(pin_pwm, pin_brake, pin_reverse, max_speed=max_speed, scale_speed=scale_speed)
         self.drive_vector_last_message = time.time()
         self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector_DISABLED', self.callback_drive_vector, 10)
         self.drive_vector_sub
-        self.drive_twist_sub = self.create_subscription(Twist, 'cmd_vel', self.callback_drive_twist, 10)
-        self.drive_twist_sub
+        self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
+        self.drive_power_sub
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
         self.odom_publisher = self.create_publisher(Odometry, 'odom', 10)
+        self.wheel_tick_pub = self.create_publisher(Int16, topic_wheel, 10)
 
         self.motor_status_pub = self.create_publisher(DiagnosticStatus, "motor_status", 1)
-        self.timer = self.create_timer(1.0/publish_current_speed_frequency, self.publish_current_speed)
+        self.timer = self.create_timer(1.0/30, self.publish_current_speed)
         self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
 
     def timer_callback_emergency_stop(self):
@@ -44,11 +52,11 @@ class MotorDriverROSWrapper(Node):
             self.stop()
 
     def publish_current_speed(self, event=None):
-        now = time.time()
         odom_msg = Odometry()
         odom_msg.header.stamp.sec = int(time.now())
         odom_msg.header.stamp.nanosec = int(now * 1e9) % 1000000000
-        self.odom_publisher.publish(odom_msg)
+#        self.odom_publisher.publish(odom_msg)
+        self.wheel_tick_pub.oublish(motor.tick_counter)
 
     def publish_motor_status(self, event=None):
         status = self.motor.get_status()
@@ -68,10 +76,10 @@ class MotorDriverROSWrapper(Node):
         self.drive_vector_last_message = time.time()
         self.motor.vdrive(msg.y, msg.x)
 
-    def callback_drive_twist(self, msg):
-        self.get_logger().info(f"Received Drive Twist: {msg.linear.x} / {msg.angular.z}")
+    def callback_drive_power(self, msg):
         self.drive_vector_last_message = time.time()
-        self.motor.twistdrive(msg.linear.x, msg.angular.z)
+        self.set_power = msg
+        self.motor.wheel(msg)
 
 
     def callback_stop(self, request, response):

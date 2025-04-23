@@ -23,7 +23,7 @@ right.start(0)
 left.start(0)
 
 class MotorDriver:
-    def __init__(self, max_speed=100, scale_speed=100):
+    def __init__(self, pwm_pin=13, reverse_pin=5, brake_pin=26, max_speed=100, scale_speed=100):
         """
         Init communication, set default settings, ...
         """
@@ -33,6 +33,21 @@ class MotorDriver:
         self.current_speed = 0
         self.voltage = 12
         self.temperature = 47
+
+        self.tick_counter = 0
+        self.last_tick_time = time.time()
+
+    # left defaults
+        self.pwm_pin = pwm_pin
+        self.reverse_pin = reverse_pin
+        self.brake_pin = brake_pin
+
+        IO.setup(self.pwm_pin, IO.OUT)
+        IO.setup(self.reverse_pin, IO.OUT)
+        IO.setup(self.brake_pin, IO.OUT)
+        self.motor = IO.PWM(self.pwm_pin,10000)
+        self.motor.start(0)
+
     def set_speed(self, speed):
         """
         Give a speed that the motor will try to reach.
@@ -57,6 +72,7 @@ class MotorDriver:
         Return current speed
         """
         return self.current_speed
+
     def get_status(self):
         """
         Get hardware information from the motor
@@ -88,6 +104,29 @@ class MotorDriver:
 
         self.leftwheel(l)
         self.rightwheel(r)
+
+    def.power_to_ticks_per_second(self, power):
+        tps = power/10.0
+        return tps
+
+    def count_ticks(self, power):
+        now = time.time()
+        dt = now - self.last_tick_time
+        self.last_tick_time = now
+        self.tick_counter += self.power_to_ticks_per_second(power) * dt
+
+    def wheel(self, power):
+        # Release brakes
+        IO.output(self.brake_pin, False)
+
+        # Set direction
+        if power < 0:
+            IO.output(self.reverse_pin, True)
+        else:
+            IO.output(seld.reverse_pin, False)
+        # Power
+        self.motor.ChangeDutyCycle(abs(power))
+        self.count_ticks(power)
 
     def leftwheel(self, vector):
         # Release brakes
