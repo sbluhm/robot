@@ -8,8 +8,10 @@ from custom_interfaces.msg import Vector
 from diagnostic_msgs.msg import DiagnosticStatus
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
-from std_msgs.msg import String
+from std_msgs.msg import Float32
+from std_msgs.msg import Int16
 from std_msgs.msg import Int32
+from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
 class MotorDriverROSWrapper(Node):
