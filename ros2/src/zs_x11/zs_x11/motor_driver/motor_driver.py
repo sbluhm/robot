@@ -102,7 +102,7 @@ class MotorDriver:
         if power < 0:
             IO.output(self.reverse_pin, True)
         else:
-            IO.output(seld.reverse_pin, False)
+            IO.output(self.reverse_pin, False)
         # Power
         self.motor.ChangeDutyCycle(abs(power))
         self.count_ticks(power)
