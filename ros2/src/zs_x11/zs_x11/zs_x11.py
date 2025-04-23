@@ -55,8 +55,8 @@ class MotorDriverROSWrapper(Node):
 
     def publish_current_speed(self, event=None):
         odom_msg = Odometry()
-        odom_msg.header.stamp.sec = int(time.now())
-        odom_msg.header.stamp.nanosec = int(now * 1e9) % 1000000000
+        odom_msg.header.stamp.sec = int(time.time())
+        odom_msg.header.stamp.nanosec = int(time.time() * 1e9) % 1000000000
 #        self.odom_publisher.publish(odom_msg)
         tick_msg = Int16()
         tick_msg.data = self.motor.tick_counter
