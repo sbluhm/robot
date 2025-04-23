@@ -58,7 +58,9 @@ class MotorDriverROSWrapper(Node):
         odom_msg.header.stamp.sec = int(time.now())
         odom_msg.header.stamp.nanosec = int(now * 1e9) % 1000000000
 #        self.odom_publisher.publish(odom_msg)
-        self.wheel_tick_pub.oublish(motor.tick_counter)
+        tick_msg = Int16()
+        tick_msg.data = self.motor.tick_counter
+        self.wheel_tick_pub.publish(tick_msg)
 
     def publish_motor_status(self, event=None):
         status = self.motor.get_status()
