@@ -105,7 +105,7 @@ class MotorDriver:
         self.leftwheel(l)
         self.rightwheel(r)
 
-    def.power_to_ticks_per_second(self, power):
+    def power_to_ticks_per_second(self, power):
         tps = power/10.0
         return tps
 
