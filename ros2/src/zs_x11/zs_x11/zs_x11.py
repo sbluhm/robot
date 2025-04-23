@@ -59,7 +59,7 @@ class MotorDriverROSWrapper(Node):
         odom_msg.header.stamp.nanosec = int(time.time() * 1e9) % 1000000000
 #        self.odom_publisher.publish(odom_msg)
         tick_msg = Int16()
-        tick_msg.data = self.motor.tick_counter
+        tick_msg.data = int(self.motor.tick_counter)
         self.wheel_tick_pub.publish(tick_msg)
 
     def publish_motor_status(self, event=None):
@@ -83,7 +83,7 @@ class MotorDriverROSWrapper(Node):
     def callback_drive_power(self, msg):
         self.drive_vector_last_message = time.time()
         self.set_power = msg
-        self.motor.wheel(msg)
+        self.motor.wheel(msg.data)
 
 
     def callback_stop(self, request, response):
