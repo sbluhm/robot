@@ -2,6 +2,8 @@
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
 
+echo "Preparing ROS Distro $ROS_DISTRO"
+
 # Only works on 64bit OS (Raspberry OS 64bit)
 if [[ `uname -m` != "x86_64" ]]; then
   echo "Update OS"
@@ -86,7 +88,7 @@ fi
 cat >> Dockerfile << EOF
 RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
 RUN /update
-RUN if [[ `uname -m` != "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
+RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
 
 
