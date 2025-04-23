@@ -3,24 +3,6 @@ import time
 
 IO.setwarnings(False)
 IO.setmode (IO.BCM)
-#Right PWM Pin
-IO.setup(12,IO.OUT)
-#Left PWM Pin
-IO.setup(13,IO.OUT)
-#Left Reverse Pin
-IO.setup(5, IO.OUT)
-#Left brake pin
-IO.setup(26, IO.OUT)
-
-#Right Reverse Pin
-IO.setup(6, IO.OUT)
-#Right brake pin
-IO.setup(25, IO.OUT)
-
-right = IO.PWM(12,10000)
-left = IO.PWM(13,10000)
-right.start(0)
-left.start(0)
 
 class MotorDriver:
     def __init__(self, pwm_pin=13, reverse_pin=5, brake_pin=26, max_speed=100, scale_speed=100):
@@ -61,11 +43,8 @@ class MotorDriver:
         """
         Set speed to 0 and thus stop the motor
         """
-        right.ChangeDutyCycle(0)
-        left.ChangeDutyCycle(0)
-        IO.output(25, True)
-        IO.output(26, True)
-        print("Engine Stopped")
+        self.motor.ChangeDutyCycle(0)
+        IO.output(self.brake_pin, True)
 
     def get_speed(self):
         """

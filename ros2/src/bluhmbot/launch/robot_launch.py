@@ -43,7 +43,12 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
-            name='zs_x11',
+            name='left_wheel',
+            parameters=[drive_config]),
+        launch_ros.actions.Node(
+            package='zs_x11',
+            executable='zs_x11',
+            name='right_wheel',
             parameters=[drive_config]),
         launch_ros.actions.Node(
             package='l298n',
