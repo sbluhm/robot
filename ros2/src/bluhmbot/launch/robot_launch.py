@@ -55,10 +55,6 @@ def generate_launch_description():
             executable='l298n',
             name='l298n'),
         launch_ros.actions.Node(
-            package='motorcontroller',
-            executable='motorcontroller',
-            name='motorcontroller'),
-        launch_ros.actions.Node(
             package='v4l2_camera',
             executable='v4l2_camera_node',
             name='v4l2_camera',
