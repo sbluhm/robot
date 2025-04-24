@@ -17,25 +17,25 @@
 16
 17
 18
-19 - GPIO10 - irf3205 grün
+19 - GPIO10 - irf3205/ZK-BM1 PWM1 FWD grün
 20
 21 - GPIO9 - l298n/irf3205 PWM1/ZK-BM1 PWM1 REV gelb 
 22 - GPIO25 right ZS_x11 brake
 23 - GPIO11 l298b/irf3205 PWM2/ZK-BM1 PWM2 REV rot
 24 - GPIO8 l298n/irf3205 DIR2/ZK-BM1 PWM2 FWD orange
 25 - GND irf3205/ZK-BM1 braun
-26 - GPIO7 l298n/irf3205 DIR1/ZK-BM1 PWM1 FWD grün
-27 - GPIO0 l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
-28 - GPIO1 l298n/delete? gelb
-29 - GPIO5 right zs_x11 reverse weiss
+26 - GPIO7  - l298n/irf3205 DIR1/ZK-BM1 PWM1 FWD grün
+27 - GPIO0  - l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
+28 - GPIO1  - l298n/delete? gelb
+29 - GPIO5  - left zs_x11 reverse weiss
 30 - GND right zs_x11 ground grau
-31 - GPIO7 right zs_x11 reverse grau
-32 - PWM0 right zs_x11 speed lila
-33 - PWM1 left zs_x11 speed weiss
+31 - GPIO6  - right zs_x11 reverse grau
+32 - GPIO12 - PWM0 right zs_x11 speed lila
+33 - GPIO13 - PWM1 left zs_x11 speed weiss
 34 - GND left zs_x11 ground schwarz
 35
 36
-37 - GPIO26 left zs_x11 brake lila
+37 - GPIO26 - left zs_x11 brake lila
 38
 39
 40
