@@ -72,7 +72,7 @@ class MotorDriverROSWrapper(Node):
         self.motor_status_pub.publish(msg)
 
     def stop(self):
-        self.get_logger().info('Stopping')
+        self.get_logger().debug('Stopping')
         self.motor.stop()
 
     def callback_drive_vector(self, msg):
@@ -93,17 +93,20 @@ class MotorDriverROSWrapper(Node):
         return response
 
 def main(args=None):
-    rclpy.init(args=args)
+    try:
+        rclpy.init(args=args)
 
-    motor_driver_wrapper = MotorDriverROSWrapper()
-    rclpy.spin(motor_driver_wrapper)
+        motor_driver_wrapper = MotorDriverROSWrapper()
+        rclpy.spin(motor_driver_wrapper)
+
+    except rclpy.exceptions.ROSInterruptException:
+        pass
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
     motor_driver_wrapper.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

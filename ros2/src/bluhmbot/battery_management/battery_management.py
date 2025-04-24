@@ -64,17 +64,24 @@ class BatteryStatePublisher(Node):
     self.percent_charge_level = self.percent_charge_level * self.decrement_factor
     
 def main(args=None):
+    """
+    The main function.
+    :param args: Not used directly by the user, but used by ROS2 to configure
+    certain aspects of the Node.
+    """
+  try:
+      # Initialize the rclpy library
+      rclpy.init(args=args)
   
-  # Initialize the rclpy library
-  rclpy.init(args=args)
+      # Create the node
+      battery_state_pub = BatteryStatePublisher()
   
-  # Create the node
-  battery_state_pub = BatteryStatePublisher()
-  
-  # Spin the node so the callback function is called.
-  # Publish any pending messages to the topics.
-  rclpy.spin(battery_state_pub)
-  
+      # Spin the node so the callback function is called.
+      # Publish any pending messages to the topics.
+      rclpy.spin(battery_state_pub)
+  except rclpy.exceptions.ROSInterruptException:
+      pass
+
   # Destroy the node explicitly
   # (optional - otherwise it will be done automatically
   # when the garbage collector destroys the node object)
