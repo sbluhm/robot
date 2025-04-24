@@ -35,7 +35,7 @@ class MotorDriverROSWrapper(Node):
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
 
-        self.motor = MotorDriver(pin_pwm, pin_brake, pin_reverse, max_speed=max_speed, scale_speed=scale_speed)
+        self.motor = MotorDriver(pin_pwm, pin_reverse, pin_brake, max_speed=max_speed, scale_speed=scale_speed)
         self.drive_vector_last_message = time.time()
         self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector_DISABLED', self.callback_drive_vector, 10)
         self.drive_vector_sub
