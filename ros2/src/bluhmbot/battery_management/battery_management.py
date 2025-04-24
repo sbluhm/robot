@@ -69,26 +69,26 @@ def main(args=None):
     :param args: Not used directly by the user, but used by ROS2 to configure
     certain aspects of the Node.
     """
-  try:
-      # Initialize the rclpy library
-      rclpy.init(args=args)
-  
-      # Create the node
-      battery_state_pub = BatteryStatePublisher()
-  
-      # Spin the node so the callback function is called.
-      # Publish any pending messages to the topics.
-      rclpy.spin(battery_state_pub)
-  except rclpy.exceptions.ROSInterruptException:
-      pass
+    try:
+        # Initialize the rclpy library
+        rclpy.init(args=args)
 
-  # Destroy the node explicitly
-  # (optional - otherwise it will be done automatically
-  # when the garbage collector destroys the node object)
-  battery_state_pub.destroy_node()
+        # Create the node
+        battery_state_pub = BatteryStatePublisher()
+
+        # Spin the node so the callback function is called.
+        # Publish any pending messages to the topics.
+        rclpy.spin(battery_state_pub)
+    except rclpy.exceptions.ROSInterruptException:
+        pass
+
+    # Destroy the node explicitly
+    # (optional - otherwise it will be done automatically
+    # when the garbage collector destroys the node object)
+    battery_state_pub.destroy_node()
   
-  # Shutdown the ROS client library for Python
-  rclpy.shutdown()
+    # Shutdown the ROS client library for Python
+    rclpy.shutdown()
   
 if __name__ == '__main__':
   main()
