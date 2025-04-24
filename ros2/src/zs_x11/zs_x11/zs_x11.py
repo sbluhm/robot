@@ -2,12 +2,12 @@ from .motor_driver.motor_driver import MotorDriver
 
 import rclpy
 import time
-from rclpy.node import Node
-
+from contextlib import suppress
 from custom_interfaces.msg import Vector
 from diagnostic_msgs.msg import DiagnosticStatus
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import Odometry
+from rclpy.node import Node
 from std_msgs.msg import Float32
 from std_msgs.msg import Int16
 from std_msgs.msg import Int32
@@ -99,14 +99,15 @@ def main(args=None):
         motor_driver_wrapper = MotorDriverROSWrapper()
         rclpy.spin(motor_driver_wrapper)
 
-    except rclpy.exceptions.ROSInterruptException:
+    except KeyboardInterrupt:
         pass
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    motor_driver_wrapper.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        motor_driver_wrapper.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

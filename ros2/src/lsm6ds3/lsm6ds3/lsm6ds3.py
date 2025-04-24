@@ -1,13 +1,13 @@
-from .imu_driver.lsm6ds3 import *
-
 import rclpy
-from rclpy.node import Node
+import time
 
+from .imu_driver.lsm6ds3 import *
+from contextlib import suppress
+from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Int32
 from sensor_msgs.msg import Imu
 from std_srvs.srv import Trigger
-import time
 from custom_interfaces.msg import Vector
 from diagnostic_msgs.msg import DiagnosticStatus
 
@@ -74,15 +74,18 @@ class ImuDriverROSWrapper(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    imu_driver_wrapper = ImuDriverROSWrapper()
-    rclpy.spin(imu_driver_wrapper)
+    try:
+        imu_driver_wrapper = ImuDriverROSWrapper()
+        rclpy.spin(imu_driver_wrapper)
+    except KeyboardInterrupot:
+        pass
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    imu_driver_wrapper.destroy_node()
-    rclpy.shutdown()
-
+    with suppress(Exception):
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        imu_driver_wrapper.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

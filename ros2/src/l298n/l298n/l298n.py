@@ -1,13 +1,13 @@
-from .motor_driver.motor_driver import MotorDriver
-
 import rclpy
-from rclpy.node import Node
+import time
 
+from .motor_driver.motor_driver import MotorDriver
+from contextlib import suppress
+from rclpy.node import Node
 from std_msgs.msg import String
 from std_msgs.msg import Int32
 from sensor_msgs.msg import Joy
 from std_srvs.srv import Trigger
-import time
 
 class MotorDriverROSWrapper(Node):
 
@@ -79,15 +79,18 @@ class MotorDriverROSWrapper(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    motor_driver_wrapper = MotorDriverROSWrapper()
-    rclpy.spin(motor_driver_wrapper)
+    try:
+        motor_driver_wrapper = MotorDriverROSWrapper()
+        rclpy.spin(motor_driver_wrapper)
+    except KeyboardInterrupt:
+        pass
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    motor_driver_wrapper.destroy_node()
-    rclpy.shutdown()
-
+    with suppress(Exception):
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        motor_driver_wrapper.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

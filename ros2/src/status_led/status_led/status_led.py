@@ -2,6 +2,7 @@ import rclpy
 import RPi.GPIO as IO
 import time
 
+from contextlib import suppress
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
 
@@ -48,14 +49,18 @@ class StatusLedROSWrapper(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    status_led_wrapper = StatusLedROSWrapper()
-    rclpy.spin(status_led_wrapper)
+    try:
+        status_led_wrapper = StatusLedROSWrapper()
+        rclpy.spin(status_led_wrapper)
+    except KeyboardInterrupt:
+        pass
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    status_led_wrapper.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        status_led_wrapper.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

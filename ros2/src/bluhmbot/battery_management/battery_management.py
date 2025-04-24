@@ -16,6 +16,7 @@ Date: November 10, 2021
 """
   
 import rclpy # Import the ROS client library for Python
+from contextlib import suppress
 from rclpy.node import Node # Enables the use of rclpy's Node class
 from sensor_msgs.msg import BatteryState # Enable use of the sensor_msgs/BatteryState message type
   
@@ -79,16 +80,17 @@ def main(args=None):
         # Spin the node so the callback function is called.
         # Publish any pending messages to the topics.
         rclpy.spin(battery_state_pub)
-    except rclpy.exceptions.ROSInterruptException:
+    except KeyboardInterrupt:
         pass
 
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
-    battery_state_pub.destroy_node()
+    with suppress(Exception):
+        # Destroy the node explicitly
+        # (optional - otherwise it will be done automatically
+        # when the garbage collector destroys the node object)
+        battery_state_pub.destroy_node()
   
-    # Shutdown the ROS client library for Python
-    rclpy.shutdown()
+        # Shutdown the ROS client library for Python
+        rclpy.shutdown()
   
 if __name__ == '__main__':
   main()
