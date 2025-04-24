@@ -77,7 +77,7 @@ def main(args=None):
     try:
         imu_driver_wrapper = ImuDriverROSWrapper()
         rclpy.spin(imu_driver_wrapper)
-    except KeyboardInterrupot:
+    except KeyboardInterrupt:
         pass
 
     with suppress(Exception):
