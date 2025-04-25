@@ -16,6 +16,7 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import rclpy
+from contextlib import suppress
 from rclpy.node import Node
 from std_msgs.msg import Float32
 from std_msgs.msg import Int16
@@ -99,8 +100,9 @@ def main(args=None):
     except rclpy.exceptions.ROSInterruptException:
         pass
 
-    wheel_loopback.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        wheel_loopback.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':

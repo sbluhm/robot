@@ -17,6 +17,7 @@
 
 
 import rclpy
+from contextlib import suppress
 from rclpy.node import Node
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist
@@ -81,8 +82,9 @@ def main(args=None):
     except rclpy.exceptions.ROSInterruptException:
         pass
 
-    twist_to_motors.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        twist_to_motors.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':

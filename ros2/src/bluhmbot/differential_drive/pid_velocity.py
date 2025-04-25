@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import rclpy
+from contextlib import suppress
 from rclpy.node import Node
-
 from std_msgs.msg import Int16
 from std_msgs.msg import Float32
 from numpy import array
@@ -196,8 +196,9 @@ def main(args=None):
     except rclpy.exceptions.ROSInterruptException:
         pass
 
-    pid_velocity.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        pid_velocity.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':

@@ -46,6 +46,7 @@
 
 import rclpy
 from rclpy.node import Node
+from contextlib import suppress
 from math import sin, cos, pi
 
 from geometry_msgs.msg import Quaternion
@@ -212,8 +213,9 @@ def main(args=None):
     except rclpy.exceptions.ROSInterruptException:
         pass
 
-    diff_tf.destroy_node()
-    rclpy.shutdown()
+    with suppress(Exception):
+        diff_tf.destroy_node()
+        rclpy.shutdown()
 
 
 if __name__ == '__main__':
