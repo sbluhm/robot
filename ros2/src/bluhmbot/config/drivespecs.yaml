@@ -9,7 +9,7 @@
     wheel_topic: lwheel
     motor_cmd_topic: lmotor_cmd
     pwm_pin: 13
-    reverse_pin: 5
+    reverse_pin: 6
     brake_pin: 26
 /right_wheel:
   ros__parameters:
@@ -18,5 +18,5 @@
     wheel_topic: rwheel
     motor_cmd_topic: rmotor_cmd
     pwm_pin: 12
-    reverse_pin: 6
+    reverse_pin: 5
     brake_pin: 25
