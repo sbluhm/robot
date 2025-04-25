@@ -24,7 +24,7 @@ class MotorDriverROSWrapper(Node):
         topic_wheel = self.declare_parameter('wheel_topic', "wheel").value
         topic_motor_cmd = self.declare_parameter('motor_cmd_topic', "motor_cmd").value
         pin_pwm = self.declare_parameter('pwm_pin', 13).value
-        pin_reverse = self.declare_parameter('reverse_pin', 5).value
+        pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
 
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
