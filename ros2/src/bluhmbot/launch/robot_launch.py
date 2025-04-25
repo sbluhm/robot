@@ -41,6 +41,35 @@ def generate_launch_description():
             parameters=[joystick_config],
             ),
         launch_ros.actions.Node(
+            package='bluhmbot',
+            executable='twist_to_motors_node',
+            name='twist_to_motors_node',
+            parameters=[
+                {"twist_topic": "cmd_vel"},
+                {"lwheel_vtarget_topic": "lwheel_vtarget"},
+                {"rwheel_vtarget_topic": "rwheel_vtarget"},
+            ]),
+        launch_ros.actions.Node(
+            package='bluhmbot',
+            executable='pid_velocity_node',
+            name='left_pid_velocity',
+            parameters=[
+                {"wheel_topic": "lwheel"},
+                {"wheel_vtarget_topic": "lwheel_vtarget"},
+                {"motor_cmd_topic": "lmotor_cmd"},
+                {"wheel_vel_topic": "lwheel_vel"}
+            ]),
+        launch_ros.actions.Node(
+            package='bluhmbot',
+            executable='pid_velocity_node',
+            name='right_pid_velocity',
+            parameters=[
+                {"wheel_topic": "rwheel"},
+                {"wheel_vtarget_topic": "rwheel_vtarget"},
+                {"motor_cmd_topic": "rmotor_cmd"},
+                {"wheel_vel_topic": "rwheel_vel"}
+            ]),
+        launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
             name='left_wheel',
