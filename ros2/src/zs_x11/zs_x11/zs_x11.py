@@ -18,27 +18,19 @@ class MotorDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('zs_x11_driver')
-        self.declare_parameter('~publish_current_speed_frequency', 5.0)
-        self.declare_parameter('~publish_motor_status_frequency', 1.0)
-
         topic_wheel = self.declare_parameter('wheel_topic', "wheel").value
         topic_motor_cmd = self.declare_parameter('motor_cmd_topic', "motor_cmd").value
         pin_pwm = self.declare_parameter('pwm_pin', 13).value
         pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
 
-        publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
-        publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
-
         self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake)
         self.drive_power_last_message = time.time()
         self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
         self.drive_power_sub
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
-        self.odom_publisher = self.create_publisher(Odometry, 'odom', 10)
         self.wheel_tick_pub = self.create_publisher(Int16, topic_wheel, 10)
 
-        self.motor_status_pub = self.create_publisher(DiagnosticStatus, "motor_status", 1)
         self.timer = self.create_timer(1.0/1, self.publish_current_speed)
         self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
 
