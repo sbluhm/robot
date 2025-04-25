@@ -27,9 +27,9 @@
 26 - GPIO7  - l298n/irf3205 DIR1/ZK-BM1 PWM1 FWD grün
 27 - GPIO0  - l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
 28 - GPIO1  - l298n/delete? gelb
-29 - GPIO5  - left zs_x11 reverse weiss
+29 - GPIO5  - right zs_x11 reverse weiss
 30 - GND right zs_x11 ground grau
-31 - GPIO6  - right zs_x11 reverse grau
+31 - GPIO6  - left zs_x11 reverse grau
 32 - GPIO12 - PWM0 right zs_x11 speed lila
 33 - GPIO13 - PWM1 left zs_x11 speed weiss
 34 - GND left zs_x11 ground schwarz
