@@ -18,8 +18,6 @@ class MotorDriverROSWrapper(Node):
 
     def __init__(self):
         super().__init__('zs_x11_driver')
-        self.declare_parameter('~max_speed', 100)
-        self.declare_parameter('~scale_speed', 100)
         self.declare_parameter('~publish_current_speed_frequency', 5.0)
         self.declare_parameter('~publish_motor_status_frequency', 1.0)
 
@@ -29,16 +27,11 @@ class MotorDriverROSWrapper(Node):
         pin_reverse = self.declare_parameter('reverse_pin', 5).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
 
-
-        max_speed = self.get_parameter('~max_speed').get_parameter_value().double_value
-        scale_speed = self.get_parameter('~scale_speed').get_parameter_value().integer_value
         publish_current_speed_frequency = self.get_parameter('~publish_current_speed_frequency').get_parameter_value().double_value
         publish_motor_status_frequency = self.get_parameter('~publish_motor_status_frequency').get_parameter_value().string_value
 
-        self.motor = MotorDriver(pin_pwm, pin_reverse, pin_brake, max_speed=max_speed, scale_speed=scale_speed)
-        self.drive_vector_last_message = time.time()
-        self.drive_vector_sub = self.create_subscription(Vector, 'drive_vector_DISABLED', self.callback_drive_vector, 10)
-        self.drive_vector_sub
+        self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake)
+        self.drive_power_last_message = time.time()
         self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
         self.drive_power_sub
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
@@ -46,45 +39,26 @@ class MotorDriverROSWrapper(Node):
         self.wheel_tick_pub = self.create_publisher(Int16, topic_wheel, 10)
 
         self.motor_status_pub = self.create_publisher(DiagnosticStatus, "motor_status", 1)
-        self.timer = self.create_timer(1.0/30, self.publish_current_speed)
+        self.timer = self.create_timer(1.0/1, self.publish_current_speed)
         self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
 
     def timer_callback_emergency_stop(self):
-        if self.drive_vector_last_message + 1 <= time.time():
+        if self.drive_power_last_message + 1 <= time.time():
             self.stop()
 
     def publish_current_speed(self, event=None):
-        odom_msg = Odometry()
-        odom_msg.header.stamp.sec = int(time.time())
-        odom_msg.header.stamp.nanosec = int(time.time() * 1e9) % 1000000000
-#        self.odom_publisher.publish(odom_msg)
         tick_msg = Int16()
         tick_msg.data = int(self.motor.tick_counter)
         self.wheel_tick_pub.publish(tick_msg)
-
-    def publish_motor_status(self, event=None):
-        status = self.motor.get_status()
-        data_list = []
-        for key in status:
-            data_list.append(KeyValue(key, str(status[key])))
-        msg = DiagnosticStatus()
-        msg.values = data_list
-        self.motor_status_pub.publish(msg)
 
     def stop(self):
         self.get_logger().debug('Stopping')
         self.motor.stop()
 
-    def callback_drive_vector(self, msg):
-        self.get_logger().info(f"Received Drive Vector: {msg.x}, {msg.y}")
-        self.drive_vector_last_message = time.time()
-        self.motor.vdrive(msg.y, msg.x)
-
     def callback_drive_power(self, msg):
-        self.drive_vector_last_message = time.time()
+        self.drive_power_last_message = time.time()
         self.set_power = msg
         self.motor.wheel(msg.data)
-
 
     def callback_stop(self, request, response):
         self.stop()
