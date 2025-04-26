@@ -20,4 +20,4 @@
     pwm_pin: 12
     reverse_pin: 5
     brake_pin: 25
-    inverse: True
+    inverse_direction: True
