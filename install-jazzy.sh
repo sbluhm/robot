@@ -1,11 +1,12 @@
 # Installing ROS
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
+SCOPE=$1
 
 echo "Preparing ROS Distro $ROS_DISTRO"
 
-# Only works on 64bit OS (Raspberry OS 64bit)
-if [[ `uname -m` != "x86_64" ]]; then
+# Only works on 64bit OS (Rasipberry OS 64bit)
+if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
   echo "Update OS"
   sudo apt -y autoremove
   sudo apt-get -y update
@@ -143,7 +144,7 @@ sudo docker build -t ros_docker_${ROS_DISTRO} .
 #do_i2c 0
 
 # Don't run this on Fedora
-if [[ `uname -m` != "x86_64" ]]; then
+if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
   echo "Installing service"
   #cp /root/robot/os/90-update.sh /lib/dhcpcd/dhcpcd-hooks/
   cp /root/robot/os/robot-update.service /etc/systemd/system
