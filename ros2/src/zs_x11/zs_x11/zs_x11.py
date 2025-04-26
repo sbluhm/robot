@@ -23,8 +23,9 @@ class MotorDriverROSWrapper(Node):
         pin_pwm = self.declare_parameter('pwm_pin', 13).value
         pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
+        inverse = self.declare_parameter('inverse_direction', False).value
 
-        self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake)
+        self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake, inverse=inverse)
         self.drive_power_last_message = time.time()
         self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
         self.drive_power_sub

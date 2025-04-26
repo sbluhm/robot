@@ -5,12 +5,15 @@ IO.setwarnings(False)
 IO.setmode (IO.BCM)
 
 class MotorDriver:
-    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26):
+    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26, inverse=False):
         """
         Init communication, set default settings, ...
         """
         self.tick_counter = 0
         self.last_tick_time = time.time()
+        self.inverse_multiplier = 1
+        if inverse:
+            self.inverse_multiplier = -1
 
     # left defaults
         self.pwm_pin = pwm_pin
@@ -45,6 +48,7 @@ class MotorDriver:
         IO.output(self.brake_pin, False)
 
         # Set direction
+        power = power*self.inverse_multiplier
         if power < 0:
             IO.output(self.reverse_pin, True)
         else:
