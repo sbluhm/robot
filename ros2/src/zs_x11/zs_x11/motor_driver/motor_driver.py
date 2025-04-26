@@ -36,7 +36,11 @@ class MotorDriver:
         IO.output(self.brake_pin, True)
 
     def power_to_ticks_per_second(self, power):
-        tps = power/10.0
+        # 90 ticks per revolution
+        if power == 0:
+            tps = 0
+        else:
+            tps = (95 + power/2) * 90 / 60
         return tps
 
     def count_ticks(self, power):
