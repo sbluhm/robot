@@ -62,3 +62,6 @@ class MotorDriver:
         # Power
         self.motor.ChangeDutyCycle(abs(power))
         self.count_ticks(power)
+
+    def GPIOcleanup(self):
+        IO.cleanup()

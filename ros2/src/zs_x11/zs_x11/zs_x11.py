@@ -81,6 +81,8 @@ def main(args=None):
         pass
 
     with suppress(Exception):
+        #safeguard used GPIO pins
+        motor_driver_wrapper.motor.GPIOcleanup()
         # Destroy the node explicitly
         # (optional - otherwise it will be done automatically
         # when the garbage collector destroys the node object)

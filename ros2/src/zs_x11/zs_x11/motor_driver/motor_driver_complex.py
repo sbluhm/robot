@@ -112,3 +112,6 @@ class MotorDriver:
              IO.output(5, True)
         # Power
         right.ChangeDutyCycle(abs(vector))
+
+    def GPIOcleanup(self):
+        IO.cleanup()
