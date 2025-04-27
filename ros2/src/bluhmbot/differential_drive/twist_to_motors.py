@@ -79,7 +79,7 @@ def main(args=None):
     try:
         twist_to_motors = TwistToMotors()
         rclpy.spin(twist_to_motors)
-    except rclpy.exceptions.ROSInterruptException:
+    except KeyboardInterrupt:
         pass
 
     with suppress(Exception):
