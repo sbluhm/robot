@@ -1,20 +1,35 @@
-/zs_x11:
+/twist_to_motors_node:
   ros__parameters:
-    ~max_speed: 50
-    ~scale_speed: 50
+    twist_topic: cmd_vel
+    lwheel_vtarget_topic: lwheel_vtarget
+    rwheel_vtarget_topic: rwheel_vtarget,
+/left_pid_velocity:
+  ros__parameters:
+    wheel_topic: lwheel
+    wheel_vtarget_topic: lwheel_vtarget
+    motor_cmd_topic: lmotor_cmd
+    wheel_vel_topic: lwheel_vel
+/right_pid_velocity:
+  ros__parameters:
+    wheel_topic: rwheel
+    wheel_vtarget_topic: rwheel_vtarget
+    motor_cmd_topic: rmotor_cmd
+    wheel_vel_topic: rwheel_vel
+    Ki: 0
+    Kd: 0
+    Kp: 0
 /left_wheel:
   ros__parameters:
-    ~max_speed: 50
-    ~scale_speed: 50
     wheel_topic: lwheel
     motor_cmd_topic: lmotor_cmd
     pwm_pin: 13
     reverse_pin: 6
     brake_pin: 26
+    Ki: 0
+    Kd: 0
+    Kp: 1
 /right_wheel:
   ros__parameters:
-    ~max_speed: 50
-    ~scale_speed: 50
     wheel_topic: rwheel
     motor_cmd_topic: rmotor_cmd
     pwm_pin: 12
