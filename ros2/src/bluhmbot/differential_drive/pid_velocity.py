@@ -193,7 +193,7 @@ def main(args=None):
     try:
         pid_velocity = PidVelocity()
         rclpy.spin(pid_velocity)
-    except rclpy.exceptions.ROSInterruptException:
+    except KeyboardInterrupt:
         pass
 
     with suppress(Exception):
