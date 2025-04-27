@@ -26,7 +26,7 @@ class MotorDriver:
         IO.setup(self.reverse_pin, IO.OUT)
         IO.setup(self.brake_pin, IO.OUT)
         IO.setup(speed_pulse_pin, IO.IN)
-        IO.add_event_detect(speed_pulse_pin, GPIO.FALLING, 
+        IO.add_event_detect(speed_pulse_pin, IO.FALLING, 
             callback=speed_pulse_callback, bouncetime=10)
         self.motor = IO.PWM(self.pwm_pin,10000)
         self.motor.start(0)
