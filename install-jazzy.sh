@@ -64,7 +64,7 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     python3-smbus2
-RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi.gpio; fi
+RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi-lgpio; fi
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
