@@ -1,5 +1,3 @@
-from .motor_driver.motor_driver import MotorDriver
-
 import rclpy
 import time
 from contextlib import suppress
@@ -24,8 +22,17 @@ class MotorDriverROSWrapper(Node):
         pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
         inverse = self.declare_parameter('inverse_direction', False).value
+        if self.declare_parameter('use_twist', False).value:
+            from .motor_driver.motor_driver import MotorDriver
+            self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake, inverse=inverse)
+            self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
+            self.drive_power_sub
+        else:
+            from .motor_driver.motor_driver_complex import MotorDriver
+            self.motor = MotorDriver()
+            self.drive_twist_sub = self.create_subscription(Twist, 'cmd_vel', self.callback_drive_twist, 10)
+            self.drive_twist_sub
 
-        self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake, inverse=inverse)
         self.drive_power_last_message = time.time()
         self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
         self.drive_power_sub
@@ -52,6 +59,11 @@ class MotorDriverROSWrapper(Node):
         self.drive_power_last_message = time.time()
         self.set_power = msg
         self.motor.wheel(msg.data)
+
+    def callback_drive_twist(self, msg):
+        self.get_logger().info(f"Received Drive Twist: {msg.linear.x} / {msg.angular.z}")
+        self.drive_vector_last_message = time.time()
+        self.motor.twistdrive(msg.linear.x, msg.angular.z)
 
     def callback_stop(self, request, response):
         self.stop()
