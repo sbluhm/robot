@@ -42,8 +42,8 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
-            name='zs_x11_complex_node',
-            parameters=[{"use_twist":True}]),
+            name='zs_x11_controller_mode',
+            parameters=[{"controller_mode":True}]),
         launch_ros.actions.Node(
             package='l298n',
             executable='l298n',
