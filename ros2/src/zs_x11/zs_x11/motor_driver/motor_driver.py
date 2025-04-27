@@ -7,7 +7,7 @@ IO.setwarnings(False)
 IO.setmode (IO.BCM)
 
 class MotorDriver:
-    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26, inverse=False):
+    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26, speed_pulse_pin=19, inverse=False):
         """
         Init communication, set default settings, ...
         """
@@ -25,6 +25,9 @@ class MotorDriver:
         IO.setup(self.pwm_pin, IO.OUT)
         IO.setup(self.reverse_pin, IO.OUT)
         IO.setup(self.brake_pin, IO.OUT)
+        IO.setup(speed_pulse_pin, IO.IN)
+        IO.add_event_detect(speed_pulse_pin, GPIO.FALLING, 
+            callback=speed_pulse_callback, bouncetime=10)
         self.motor = IO.PWM(self.pwm_pin,10000)
         self.motor.start(0)
 
@@ -48,6 +51,9 @@ class MotorDriver:
         dt = now - self.last_tick_time
         self.last_tick_time = now
         self.tick_counter += self.power_to_ticks_per_second(power) * dt
+
+    def speed_pulse_callback(self):
+        self.tick_counter += 1
 
     def wheel(self, power):
         # Release brakes
