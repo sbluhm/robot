@@ -15,9 +15,9 @@
     wheel_vtarget_topic: rwheel_vtarget
     motor_cmd_topic: rmotor_cmd
     wheel_vel_topic: rwheel_vel
-    Ki: 0
-    Kd: 0
-    Kp: 0
+    Ki: 100000.0
+    Kd: 0.0
+    Kp: 100000.0
 /left_wheel:
   ros__parameters:
     wheel_topic: lwheel
@@ -25,9 +25,9 @@
     pwm_pin: 13
     reverse_pin: 6
     brake_pin: 26
-    Ki: 0
-    Kd: 0
-    Kp: 1
+    Ki: 100000.0
+    Kd: 0.0
+    Kp: 100000.0
 /right_wheel:
   ros__parameters:
     wheel_topic: rwheel
