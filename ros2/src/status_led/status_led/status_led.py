@@ -45,6 +45,9 @@ class StatusLedROSWrapper(Node):
     def led_on(self):
         IO.output(LED, True)
 
+    def GPIOcleanup(self):
+        IO.cleanup()
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -59,6 +62,7 @@ def main(args=None):
         # Destroy the node explicitly
         # (optional - otherwise it will be done automatically
         # when the garbage collector destroys the node object)
+        status_led_wrapper.GPIOcleanup()
         status_led_wrapper.destroy_node()
         rclpy.shutdown()
 
