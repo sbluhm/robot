@@ -29,7 +29,7 @@ class MotorDriver:
         """
         self.max_speed = max_speed
         self.scale_speed = scale_speed
-        self.wheelbase = 1
+        self.wheelbase = 0.46
         self.current_speed = 0
         self.voltage = 12
         self.temperature = 47
