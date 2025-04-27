@@ -27,6 +27,8 @@ class MotorDriverROSWrapper(Node):
             self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake, inverse=inverse)
             self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
             self.drive_power_sub
+            self.timer = self.create_timer(1.0/1, self.publish_current_speed)
+
         else:
             from .motor_driver.motor_driver_complex import MotorDriver
             self.motor = MotorDriver()
@@ -34,12 +36,9 @@ class MotorDriverROSWrapper(Node):
             self.drive_twist_sub
 
         self.drive_power_last_message = time.time()
-        self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
-        self.drive_power_sub
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
         self.wheel_tick_pub = self.create_publisher(Int16, topic_wheel, 10)
 
-        self.timer = self.create_timer(1.0/1, self.publish_current_speed)
         self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
 
     def timer_callback_emergency_stop(self):
