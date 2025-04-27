@@ -26,7 +26,7 @@ class MotorDriver:
         IO.setup(self.reverse_pin, IO.OUT)
         IO.setup(self.brake_pin, IO.OUT)
         IO.setup(speed_pulse_pin, IO.IN)
-        IO.add_event_detect(speed_pulse_pin, IO.FALLING, 
+        IO.add_event_detect(speed_pulse_pin, IO.RISING, 
             callback=self.speed_pulse_callback, bouncetime=10)
         self.motor = IO.PWM(self.pwm_pin,10000)
         self.motor.start(0)
@@ -52,7 +52,7 @@ class MotorDriver:
         self.last_tick_time = now
         self.tick_counter += self.power_to_ticks_per_second(power) * dt
 
-    def speed_pulse_callback(self):
+    def speed_pulse_callback(self, interrupt_pin):
         self.tick_counter += 1
 
     def wheel(self, power):
