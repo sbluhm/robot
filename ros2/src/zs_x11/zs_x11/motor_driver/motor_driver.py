@@ -14,6 +14,8 @@ class MotorDriver:
         self.tick_counter = 0
         self.last_tick_time = time.time()
         self.inverse_multiplier = 1
+        # Used to add/subtract ticks positive or negative
+        self.__direction = 1
         if inverse:
             self.inverse_multiplier = -1
 
@@ -53,7 +55,7 @@ class MotorDriver:
         self.tick_counter += self.power_to_ticks_per_second(power) * dt
 
     def speed_pulse_callback(self, interrupt_pin):
-        self.tick_counter += 1
+        self.tick_counter = self.tick_counter + self.__direction
 
     def wheel(self, power):
         # Release brakes
@@ -62,12 +64,14 @@ class MotorDriver:
         # Set direction and scale to 255
         power = self.inverse_multiplier * power * MAX_POWER_VALUE_SCALE
         if power < 0:
+            self.__direction = -1
             IO.output(self.reverse_pin, True)
         else:
+            self.__direction = 1
             IO.output(self.reverse_pin, False)
         # Power
         self.motor.ChangeDutyCycle(abs(power))
-        self.count_ticks(power)
+#        self.count_ticks(power)
 
     def GPIOcleanup(self):
         IO.cleanup()
