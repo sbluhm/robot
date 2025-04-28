@@ -3,7 +3,7 @@ import time
 IO.setwarnings(False)          
 IO.setmode (IO.BCM)         
 
-PWM_FWD_PIN = 7
+PWM_FWD_PIN = 10
 PWM_REV_PIN = 9
 
 IO.setup(PWM_FWD_PIN,IO.OUT)
