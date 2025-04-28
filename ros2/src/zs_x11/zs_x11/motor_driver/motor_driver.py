@@ -13,9 +13,9 @@ class MotorDriver:
         """
         self.tick_counter = 0
         self.last_tick_time = time.time()
-        self.inverse_multiplier = 1
         # Used to add/subtract ticks positive or negative
         self.__direction = 1
+        self.inverse = inverse
         if inverse:
             self.inverse_multiplier = -1
 
@@ -62,13 +62,13 @@ class MotorDriver:
         IO.output(self.brake_pin, False)
 
         # Set direction and scale to 255
-        power = self.inverse_multiplier * power * MAX_POWER_VALUE_SCALE
+        power = power * MAX_POWER_VALUE_SCALE
         if power < 0:
             self.__direction = -1
-            IO.output(self.reverse_pin, True)
+            IO.output(self.reverse_pin, not self.inverse)
         else:
             self.__direction = 1
-            IO.output(self.reverse_pin, False)
+            IO.output(self.reverse_pin, self.inverse)
         # Power
         self.motor.ChangeDutyCycle(abs(power))
 #        self.count_ticks(power)

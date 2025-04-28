@@ -28,7 +28,7 @@
     pwm_pin: 13
     reverse_pin: 6
     brake_pin: 26
-    speed_pulse_pin: 19
+    speed_pulse_pin: 16
 /right_wheel:
   ros__parameters:
     wheel_topic: rwheel
@@ -36,5 +36,5 @@
     pwm_pin: 12
     reverse_pin: 5
     brake_pin: 25
-    speed_pulse_pin: 16
+    speed_pulse_pin: 19
     inverse_direction: True

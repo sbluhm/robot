@@ -34,8 +34,8 @@
 33 - GPIO13 - left zs_x11 PWM1 speed weiss
 34 - GND    - left zs_x11 ground schwarz
 35 - GPIO19 - left zs_x11 speed pulse weiss
-36 - GPIO16 - right zs_x11 speed pulse lila
-37 - GPIO26 - left zs_x11 brake lila
+36 - GPIO16 - left zs_x11 speed pulse lila
+37 - GPIO26 - right zs_x11 brake lila
 38 - GPIO20 - 
 39 - GND    - 
 40 - GPIO21 - 
