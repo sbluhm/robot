@@ -40,20 +40,6 @@ class MotorDriver:
         self.motor.ChangeDutyCycle(0)
         IO.output(self.brake_pin, True)
 
-    def power_to_ticks_per_second(self, power):
-        # 90 ticks per revolution
-        if power == 0:
-            tps = 0
-        else:
-            tps = (95 + power/2) * 90 / 60
-        return tps
-
-    def count_ticks(self, power):
-        now = time.time()
-        dt = now - self.last_tick_time
-        self.last_tick_time = now
-        self.tick_counter += self.power_to_ticks_per_second(power) * dt
-
     def speed_pulse_callback(self, interrupt_pin):
         self.tick_counter = self.tick_counter + self.__direction
 
@@ -71,7 +57,6 @@ class MotorDriver:
             IO.output(self.reverse_pin, self.inverse)
         # Power
         self.motor.ChangeDutyCycle(abs(power))
-#        self.count_ticks(power)
 
     def GPIOcleanup(self):
         IO.cleanup()
