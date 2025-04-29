@@ -20,11 +20,6 @@ def generate_launch_description():
     return launch.LaunchDescription([
         launch_ros.actions.Node(
             package='bluhmbot',
-            executable='twist_to_motors_node',
-            name='twist_to_motors_node',
-            parameters=[drive_config]),
-        launch_ros.actions.Node(
-            package='bluhmbot',
             executable='pid_velocity_node',
             name='left_pid_velocity',
             parameters=[drive_config]),
