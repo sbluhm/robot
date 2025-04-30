@@ -19,6 +19,9 @@ def setup(dummy1, dummy2):
 def output(dummy1, dummy2):
     return True
 
+def add_event_detect(pin, edge,callback, bouncetime=10
+    return true
+
 class PWM():
     def __init__(self,dummy1, dummy2):
         return None
