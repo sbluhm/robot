@@ -7,7 +7,7 @@ IO.setwarnings(False)
 IO.setmode (IO.BCM)
 
 class MotorDriver:
-    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26, speed_pulse_pin=19, inverse=False):
+    def __init__(self, pwm_pin=13, reverse_pin=6, brake_pin=26, speed_pulse_pin=16, inverse=False):
         """
         Init communication, set default settings, ...
         """

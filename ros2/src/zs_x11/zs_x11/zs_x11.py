@@ -21,7 +21,7 @@ class MotorDriverROSWrapper(Node):
         pin_pwm = self.declare_parameter('pwm_pin', 13).value
         pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
-        pin_speed_pulse = self.declare_parameter('speed_pulse_pin', 19).value
+        pin_speed_pulse = self.declare_parameter('speed_pulse_pin', 16).value
         inverse = self.declare_parameter('inverse_direction', False).value
         controller_mode = self.declare_parameter('controller_mode', False).value
         if controller_mode:
