@@ -34,7 +34,7 @@ class MotorDriverROSWrapper(Node):
             self.motor = MotorDriver(pwm_pin=pin_pwm, reverse_pin=pin_reverse, brake_pin=pin_brake, speed_pulse_pin = pin_speed_pulse, inverse=inverse)
             self.drive_power_sub = self.create_subscription(Float32, topic_motor_cmd, self.callback_drive_power, 10)
             self.drive_power_sub
-            self.timer = self.create_timer(1.0/1, self.publish_current_speed)
+            self.timer = self.create_timer(1.0/10, self.publish_current_speed)
 
         self.drive_power_last_message = time.time()
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
