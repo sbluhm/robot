@@ -7,7 +7,7 @@
   ros__parameters:
     wheel_topic: lwheel
     motor_cmd_topic: lmotor_cmd
-    wheel_vtarget: lwheel_vtarget
+    wheel_vtarget_topic: lwheel_vtarget
     pwm_pin: 13
     reverse_pin: 6
     brake_pin: 26
@@ -16,7 +16,7 @@
   ros__parameters:
     wheel_topic: rwheel
     motor_cmd_topic: rmotor_cmd
-    wheel_vtarget: rwheel_vtarget
+    wheel_vtarget_topic: rwheel_vtarget
     pwm_pin: 12
     reverse_pin: 5
     brake_pin: 25
