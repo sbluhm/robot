@@ -12,8 +12,8 @@ from std_msgs.msg import Int32
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
-MOTOR_ROC = 33,0432965288789
-MOTOR_SHIFT = -0,185685198415843
+MOTOR_ROC = 33.0432965288789
+MOTOR_SHIFT = -0.185685198415843
 
 class MotorDriverROSWrapper(Node):
 
