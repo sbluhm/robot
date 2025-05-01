@@ -45,16 +45,6 @@ def generate_launch_description():
             name='twist_to_motors_node',
             parameters=[drive_config]),
         launch_ros.actions.Node(
-            package='bluhmbot',
-            executable='pid_velocity_node',
-            name='left_pid_velocity',
-            parameters=[drive_config]),
-        launch_ros.actions.Node(
-            package='bluhmbot',
-            executable='pid_velocity_node',
-            name='right_pid_velocity',
-            parameters=[drive_config]),
-        launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
             name='left_wheel',

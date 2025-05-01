@@ -3,28 +3,11 @@
     twist_topic: cmd_vel
     lwheel_vtarget_topic: lwheel_vtarget
     rwheel_vtarget_topic: rwheel_vtarget,
-/left_pid_velocity:
-  ros__parameters:
-    wheel_topic: lwheel
-    wheel_vtarget_topic: lwheel_vtarget
-    motor_cmd_topic: lmotor_cmd
-    wheel_vel_topic: lwheel_vel
-    Ki: 100000.0
-    Kd: 0.0
-    Kp: 100000.0
-/right_pid_velocity:
-  ros__parameters:
-    wheel_topic: rwheel
-    wheel_vtarget_topic: rwheel_vtarget
-    motor_cmd_topic: rmotor_cmd
-    wheel_vel_topic: rwheel_vel
-    Ki: 100000.0
-    Kd: 0.0
-    Kp: 100000.0
 /left_wheel:
   ros__parameters:
     wheel_topic: lwheel
     motor_cmd_topic: lmotor_cmd
+    wheel_vtarget: lwheel_vtarget
     pwm_pin: 13
     reverse_pin: 6
     brake_pin: 26
@@ -33,6 +16,7 @@
   ros__parameters:
     wheel_topic: rwheel
     motor_cmd_topic: rmotor_cmd
+    wheel_vtarget: rwheel_vtarget
     pwm_pin: 12
     reverse_pin: 5
     brake_pin: 25
