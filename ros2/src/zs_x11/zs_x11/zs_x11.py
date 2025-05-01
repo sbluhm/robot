@@ -21,7 +21,7 @@ class MotorDriverROSWrapper(Node):
         super().__init__('zs_x11_driver')
         topic_wheel = self.declare_parameter('wheel_topic', "wheel").value
         topic_motor_cmd = self.declare_parameter('motor_cmd_topic', "motor_cmd").value
-        topic_wheel_target = self.declare_parameter('wheel_vtarget_topic', "lwheel_vtarget").value
+        topic_wheel_vtarget = self.declare_parameter('wheel_vtarget_topic', "lwheel_vtarget").value
         pin_pwm = self.declare_parameter('pwm_pin', 13).value
         pin_reverse = self.declare_parameter('reverse_pin', 6).value
         pin_brake = self.declare_parameter('brake_pin', 26).value
