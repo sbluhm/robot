@@ -1,3 +1,5 @@
+RISING=True
+
 def BCM():
     return True
 
@@ -20,7 +22,7 @@ def output(dummy1, dummy2):
     return True
 
 def add_event_detect(pin, edge,callback, bouncetime=10):
-    return true
+    return True
 
 class PWM():
     def __init__(self,dummy1, dummy2):
