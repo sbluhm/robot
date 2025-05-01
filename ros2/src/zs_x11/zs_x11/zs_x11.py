@@ -71,7 +71,7 @@ class MotorDriverROSWrapper(Node):
     def callback_wheel_vtarget(self, msg):
         self.drive_power_last_message = time.time()
         power = ( msg.data + MOTOR_SHIFT ) * MOTOR_ROC
-        self.motor.wheel(msg.data)
+        self.motor.wheel(power)
 
     def callback_drive_power(self, msg):
         self.drive_power_last_message = time.time()
