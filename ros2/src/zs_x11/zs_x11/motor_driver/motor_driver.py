@@ -41,17 +41,19 @@ class MotorDriver:
     def speed_pulse_callback(self, interrupt_pin):
         self.tick_counter = self.tick_counter + self.__direction
 
-    def wheel(self, power):
-        # Release brakes
-        IO.output(self.brake_pin, False)
-
-        # Set direction
-        if power < 0:
+    def reverse(self, reverse=True):
+        if reverse:
             self.__direction = -1
             IO.output(self.reverse_pin, not self.inverse)
         else:
             self.__direction = 1
             IO.output(self.reverse_pin, self.inverse)
+
+
+    def wheel(self, power):
+        # Release brakes
+        IO.output(self.brake_pin, False)
+
         # Power
         self.motor.ChangeDutyCycle(abs(power))
 

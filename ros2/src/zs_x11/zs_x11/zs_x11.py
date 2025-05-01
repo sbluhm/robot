@@ -12,9 +12,11 @@ from std_msgs.msg import Int32
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
-MOTOR_ROC = 33.0432965288789
-MOTOR_SHIFT = -0.185685198415843
-
+#MOTOR_ROC = 33.0432965288789
+MOTOR_ROC = 32.2418230613342
+#MOTOR_SHIFT = -0.185685198415843
+MOTOR_SHIFT = -0.155436252405753
+MIN_SPEED = 0.02
 class MotorDriverROSWrapper(Node):
 
     def __init__(self):
@@ -70,7 +72,15 @@ class MotorDriverROSWrapper(Node):
 
     def callback_wheel_vtarget(self, msg):
         self.drive_power_last_message = time.time()
-        power = ( msg.data + MOTOR_SHIFT ) * MOTOR_ROC
+        input = msg.data
+        if input < 0:
+            self.motor.reverse()
+        else:
+            self.motor.reverse(False)
+        if abs(input) >= MIN_SPEED:
+            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
+        else:
+            power = 0
         self.motor.wheel(power)
 
     def callback_drive_power(self, msg):
