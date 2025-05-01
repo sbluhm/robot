@@ -1,8 +1,6 @@
 import RPi.GPIO as IO
 import time
 
-MAX_POWER_VALUE_SCALE = 100.0/255.0
-
 IO.setwarnings(False)
 IO.setmode (IO.BCM)
 
@@ -47,8 +45,7 @@ class MotorDriver:
         # Release brakes
         IO.output(self.brake_pin, False)
 
-        # Set direction and scale to 255
-        power = power * MAX_POWER_VALUE_SCALE
+        # Set direction
         if power < 0:
             self.__direction = -1
             IO.output(self.reverse_pin, not self.inverse)
