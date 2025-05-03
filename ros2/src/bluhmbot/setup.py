@@ -26,7 +26,8 @@ setup(
         'console_scripts': [
             'battery_management_node = battery_management.battery_management:main',
             'twist_to_motors_node = differential_drive.twist_to_motors:main',
-            'pid_velocity_node = differential_drive.pid_velocity:main'
+            'pid_velocity_node = differential_drive.pid_velocity:main',
+            'diff_tf_node = differential_drive.diff_tf:main'
         ],
     },
 )

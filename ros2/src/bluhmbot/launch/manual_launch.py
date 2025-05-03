@@ -40,6 +40,10 @@ def generate_launch_description():
             name='teleop_twist_joy_node',
             parameters=[joystick_config]),
         launch_ros.actions.Node(
+            package='bluhmbot',
+            executable='diff_tf_node',
+            name='diff_tf_node'),
+        launch_ros.actions.Node(
             package='zs_x11',
             executable='zs_x11',
             name='zs_x11_controller_mode',
