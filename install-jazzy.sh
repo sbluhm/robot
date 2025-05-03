@@ -5,6 +5,11 @@ SCOPE=$1
 
 echo "Preparing ROS Distro $ROS_DISTRO"
 
+# Check branch status first
+git remote update
+git status | grep "Your branch is behind"
+
+
 # Only works on 64bit OS (Rasipberry OS 64bit)
 if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
   echo "Update OS"
