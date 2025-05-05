@@ -80,7 +80,7 @@ class DiffTf(Node):
         self.base_width = float(self.declare_parameter('base_width', 0.46).value)  # The wheel base width in meters
 
         self.base_frame_id = self.declare_parameter('base_frame_id',
-                                                    'base_link').value  # the name of the base frame of the robot
+                                                    'base_footprint').value  # the name of the base frame of the robot
         self.odom_frame_id = self.declare_parameter('odom_frame_id',
                                                     'odom').value  # the name of the odometry reference frame
 
