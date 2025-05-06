@@ -31,15 +31,6 @@ def generate_launch_description():
             executable='lsm6ds3_node',
             name='lsm6ds3_node'),
         launch_ros.actions.Node(
-            package='joy',
-            executable='joy_node',
-            name='joy_node'),
-        launch_ros.actions.Node(
-            package='teleop_twist_joy',
-            executable='teleop_node',
-            name='teleop_twist_joy_node',
-            parameters=[joystick_config]),
-        launch_ros.actions.Node(
             package='bluhmbot',
             executable='twist_to_motors_node',
             name='twist_to_motors_node',
