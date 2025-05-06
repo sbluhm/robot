@@ -157,8 +157,8 @@ class DiffTf(Node):
 
         transform_stamped_msg = TransformStamped()
         transform_stamped_msg.header.stamp = self.get_clock().now().to_msg()
-        transform_stamped_msg.header.frame_id = self.odom_frame_id
-        transform_stamped_msg.child_frame_id = self.base_frame_id
+        transform_stamped_msg.header.frame_id = self.base_frame_id
+        transform_stamped_msg.child_frame_id = self.odom_frame_id
         transform_stamped_msg.transform.translation.x = self.x
         transform_stamped_msg.transform.translation.y = self.y
         transform_stamped_msg.transform.translation.z = 0.0
