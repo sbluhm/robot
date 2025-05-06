@@ -5,6 +5,8 @@ import launch_ros.actions
 import os
 
 def generate_launch_description():
+    pkg_share = FindPackageShare(package='bluhmbot').find('bluhmbot')
+    default_model_path = os.path.join(pkg_share, 'src', 'description', 'bluhmbot_description.sdf')
     c920_config = os.path.join(
         get_package_share_directory('bluhmbot'),
         'config',
@@ -17,7 +19,25 @@ def generate_launch_description():
         get_package_share_directory('bluhmbot'),
         'config',
         'joystick.yaml')
+
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{'robot_description': Command(['xacro ', default_model_path])}]
+    )
+    joint_state_publisher_node = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
+        parameters=[{'robot_description': Command(['xacro ', default_model_path])}],
+        condition=UnlessCondition(LaunchConfiguration('gui'))
+    )
+
+
     return launch.LaunchDescription([
+        joint_state_publisher_node,
+        robot_state_publisher_node,
         launch_ros.actions.Node(
             package='status_led',
             executable='status_led',
