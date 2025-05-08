@@ -1,11 +1,14 @@
-from ament_index_python.packages import get_package_share_directory
-
 import launch
 import launch_ros.actions
 import os
 
+from ament_index_python.packages import get_package_share_directory
+from launch_ros.actions import Node
+from launch.substitutions import Command, LaunchConfiguration
+
+
 def generate_launch_description():
-    pkg_share = FindPackageShare(package='bluhmbot').find('bluhmbot')
+    pkg_share = get_package_share_directory('bluhmbot')
     default_model_path = os.path.join(pkg_share, 'src', 'description', 'bluhmbot_description.sdf')
     c920_config = os.path.join(
         get_package_share_directory('bluhmbot'),
@@ -31,7 +34,6 @@ def generate_launch_description():
         executable='joint_state_publisher',
         name='joint_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', default_model_path])}],
-        condition=UnlessCondition(LaunchConfiguration('gui'))
     )
 
 
