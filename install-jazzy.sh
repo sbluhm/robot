@@ -6,7 +6,7 @@ SCOPE=$1
 echo "Preparing ROS Distro $ROS_DISTRO"
 
 # Check branch status first
-git remote update
+git remote update > /dev/null
 git status | grep "Your branch is behind"
 
 
@@ -47,7 +47,7 @@ fi
 
 echo "Updating Docker Container"
 cd /tmp 
-git clone https://github.com/osrf/docker_images/
+git clone https://github.com/osrf/docker_images/ --quiet
 #git submodule init
 #git submodule update
 if [[ `uname -m` == "x86_64" ]]; then
@@ -55,7 +55,7 @@ if [[ `uname -m` == "x86_64" ]]; then
 else
   cd docker_images/ros/${ROS_DISTRO}/ubuntu/${UBUNTU_DISTRO}/perception
 fi
-git checkout Dockerfile
+git checkout Dockerfile --quiet
 
 # Dev environment:
 # ros-humble-robot-localization
@@ -91,7 +91,7 @@ EOF
 fi
 
 cat >> Dockerfile << EOF
-RUN git clone https://github.com/sbluhm/robot /root/robot && echo $(date)
+RUN git clone https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
