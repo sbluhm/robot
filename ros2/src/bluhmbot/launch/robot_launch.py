@@ -88,5 +88,11 @@ def generate_launch_description():
                 ('/image_raw/theora', '/camera/image_raw/theora'),
                 ('/image_raw/zstd', '/camera/image_raw/zstd'),
             ]),
+        launch_ros.actions.Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='static_transform_publisher',
+            arguments=['0', '0', '0.15', '0', '0', '0', 'map', 'odom'],
+            ),
   ])
 
