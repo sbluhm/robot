@@ -70,6 +70,10 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-xacro \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-robot-localization
+
     python3-smbus2
 RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi-lgpio; fi
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
@@ -86,8 +90,6 @@ cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-${ROS_DISTRO}-turtlebot3-gazebo \
-    ros-${ROS_DISTRO}-joint-state-publisher \
-    ros-${ROS_DISTRO}-robot-localization
 EOF
 fi
 
