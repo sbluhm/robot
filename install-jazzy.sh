@@ -92,8 +92,7 @@ EOF
 fi
 
 cat >> Dockerfile << EOF
-RUN git clone https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
-RUN cd robot; git checkout $GIT_CURRENT_BRANCH
+RUN git clone -b $GIT_CURRENT_BRANCH  https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
