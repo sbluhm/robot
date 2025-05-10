@@ -89,7 +89,7 @@ if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
-    ros-${ROS_DISTRO}-turtlebot3-gazebo \
+    ros-${ROS_DISTRO}-turtlebot3-gazebo 
 EOF
 fi
 
