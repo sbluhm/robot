@@ -2,8 +2,9 @@
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
 SCOPE=$1
+GIT_CURRENT_BRANCH=$(cd "$(dirname ${BASH_SOURCE[0]})"; git branch --show-current)
 
-echo "Preparing ROS Distro $ROS_DISTRO"
+echo "Preparing ROS Distro $ROS_DISTRO on git branch $GIT_CURRENT_BRANCH"
 
 # Check branch status first
 git remote update > /dev/null
@@ -92,6 +93,7 @@ fi
 
 cat >> Dockerfile << EOF
 RUN git clone https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
+RUN cd robot; git checkout $GIT_CURRENT_BRANCH
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
