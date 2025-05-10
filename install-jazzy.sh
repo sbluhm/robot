@@ -73,6 +73,7 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     ros-${ROS_DISTRO}-xacro \
     ros-${ROS_DISTRO}-joint-state-publisher \
     ros-${ROS_DISTRO}-robot-localization \
+    ros-${ROS_DISTRO}-sdformat-urdf \
     python3-smbus2
 
 RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi-lgpio; fi
