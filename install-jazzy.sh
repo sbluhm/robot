@@ -2,7 +2,8 @@
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
 SCOPE=$1
-GIT_CURRENT_BRANCH=$(cd "$(dirname "$(readlink -f "$0")")"; git branch --show-current)
+cd "$(dirname "$(readlink -f "$0")")"
+GIT_CURRENT_BRANCH=$(git branch --show-current)
 
 echo "Preparing ROS Distro $ROS_DISTRO on git branch $GIT_CURRENT_BRANCH"
 
