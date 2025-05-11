@@ -85,6 +85,7 @@ RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
+RUN ln -s /root/robot/os/nav2.sh /nav2
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/master/os/pigpio/pigpio-install.sh | bash
 EOF
 
