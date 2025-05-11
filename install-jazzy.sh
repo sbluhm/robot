@@ -85,6 +85,7 @@ RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' 
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
 RUN ln -s /root/robot/os/nav2.sh /nav2
+RUN ln -s /root/robot/os/rviz.sh /rviz
 EOF
 
 # Install additional packages on dev machine for navigation simulation
