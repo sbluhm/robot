@@ -95,6 +95,7 @@ if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
+    ros-jazzy-nav2-loopback-sim ros-jazzy-nav2-minimal-tb3-sim ros-jazzy-slam-toolbox ros-jazzy-turtlebot3-bringup ros-jazzy-slam-toolbox \
     ros-${ROS_DISTRO}-turtlebot3-gazebo 
 RUN ln -sf /root/robot/os/start-mock.sh /start
 EOF
