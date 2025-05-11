@@ -65,7 +65,6 @@ def generate_launch_description():
             package='zs_x11',
             executable='zs_x11',
             name='left_wheel',
-            prefix=['valgrind --tool=callgrind --dump-instr=yes -v --instr-atstart=no'],
             parameters=[drive_config]),
         launch_ros.actions.Node(
             package='zs_x11',
