@@ -74,7 +74,6 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='l298n',
             executable='l298n',
-            prefix=['valgrind --tool=callgrind --dump-instr=yes -v --instr-atstart=no'],
             name='l298n'),
         launch_ros.actions.Node(
             package='v4l2_camera',
