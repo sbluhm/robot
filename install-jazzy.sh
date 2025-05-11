@@ -2,8 +2,9 @@
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
 SCOPE=$1
+GIT_CURRENT_BRANCH=$(cd "$(dirname ${BASH_SOURCE[0]})"; git branch --show-current)
 
-echo "Preparing ROS Distro $ROS_DISTRO"
+echo "Preparing ROS Distro $ROS_DISTRO on git branch $GIT_CURRENT_BRANCH"
 
 # Check branch status first
 git remote update > /dev/null
@@ -69,7 +70,12 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-xacro \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-robot-localization \
+    ros-${ROS_DISTRO}-sdformat-urdf \
     python3-smbus2
+
 RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi-lgpio; fi
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
@@ -84,14 +90,12 @@ if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
-    ros-${ROS_DISTRO}-turtlebot3-gazebo \
-    ros-${ROS_DISTRO}-joint-state-publisher \
-    ros-${ROS_DISTRO}-robot-localization
+    ros-${ROS_DISTRO}-turtlebot3-gazebo 
 EOF
 fi
 
 cat >> Dockerfile << EOF
-RUN git clone https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
+RUN git clone -b $GIT_CURRENT_BRANCH  https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
 EOF
