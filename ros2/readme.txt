@@ -15,3 +15,6 @@ ros2 start
 
 # Launch the robot
 ros2 launch bluhmbot robot_launch.py
+
+# Instructions for profiling
+https://robotics.stackexchange.com/questions/99990/how-to-run-code-profiler-for-your-ros2-nodes

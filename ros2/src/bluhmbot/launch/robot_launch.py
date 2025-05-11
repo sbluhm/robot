@@ -65,6 +65,7 @@ def generate_launch_description():
             package='zs_x11',
             executable='zs_x11',
             name='left_wheel',
+            prefix=['valgrind --tool=callgrind --dump-instr=yes -v --instr-atstart=no'],
             parameters=[drive_config]),
         launch_ros.actions.Node(
             package='zs_x11',
@@ -74,6 +75,7 @@ def generate_launch_description():
         launch_ros.actions.Node(
             package='l298n',
             executable='l298n',
+            prefix=['valgrind --tool=callgrind --dump-instr=yes -v --instr-atstart=no'],
             name='l298n'),
         launch_ros.actions.Node(
             package='v4l2_camera',
