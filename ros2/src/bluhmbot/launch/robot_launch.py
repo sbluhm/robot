@@ -3,12 +3,14 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, GroupAction, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.descriptions import ComposableNode, ParameterFile
 from launch_ros.substitutions import FindPackageShare
+from nav2_common.launch import RewrittenYaml
 
 
 def generate_launch_description():
@@ -179,10 +181,9 @@ def generate_launch_description():
     map_server_node = Node(
         package='nav2_map_server',
         executable='map_server',
-        plugin='nav2_map_server::MapServer',
         name='map_server',
         output='screen',
-        respawn=use_respawn,
+        respawn=True,
         respawn_delay=2.0,
         parameters=[configured_params, {'yaml_filename': map_yaml_file}],
         arguments=['--ros-args', '--log-level', log_level],
