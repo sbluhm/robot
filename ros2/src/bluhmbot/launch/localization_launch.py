@@ -66,7 +66,7 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map', default_value='', description='Full path to map yaml file to load'
+        'map', default_value=os.path.join(bluhmbot_dir, 'maps', 'tb3_sandbox.yaml'), description='Full path to map yaml file to load'
     )
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
