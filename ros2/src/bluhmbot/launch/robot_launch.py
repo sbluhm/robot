@@ -76,16 +76,6 @@ def generate_launch_description():
         name='joint_state_publisher',
         parameters=[{'robot_description': Command(['xacro ', default_model_path])}],
     )
-    map_server_node = Node(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        output='screen',
-        respawn=True,
-        respawn_delay=2.0,
-        parameters=[configured_params, {'yaml_filename': map_yaml_file}],
-        arguments=['--ros-args', '--log-level', log_level],
-    )
 
     return launch.LaunchDescription([
         declare_namespace_cmd,
@@ -148,6 +138,5 @@ def generate_launch_description():
             name='static_transform_publisher',
             arguments=['0', '0', '0.15', '0', '0', '0', 'odom', 'map'],
             ),
-        map_server_node
   ])
 
