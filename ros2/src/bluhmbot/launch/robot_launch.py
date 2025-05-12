@@ -3,7 +3,8 @@ import launch_ros.actions
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode, ParameterFile
@@ -138,5 +139,17 @@ def generate_launch_description():
             name='static_transform_publisher',
             arguments=['0', '0', '0.15', '0', '0', '0', 'odom', 'map'],
             ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(bringup_dir, 'launch', 'localization_launch.py')
+            ),
+            launch_arguments={
+                'map': map_yaml_file,
+#                'autostart': True,
+                'params_file': params_file,
+#                'use_respawn': True,
+            }.items(),
+        ),
+
   ])
 
