@@ -2,11 +2,17 @@ import launch_ros.actions
 import os
 
 from ament_index_python.packages import get_package_share_directory
+<<<<<<< HEAD
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+=======
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import Command, LaunchConfiguration
+>>>>>>> e996be0 (added localisation launch)
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode, ParameterFile
 from launch_ros.substitutions import FindPackageShare
@@ -152,7 +158,7 @@ def generate_launch_description():
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_transform_publisher',
-        arguments=['0', '0', '0.15', '0', '0', '0', 'map', 'odom'],
+        arguments=['0.634804', '-1.86595', '0.15', '1.59969','0', '0', 'map', 'odom'],
     )
 
     status_led = Node(
@@ -172,7 +178,7 @@ def generate_launch_description():
 
     utility_motors = Node(
             package='l298n',
-            executable='l298n',
+            executable='l297n',
             name='l298n')
 
     camera = Node(
@@ -186,7 +192,19 @@ def generate_launch_description():
                 ('/image_raw/compressed', '/camera/image_raw/compressed'),
                 ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
                 ('/image_raw/theora', '/camera/image_raw/theora'),
-            ])
+                ('/image_raw/zstd', '/camera/image_raw/zstd'),
+            ]),
+    localization_launch = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(bringup_dir, 'launch', 'localization_launch.py')
+            ),
+            launch_arguments={
+                'map': map_yaml_file,
+#                'autostart': True,
+                'params_file': params_file,
+#                'use_respawn': True,
+            }.items(),
+        )
 
     map_server_node = Node(
         package='nav2_map_server',
@@ -220,7 +238,8 @@ def generate_launch_description():
         delay_joint_state_broadcaster_after_robot_controller_spawner,
         utility_motors,
         camera,
-        map_server_node
+        map_server_node,
+        localization_launch,
 #        battery_management,
     ]
 
