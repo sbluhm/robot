@@ -63,8 +63,19 @@ def generate_launch_description():
     declare_mock_usage = DeclareLaunchArgument(
         "use_mock_hardware", default_value="false", description="Start robot with mock hardware mirroring command to its states.",
     )
+<<<<<<< HEAD
     # Declare arguments
     declared_arguments = [
+=======
+    joint_state_publisher_node = Node(
+        package='joint_state_publisher',
+        executable='joint_state_publisher',
+        name='joint_state_publisher',
+        parameters=[{'robot_description': Command(['xacro ', default_model_path])}],
+    )
+
+    return launch.LaunchDescription([
+>>>>>>> b2d2ac8 (fixes)
         declare_namespace_cmd,
         declare_map_yaml_cmd,
         declare_params_file_cmd,
@@ -175,7 +186,6 @@ def generate_launch_description():
                 ('/image_raw/compressed', '/camera/image_raw/compressed'),
                 ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
                 ('/image_raw/theora', '/camera/image_raw/theora'),
-                ('/image_raw/zstd', '/camera/image_raw/zstd'),
             ])
 
     map_server_node = Node(

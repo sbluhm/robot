@@ -28,6 +28,7 @@ from nav2_common.launch import RewrittenYaml
 def generate_launch_description() -> LaunchDescription:
     # Get the launch directory
     bringup_dir = get_package_share_directory('nav2_bringup')
+    bluhmbot_dir = get_package_share_directory('bluhmbot')
 
     namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')
@@ -76,7 +77,7 @@ def generate_launch_description() -> LaunchDescription:
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(bringup_dir, 'config', 'nav2_params.yaml'),
+        default_value=os.path.join(bluhmbot_dir, 'config', 'nav2_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
 
@@ -206,7 +207,7 @@ def generate_launch_description() -> LaunchDescription:
             LoadComposableNodes(
                 target_container=container_name_full,
                 composable_node_descriptions=[
-                    ComposableNode(
+#                    ComposableNode(
 #                        package='nav2_amcl',
 #                        plugin='nav2_amcl::AmclNode',
 #                        name='amcl',
