@@ -88,10 +88,10 @@ def generate_launch_description():
     )
 
     return launch.LaunchDescription([
-        declare_namespace_cmd
-        declare_map_yaml_cmd
-        declare_params_file_cmd
-        declare_log_level_cmd
+        declare_namespace_cmd,
+        declare_map_yaml_cmd,
+        declare_params_file_cmd,
+        declare_log_level_cmd,
         joint_state_publisher_node,
         robot_state_publisher_node,
         Node(
