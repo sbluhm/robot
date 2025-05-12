@@ -3,42 +3,81 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, GroupAction, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.descriptions import ComposableNode, ParameterFile
 from launch_ros.substitutions import FindPackageShare
+from nav2_common.launch import RewrittenYaml
 
 
 def generate_launch_description():
+    bringup_dir = get_package_share_directory('bluhmbot')
     pkg_share = get_package_share_directory('bluhmbot')
-    default_model_path = os.path.join(pkg_share, 'description', 'bluhmbot_description.sdf')
-    c920_config = os.path.join(
-        get_package_share_directory('bluhmbot'),
-        'config',
-        'v4l2_camera.yaml')
-    drive_config = os.path.join(
-        get_package_share_directory('bluhmbot'),
-        'config',
-        'drivespecs.yaml')
-    joystick_config = os.path.join(
-        get_package_share_directory('bluhmbot'),
-        'config',
-        'joystick.yaml')
+    nav2_bringup_dir = get_package_share_directory('nav2_bringup')
 
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_mock_hardware",
-            default_value="false",
-            description="Start robot with mock hardware mirroring command to its states.",
-        )
+    default_model_path = os.path.join(pkg_share, 'description', 'bluhmbot_description.sdf')
+
+
+    # Map fully qualified names to relative ones so the node's namespace can be prepended.
+    # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
+    # https://github.com/ros/geometry2/issues/32
+    # https://github.com/ros/robot_state_publisher/pull/30
+    # TODO(orduno) Substitute with `PushNodeRemapping`
+    #              https://github.com/ros2/launch_ros/issues/56
+    remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
+
+    configured_params = ParameterFile(
+        RewrittenYaml(
+            source_file=params_file,
+            root_key=namespace,
+            param_rewrites={},
+            convert_types=True,
+        ),
+        allow_substs=True,
     )
-        
+
+    c920_config = os.path.join(
+        bringup_dir, 'config', 'v4l2_camera.yaml')
+    joystick_config = os.path.join(
+        bringup_dir, 'config', 'joystick.yaml')
+
+    declare_namespace_cmd = DeclareLaunchArgument(
+        'namespace', default_value='', description='Top-level namespace'
+    )
+    declare_map_yaml_cmd = DeclareLaunchArgument(
+        'map',
+        default_value=os.path.join(bringup_dir, 'maps', 'tb3_sandbox.yaml'),
+        description='Full path to map yaml file to load'
+    )
+    declare_params_file_cmd = DeclareLaunchArgument(
+        'params_file',
+        default_value=os.path.join(bringup_dir, 'config', 'nav2_params.yaml'),
+        description='Full path to the ROS2 parameters file to use for all launched nodes',
+    )
+    declare_log_level_cmd = DeclareLaunchArgument(
+        'log_level', default_value='info', description='log level'
+    )
+    declare_mock_usage = DeclareLaunchArgument(
+        "use_mock_hardware", default_value="false", description="Start robot with mock hardware mirroring command to its states.",
+    )
+    # Declare arguments
+    declared_arguments = [
+        declare_namespace_cmd,
+        declare_map_yaml_cmd,
+        declare_params_file_cmd,
+        declare_log_level_cmd,
+        declare_mock_usage,
+        ]
+
     # Initialize Arguments
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
+    namespace = LaunchConfiguration('namespace')
+    map_yaml_file = LaunchConfiguration('map')
+    params_file = LaunchConfiguration('params_file')
+    log_level = LaunchConfiguration('log_level')
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -139,6 +178,18 @@ def generate_launch_description():
                 ('/image_raw/zstd', '/camera/image_raw/zstd'),
             ])
 
+    map_server_node = Node(
+        package='nav2_map_server',
+        executable='map_server',
+        name='map_server',
+        output='screen',
+        respawn=True,
+        respawn_delay=2.0,
+        parameters=[configured_params, {'yaml_filename': map_yaml_file}],
+        arguments=['--ros-args', '--log-level', log_level],
+    )
+
+
     # Delay start of joint_state_broadcaster after `robot_controller`
     # TODO(anyone): This is a workaround for flaky tests. Remove when fixed.
     delay_joint_state_broadcaster_after_robot_controller_spawner = RegisterEventHandler(
@@ -159,6 +210,7 @@ def generate_launch_description():
         delay_joint_state_broadcaster_after_robot_controller_spawner,
         utility_motors,
         camera,
+        map_server_node
 #        battery_management,
     ]
 
