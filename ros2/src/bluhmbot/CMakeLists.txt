@@ -70,6 +70,12 @@ install(
   DIRECTORY bringup/launch  config launch
   DESTINATION share/bluhmbot
 )
+
+install(
+  DIRECTORY maps
+  DESTINATION share/bluhmbot
+)
+
 install(
   DIRECTORY rviz
   DESTINATION share/bluhmbot

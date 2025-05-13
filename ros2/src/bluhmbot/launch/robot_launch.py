@@ -1,18 +1,12 @@
-import launch_ros.actions
 import os
 
 from ament_index_python.packages import get_package_share_directory
-<<<<<<< HEAD
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription, RegisterEventHandler
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
-=======
-from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, LaunchConfiguration
->>>>>>> e996be0 (added localisation launch)
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.descriptions import ComposableNode, ParameterFile
 from launch_ros.substitutions import FindPackageShare
@@ -34,16 +28,6 @@ def generate_launch_description():
     # TODO(orduno) Substitute with `PushNodeRemapping`
     #              https://github.com/ros2/launch_ros/issues/56
     remappings = [('/tf', 'tf'), ('/tf_static', 'tf_static')]
-
-    configured_params = ParameterFile(
-        RewrittenYaml(
-            source_file=params_file,
-            root_key=namespace,
-            param_rewrites={},
-            convert_types=True,
-        ),
-        allow_substs=True,
-    )
 
     c920_config = os.path.join(
         bringup_dir, 'config', 'v4l2_camera.yaml')
@@ -69,19 +53,9 @@ def generate_launch_description():
     declare_mock_usage = DeclareLaunchArgument(
         "use_mock_hardware", default_value="false", description="Start robot with mock hardware mirroring command to its states.",
     )
-<<<<<<< HEAD
+
     # Declare arguments
     declared_arguments = [
-=======
-    joint_state_publisher_node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        parameters=[{'robot_description': Command(['xacro ', default_model_path])}],
-    )
-
-    return launch.LaunchDescription([
->>>>>>> b2d2ac8 (fixes)
         declare_namespace_cmd,
         declare_map_yaml_cmd,
         declare_params_file_cmd,
@@ -95,6 +69,16 @@ def generate_launch_description():
     map_yaml_file = LaunchConfiguration('map')
     params_file = LaunchConfiguration('params_file')
     log_level = LaunchConfiguration('log_level')
+
+    configured_params = ParameterFile(
+        RewrittenYaml(
+            source_file=params_file,
+            root_key=namespace,
+            param_rewrites={},
+            convert_types=True,
+        ),
+        allow_substs=True,
+    )
 
     # Get URDF via xacro
     robot_description_content = Command(
@@ -178,7 +162,7 @@ def generate_launch_description():
 
     utility_motors = Node(
             package='l298n',
-            executable='l297n',
+            executable='l298n',
             name='l298n')
 
     camera = Node(
@@ -193,7 +177,8 @@ def generate_launch_description():
                 ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
                 ('/image_raw/theora', '/camera/image_raw/theora'),
                 ('/image_raw/zstd', '/camera/image_raw/zstd'),
-            ]),
+            ])
+            
     localization_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(bringup_dir, 'launch', 'localization_launch.py')
