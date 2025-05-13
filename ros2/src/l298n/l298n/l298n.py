@@ -78,10 +78,12 @@ class MotorDriverROSWrapper(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+    motor_driver_wrapper = MotorDriverROSWrapper()
 
     try:
-        motor_driver_wrapper = MotorDriverROSWrapper()
-        rclpy.spin(motor_driver_wrapper)
+        while rclpy.ok():
+            rclpy.spin_once(motor_driver_wrapper)
+            motor_driver_wrapper.create_rate(2).sleep()
     except KeyboardInterrupt:
         pass
 
