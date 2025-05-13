@@ -1,6 +1,6 @@
 /twist_to_motors_node:
   ros__parameters:
-    twist_topic: cmd_vel
+    twist_topic: cmd_vel_smoothed
     lwheel_vtarget_topic: lwheel_vtarget
     rwheel_vtarget_topic: rwheel_vtarget,
 /left_wheel:
