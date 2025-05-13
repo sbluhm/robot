@@ -178,7 +178,7 @@ def generate_launch_description():
 
     utility_motors = Node(
             package='l298n',
-            executable='l298n',
+            executable='l297n',
             name='l298n')
 
     camera = Node(
