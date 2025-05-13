@@ -34,7 +34,7 @@ class TwistToMotors(Node):
         self.nodename = "twist_to_motors"
 
         ### get parameters ####
-        topic_twist = self.declare_parameter('wheel_topic', "cmd_vel").value
+        topic_twist = self.declare_parameter('twist_topic', "cmd_vel").value
         topic_lwheel_vtarget = self.declare_parameter('lwheel_vtarget_topic', "lwheel_vtarget").value
         topic_rwheel_vtarget = self.declare_parameter('rwheel_vel_topic', "rwheel_vtarget").value
 
