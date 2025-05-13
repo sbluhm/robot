@@ -137,7 +137,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='static_transform_publisher',
-            arguments=['0.634804', '-1.86595', '0.15', '1.59969','0', '0', 'odom', 'map'],
+            arguments=['0.634804', '-1.86595', '0.15', '1.59969','0', '0', 'map', 'odom'],
             ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
