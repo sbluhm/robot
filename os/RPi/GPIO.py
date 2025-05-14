@@ -12,7 +12,7 @@ def _dummy_interrupt(callback, pin):
 #    _MOTOR_SHIFT = -0.155436252405753
 #    _MIN_POWER = 4.366
     _MOTOR_SHIFT = 0.0
-    _MIN_POWER = 0.0
+    _MIN_POWER = 0.0000001
 
     while True:
         if pin == 16:
@@ -25,7 +25,8 @@ def _dummy_interrupt(callback, pin):
         if dutycycle >= _MIN_POWER:
             sleep(1/(( dutycycle / _MOTOR_ROC - _MOTOR_SHIFT) * 90))
             callback(pin)
-        sleep(0.1)
+        else:
+            sleep(0.1)
 
 def BCM():
     return True
