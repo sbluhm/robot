@@ -107,19 +107,14 @@ def generate_launch_description():
             executable='diff_tf_node',
             name='diff_tf_node'),
         Node(
-            package='zs_x11',
-            executable='zs_x11',
-            name='left_wheel',
+            package='integrated',
+            executable='integrated',
+            name='wheels',
             parameters=[drive_config]),
-        Node(
-            package='zs_x11',
-            executable='zs_x11',
-            name='right_wheel',
-            parameters=[drive_config]),
-        Node(
-            package='l298n',
-            executable='l298n',
-            name='l298n'),
+#        Node(
+#            package='l298n',
+#            executable='l298n',
+#            name='l298n'),
         Node(
             package='v4l2_camera',
             executable='v4l2_camera_node',
