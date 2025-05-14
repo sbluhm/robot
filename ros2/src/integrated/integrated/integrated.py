@@ -23,10 +23,6 @@ class MotorDriverWrapper(Node):
 
     def __init__(self):
         super().__init__('integrated_driver')
-        topic_lwheel = self.declare_parameter('lwheel_topic', "lwheel").value
-        topic_lmotor_cmd = self.declare_parameter('lmotor_cmd_topic', "lmotor_cmd").value
-        topic_rwheel = self.declare_parameter('rwheel_topic', "rwheel").value
-        topic_rmotor_cmd = self.declare_parameter('rmotor_cmd_topic', "rmotor_cmd").value
         pin_lpwm = self.declare_parameter('lpwm_pin', 13).value
         pin_lreverse = self.declare_parameter('lreverse_pin', 6).value
         pin_lbrake = self.declare_parameter('lbrake_pin', 26).value
@@ -41,12 +37,8 @@ class MotorDriverWrapper(Node):
         from .motor_driver.motor_driver import MotorDriver
 
         self.lmotor = MotorDriver(pwm_pin=pin_lpwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
-        self.lwheel_tick_pub = self.create_publisher(Int16, topic_lwheel, 10)
-
         self.rmotor = MotorDriver(pwm_pin=pin_rpwm, reverse_pin=pin_rreverse, brake_pin=pin_rbrake, speed_pulse_pin = pin_rspeed_pulse, inverse=rinverse)
-        self.rwheel_tick_pub = self.create_publisher(Int16, topic_rwheel, 10)
 
-        self.timer = self.create_timer(1.0/10, self.publish_tick_counter)
         self.drive_power_last_message = time.time()
         self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
         self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
@@ -54,15 +46,6 @@ class MotorDriverWrapper(Node):
     def timer_callback_emergency_stop(self):
         if self.drive_power_last_message + 1 <= time.time():
             self.stop()
-
-    def publish_tick_counter(self, event=None):
-        ltick_msg = Int16()
-        ltick_msg.data = int(self.lmotor.tick_counter)
-        self.lwheel_tick_pub.publish(ltick_msg)
-        rtick_msg = Int16()
-        rtick_msg.data = int(self.rmotor.tick_counter)
-        self.rwheel_tick_pub.publish(rtick_msg)
-
 
 
     def stop(self):
@@ -114,7 +97,9 @@ class TwistToMotors(Node):
         self.nodename = "twist_to_motors"
     
         ### get parameters ####
-        topic_twist = self.declare_parameter('twist_topic', "cmd_vel").value
+        topic_twist = self.declare_parameter('twist_topic', "cmd_vel_smoothed").value
+        topic_lwheel = self.declare_parameter('lwheel_topic', "lwheel").value
+        topic_rwheel = self.declare_parameter('rwheel_topic', "rwheel").value
 
         self.get_logger().info("%s started" % self.nodename)
 
@@ -126,9 +111,13 @@ class TwistToMotors(Node):
         self.create_subscription(Twist, topic_twist, self.twist_callback, 10)
         self.motor = MotorDriverWrapper()
 
+        self.lwheel_tick_pub = self.create_publisher(Int16, topic_lwheel, 10)
+        self.rwheel_tick_pub = self.create_publisher(Int16, topic_rwheel, 10)
+
 #        self.rate_hz = self.declare_parameter("rate_hz", 50).value
         self.rate_hz = self.declare_parameter("rate_hz", 5).value       
         self.create_timer(1.0/self.rate_hz, self.calculate_left_and_right_target)
+        self.timer = self.create_timer(1.0/10, self.publish_tick_counter)
 
     def calculate_left_and_right_target(self):
         # dx = (l + r) / 2
@@ -150,6 +139,15 @@ class TwistToMotors(Node):
         self.ticks_since_target = 0
         self.dx = msg.linear.x
         self.dr = msg.angular.z
+
+    def publish_tick_counter(self, event=None):
+        ltick_msg = Int16()
+        ltick_msg.data = int(self.lmotor.tick_counter)
+        self.lwheel_tick_pub.publish(ltick_msg)
+        rtick_msg = Int16()
+        rtick_msg.data = int(self.rmotor.tick_counter)
+        self.rwheel_tick_pub.publish(rtick_msg)
+
 
 def main(args=None):
     try:

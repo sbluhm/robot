@@ -85,14 +85,14 @@ def generate_launch_description():
         declare_log_level_cmd,
         joint_state_publisher_node,
         robot_state_publisher_node,
-        Node(
-            package='status_led',
-            executable='status_led',
-            name='status_led'),
-        Node(
-            package='bluhmbot',
-            executable='battery_management_node',
-            name='battery_management_node'),
+#        Node(
+#            package='status_led',
+#            executable='status_led',
+#            name='status_led'),
+ #       Node(
+ #           package='bluhmbot',
+ #           executable='battery_management_node',
+ #           name='battery_management_node'),
         Node(
             package='lsm6ds3',
             executable='lsm6ds3_node',
@@ -115,19 +115,19 @@ def generate_launch_description():
 #            package='l298n',
 #            executable='l298n',
 #            name='l298n'),
-        Node(
-            package='v4l2_camera',
-            executable='v4l2_camera_node',
-            name='v4l2_camera',
-            parameters=[c920_config],
-            remappings=[
-                ('/camera_info', '/camera/camera_info'),
-                ('/image_raw', '/camera/image_raw'),
-                ('/image_raw/compressed', '/camera/image_raw/compressed'),
-                ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
-                ('/image_raw/theora', '/camera/image_raw/theora'),
-                ('/image_raw/zstd', '/camera/image_raw/zstd'),
-            ]),
+#        Node(
+#            package='v4l2_camera',
+#            executable='v4l2_camera_node',
+#            name='v4l2_camera',
+#            parameters=[c920_config],
+#            remappings=[
+#                ('/camera_info', '/camera/camera_info'),
+#                ('/image_raw', '/camera/image_raw'),
+#                ('/image_raw/compressed', '/camera/image_raw/compressed'),
+#                ('/image_raw/compressedDepth', '/camera/image_raw/compressedDepth'),
+#                ('/image_raw/theora', '/camera/image_raw/theora'),
+#                ('/image_raw/zstd', '/camera/image_raw/zstd'),
+#            ]),
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
