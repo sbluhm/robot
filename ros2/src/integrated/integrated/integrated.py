@@ -142,10 +142,10 @@ class TwistToMotors(Node):
 
     def publish_tick_counter(self, event=None):
         ltick_msg = Int16()
-        ltick_msg.data = int(self.lmotor.tick_counter)
+        ltick_msg.data = int(self.motor.lmotor.tick_counter)
         self.lwheel_tick_pub.publish(ltick_msg)
         rtick_msg = Int16()
-        rtick_msg.data = int(self.rmotor.tick_counter)
+        rtick_msg.data = int(self.motor.rmotor.tick_counter)
         self.rwheel_tick_pub.publish(rtick_msg)
 
 
