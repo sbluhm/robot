@@ -38,12 +38,9 @@ class MotorDriverROSWrapper(Node):
         linverse = self.declare_parameter('linverse_direction', False).value
         rinverse = self.declare_parameter('rinverse_direction', True).value
 
-# "mode" supports "CONTROLLER", "PID" (default) and "WHEEL".
-# CONTROLLER takes /cmd_vel as Twist input. PID takes velocity in m/s, WHEEL takes the pwm duty cycle as input
-        mode = self.declare_parameter('mode', "pid").value
         from .motor_driver.motor_driver import MotorDriver
 
-        self.lmotor = MotorDriver(pwm_pin=lpin_pwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
+        self.lmotor = MotorDriver(pwm_pin=pin_lpwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
         self.lwheel_vtarget_sub = self.create_subscription(Float32, topic_lwheel_vtarget, self.callback_lwheel_vtarget, 10)
         self.lwheel_vtarget_sub
         self.lwheel_tick_pub = self.create_publisher(Int16, topic_lwheel, 10)
