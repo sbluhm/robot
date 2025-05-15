@@ -19,6 +19,7 @@ MOTOR_ROC = 32.2418230613342
 #MOTOR_SHIFT = -0.185685198415843
 MOTOR_SHIFT = -0.155436252405753
 MIN_SPEED = 0.02
+
 class MotorDriverWrapper(Node):
 
     def __init__(self):
@@ -40,18 +41,6 @@ class MotorDriverWrapper(Node):
         self.rmotor = MotorDriver(pwm_pin=pin_rpwm, reverse_pin=pin_rreverse, brake_pin=pin_rbrake, speed_pulse_pin = pin_rspeed_pulse, inverse=rinverse)
 
         self.drive_power_last_message = time.time()
-        self.stop_motor_srv = self.create_service(Trigger, 'stop_motor', self.callback_stop)
-        self.timer = self.create_timer(1, self.timer_callback_emergency_stop)
-
-    def timer_callback_emergency_stop(self):
-        if self.drive_power_last_message + 1 <= time.time():
-            self.stop()
-
-
-    def stop(self):
-        self.get_logger().debug('Stopping')
-        self.lmotor.stop()
-        self.rmotor.stop()
 
     def callback_lwheel_vtarget(self, msg):
         self.drive_power_last_message = time.time()
@@ -77,13 +66,6 @@ class MotorDriverWrapper(Node):
         else:
             power = 0
         self.rmotor.wheel(power)
-
-    def callback_stop(self, request, response):
-        self.stop()
-        response = '{"success": True, "message": "Motor has been stopped"}'
-        self.get_logger().info('Incoming request: %d' % (request))
-        return response
-
 
 
 class TwistToMotors(Node):
@@ -115,7 +97,7 @@ class TwistToMotors(Node):
         self.rwheel_tick_pub = self.create_publisher(Int16, topic_rwheel, 10)
 
 #        self.rate_hz = self.declare_parameter("rate_hz", 50).value
-        self.rate_hz = self.declare_parameter("rate_hz", 5).value       
+        self.rate_hz = self.declare_parameter("rate_hz", 5).value
         self.create_timer(1.0/self.rate_hz, self.calculate_left_and_right_target)
         self.timer = self.create_timer(1.0/10, self.publish_tick_counter)
 
@@ -125,9 +107,13 @@ class TwistToMotors(Node):
 
         right = Float32()
         left = Float32()
-        
-        right.data = 1.0 * self.dx + self.dr * self.w / 2.0
-        left.data = 1.0 * self.dx - self.dr * self.w / 2.0
+
+        if self.ticks_since_target > self.rate_hz:
+            right.data = 0.0
+            left.data = 0.0
+        else:
+            right.data = 1.0 * self.dx + self.dr * self.w / 2.0
+            left.data = 1.0 * self.dx - self.dr * self.w / 2.0
 
         self.motor.callback_lwheel_vtarget(left)
         self.motor.callback_rwheel_vtarget(right)
