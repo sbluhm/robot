@@ -97,11 +97,11 @@ def generate_launch_description():
             package='lsm6ds3',
             executable='lsm6ds3_node',
             name='lsm6ds3_node'),
-        Node(
-            package='bluhmbot',
-            executable='twist_to_motors_node',
-            name='twist_to_motors_node',
-            parameters=[drive_config]),
+#        Node(
+#            package='bluhmbot',
+#            executable='twist_to_motors_node',
+#            name='twist_to_motors_node',
+#            parameters=[drive_config]),
         Node(
             package='bluhmbot',
             executable='diff_tf_node',
