@@ -102,10 +102,10 @@ def generate_launch_description():
 #            executable='twist_to_motors_node',
 #            name='twist_to_motors_node',
 #            parameters=[drive_config]),
-        Node(
-            package='bluhmbot',
-            executable='diff_tf_node',
-            name='diff_tf_node'),
+#        Node(
+#            package='bluhmbot',
+#            executable='diff_tf_node',
+#            name='diff_tf_node'),
         Node(
             package='integrated',
             executable='integrated',
