@@ -14,12 +14,20 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Twist
 
+from rclpy.node import Node
+from math import sin, cos, pi
+
+from geometry_msgs.msg import Quaternion
+from geometry_msgs.msg import TransformStamped
+from tf2_ros import TransformBroadcaster
+
 
 #MOTOR_ROC = 33.0432965288789
 MOTOR_ROC = 32.2418230613342
 #MOTOR_SHIFT = -0.185685198415843
 MOTOR_SHIFT = -0.155436252405753
 MIN_SPEED = 0.02
+NS_TO_SEC= 1000000000
 
 class TwistToMotors(Node):
     """ 
@@ -88,13 +96,14 @@ class TwistToMotors(Node):
         self.dr = 0.0
         self.then = self.get_clock().now()
 
-        self.w = self.declare_parameter("base_width", 0.2).value
         self.dx = 0
         self.dr = 0
         self.ticks_since_target = 0
-    
+
+        self.odom_pub = self.create_publisher(Odometry, "odom", 10)
+        self.odom_broadcaster = TransformBroadcaster(self)
+
         self.create_subscription(Twist, topic_twist, self.twist_callback, 10)
-        self.motor = MotorDriverWrapper()
 
 #        self.rate_hz = self.declare_parameter("rate_hz", 50).value
         self.rate_hz = self.declare_parameter("rate_hz", 5).value
@@ -104,44 +113,39 @@ class TwistToMotors(Node):
         # dx = (l + r) / 2
         # dr = (r - l) / w
 
-        right = Float32()
-        left = Float32()
-
         if self.ticks_since_target > self.rate_hz:
-            right.data = 0.0
-            left.data = 0.0
+            right_velocity = 0.0
+            left_velocity = 0.0
         else:
-            right.data = 1.0 * self.dx + self.dr * self.w / 2.0
-            left.data = 1.0 * self.dx - self.dr * self.w / 2.0
+            right_velocity = 1.0 * self.dx + self.dr * self.base_width / 2.0
+            left_velocity = 1.0 * self.dx - self.dr * self.base_width / 2.0
 
-        self.motor.callback_lwheel_vtarget(left)
-        self.motor.callback_rwheel_vtarget(right)
+        self.callback_lwheel_vtarget(left_velocity)
+        self.callback_rwheel_vtarget(right_velocity)
 
         self.ticks_since_target += 1
 
-        update_tick_counter(self.lmotor.tick_counter, self.prev_lencoder, self.lmult, self.left)
-        update_tick_counter(self.rmotor.tick_counter, self.prev_rencoder, self.rmult, self.right)
+        self.lwheel_callback()
+        self.rwheel_callback()
 
-    def callback_lwheel_vtarget(self, msg):
-        input = msg.data
-        if input < 0:
+    def callback_lwheel_vtarget(self, velocity):
+        if velocity < 0:
             self.lmotor.reverse()
         else:
             self.lmotor.reverse(False)
-        if abs(input) >= MIN_SPEED:
-            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
+        if abs(velocity) >= MIN_SPEED:
+            power = ( abs(velocity) + MOTOR_SHIFT ) * MOTOR_ROC
         else:
             power = 0
         self.lmotor.wheel(power)
 
-    def callback_rwheel_vtarget(self, msg):
-        input = msg.data
-        if input < 0:
+    def callback_rwheel_vtarget(self, velocity):
+        if velocity < 0:
             self.rmotor.reverse()
         else:
             self.rmotor.reverse(False)
-        if abs(input) >= MIN_SPEED:
-            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
+        if abs(velocity) >= MIN_SPEED:
+            power = ( abs(velocity) + MOTOR_SHIFT ) * MOTOR_ROC
         else:
             power = 0
         self.rmotor.wheel(power)
@@ -151,20 +155,28 @@ class TwistToMotors(Node):
         self.dx = msg.linear.x
         self.dr = msg.angular.z
 
-    def update_tick_counter(self, tick_counter, prev_encoder, mult, wheel):
-        env = int(tick_counter)
-        if enc < self.encoder_low_wrap and prev_encoder > self.encoder_high_wrap:
-            mult = mult + 1
+    def lwheel_callback(self):
+        enc = int(self.lmotor.tick_counter)
+        if enc < self.encoder_low_wrap and self.prev_lencoder > self.encoder_high_wrap:
+            self.lmult = self.lmult + 1
 
-        if enc > self.encoder_high_wrap and prev_encoder < self.encoder_low_wrap:
-            mult = mult - 1
+        if enc > self.encoder_high_wrap and self.prev_lencoder < self.encoder_low_wrap:
+            self.lmult = self.lmult - 1
 
-        wheel = 1.0 * (enc + mult * (self.encoder_max - self.encoder_min))
-        prev_encoder = enc
+        self.left = 1.0 * (enc + self.lmult * (self.encoder_max - self.encoder_min))
+        self.prev_lencoder = enc
+    def rwheel_callback(self):
+        enc = int(self.rmotor.tick_counter)
+        if enc < self.encoder_low_wrap and self.prev_rencoder > self.encoder_high_wrap:
+            self.rmult = self.rmult + 1
 
+        if enc > self.encoder_high_wrap and self.prev_rencoder < self.encoder_low_wrap:
+            self.rmult = self.rmult - 1
 
+        self.right = 1.0 * (enc + self.rmult * (self.encoder_max - self.encoder_min))
+        self.prev_rencoder = enc
 
-   def update(self):
+    def update(self):
         now = self.get_clock().now()
         elapsed = now - self.then
         self.then = now
