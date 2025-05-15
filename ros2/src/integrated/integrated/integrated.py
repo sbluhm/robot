@@ -40,10 +40,7 @@ class MotorDriverWrapper(Node):
         self.lmotor = MotorDriver(pwm_pin=pin_lpwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
         self.rmotor = MotorDriver(pwm_pin=pin_rpwm, reverse_pin=pin_rreverse, brake_pin=pin_rbrake, speed_pulse_pin = pin_rspeed_pulse, inverse=rinverse)
 
-        self.drive_power_last_message = time.time()
-
     def callback_lwheel_vtarget(self, msg):
-        self.drive_power_last_message = time.time()
         input = msg.data
         if input < 0:
             self.lmotor.reverse()
@@ -55,7 +52,6 @@ class MotorDriverWrapper(Node):
             power = 0
         self.lmotor.wheel(power)
     def callback_rwheel_vtarget(self, msg):
-        self.drive_power_last_message = time.time()
         input = msg.data
         if input < 0:
             self.rmotor.reverse()
@@ -75,8 +71,8 @@ class TwistToMotors(Node):
     """
 
     def __init__(self):
-        super(TwistToMotors, self).__init__("twist_to_motors")
-        self.nodename = "twist_to_motors"
+        super(TwistToMotors, self).__init__("integrated")
+        self.nodename = "integrated"
     
         ### get parameters ####
         topic_twist = self.declare_parameter('twist_topic', "cmd_vel_smoothed").value
@@ -99,7 +95,6 @@ class TwistToMotors(Node):
 #        self.rate_hz = self.declare_parameter("rate_hz", 50).value
         self.rate_hz = self.declare_parameter("rate_hz", 5).value
         self.create_timer(1.0/self.rate_hz, self.calculate_left_and_right_target)
-        self.timer = self.create_timer(1.0/10, self.publish_tick_counter)
 
     def calculate_left_and_right_target(self):
         # dx = (l + r) / 2
@@ -119,6 +114,8 @@ class TwistToMotors(Node):
         self.motor.callback_rwheel_vtarget(right)
 
         self.ticks_since_target += 1
+
+        self.publish_tick_counter
 
 
     def twist_callback(self, msg):
