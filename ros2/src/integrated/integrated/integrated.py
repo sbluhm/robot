@@ -115,7 +115,7 @@ class TwistToMotors(Node):
 
         self.ticks_since_target += 1
 
-        self.publish_tick_counter
+        self.publish_tick_counter()
 
 
     def twist_callback(self, msg):
