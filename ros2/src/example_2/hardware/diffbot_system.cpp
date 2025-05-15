@@ -195,9 +195,8 @@ hardware_interface::return_type DiffBotSystemHardware::read(
     if (descr.get_interface_name() == hardware_interface::HW_IF_POSITION)
     {
 
-      ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
-
       if( name == "left_wheel_joint/position" ) {
+//	ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
         double position = static_cast<double>(wheel_tick_count_l) * 2*M_PI/45;
         set_state(name, position);
 
@@ -215,6 +214,7 @@ hardware_interface::return_type DiffBotSystemHardware::read(
 */
 
       } else if ( name == "right_wheel_joint/position" ) {
+//	ss << std::endl << "Wheel Tick state right: " << wheel_tick_count_r << "Name: " << name;
         double position = static_cast<double>(wheel_tick_count_r) * 2*M_PI/45;
         set_state(name, position);
       }
@@ -224,10 +224,10 @@ hardware_interface::return_type DiffBotSystemHardware::read(
       // Simply integrates
       auto velo = get_command(descr.get_prefix_name() + "/" + hardware_interface::HW_IF_VELOCITY);
 //      set_state(name, get_state(name) + period.seconds() * velo);
-
+/*
       ss << std::endl
          << "\t position " << get_state(name) << " and velocity " << velo << " for '" << name
-         << "'!";
+         << "'!"; */
     }
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
@@ -263,10 +263,10 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
       motor_driver_.set_motor_values(motor_value_l, motor_value_r);
       speed_changed = false;
     }
-
+/*
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << "command " << get_command(name) <<  " for '" << name << "'!";
-
+*/
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
