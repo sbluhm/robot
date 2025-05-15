@@ -1,5 +1,6 @@
 import rclpy
 import time
+from .motor_driver.motor_driver import MotorDriver
 from contextlib import suppress
 from custom_interfaces.msg import Vector
 from diagnostic_msgs.msg import DiagnosticStatus
@@ -20,50 +21,6 @@ MOTOR_ROC = 32.2418230613342
 MOTOR_SHIFT = -0.155436252405753
 MIN_SPEED = 0.02
 
-class MotorDriverWrapper(Node):
-
-    def __init__(self):
-        super().__init__('integrated_driver')
-        pin_lpwm = self.declare_parameter('lpwm_pin', 13).value
-        pin_lreverse = self.declare_parameter('lreverse_pin', 6).value
-        pin_lbrake = self.declare_parameter('lbrake_pin', 26).value
-        pin_lspeed_pulse = self.declare_parameter('lspeed_pulse_pin', 16).value
-        pin_rpwm = self.declare_parameter('rpwm_pin', 12).value
-        pin_rreverse = self.declare_parameter('rreverse_pin', 5).value
-        pin_rbrake = self.declare_parameter('rbrake_pin', 25).value
-        pin_rspeed_pulse = self.declare_parameter('rspeed_pulse_pin', 19).value
-        linverse = self.declare_parameter('linverse_direction', False).value
-        rinverse = self.declare_parameter('rinverse_direction', True).value
-
-        from .motor_driver.motor_driver import MotorDriver
-
-        self.lmotor = MotorDriver(pwm_pin=pin_lpwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
-        self.rmotor = MotorDriver(pwm_pin=pin_rpwm, reverse_pin=pin_rreverse, brake_pin=pin_rbrake, speed_pulse_pin = pin_rspeed_pulse, inverse=rinverse)
-
-    def callback_lwheel_vtarget(self, msg):
-        input = msg.data
-        if input < 0:
-            self.lmotor.reverse()
-        else:
-            self.lmotor.reverse(False)
-        if abs(input) >= MIN_SPEED:
-            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
-        else:
-            power = 0
-        self.lmotor.wheel(power)
-    def callback_rwheel_vtarget(self, msg):
-        input = msg.data
-        if input < 0:
-            self.rmotor.reverse()
-        else:
-            self.rmotor.reverse(False)
-        if abs(input) >= MIN_SPEED:
-            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
-        else:
-            power = 0
-        self.rmotor.wheel(power)
-
-
 class TwistToMotors(Node):
     """ 
     twist_to_motors - converts a twist message to motor commands.  Needed for navigation stack
@@ -78,6 +35,19 @@ class TwistToMotors(Node):
         topic_twist = self.declare_parameter('twist_topic', "cmd_vel_smoothed").value
         topic_lwheel = self.declare_parameter('lwheel_topic', "lwheel").value
         topic_rwheel = self.declare_parameter('rwheel_topic', "rwheel").value
+        pin_lpwm = self.declare_parameter('lpwm_pin', 13).value
+        pin_lreverse = self.declare_parameter('lreverse_pin', 6).value
+        pin_lbrake = self.declare_parameter('lbrake_pin', 26).value
+        pin_lspeed_pulse = self.declare_parameter('lspeed_pulse_pin', 16).value
+        pin_rpwm = self.declare_parameter('rpwm_pin', 12).value
+        pin_rreverse = self.declare_parameter('rreverse_pin', 5).value
+        pin_rbrake = self.declare_parameter('rbrake_pin', 25).value
+        pin_rspeed_pulse = self.declare_parameter('rspeed_pulse_pin', 19).value
+        linverse = self.declare_parameter('linverse_direction', False).value
+        rinverse = self.declare_parameter('rinverse_direction', True).value
+
+        self.lmotor = MotorDriver(pwm_pin=pin_lpwm, reverse_pin=pin_lreverse, brake_pin=pin_lbrake, speed_pulse_pin = pin_lspeed_pulse, inverse=linverse)
+        self.rmotor = MotorDriver(pwm_pin=pin_rpwm, reverse_pin=pin_rreverse, brake_pin=pin_rbrake, speed_pulse_pin = pin_rspeed_pulse, inverse=rinverse)
 
         self.get_logger().info("%s started" % self.nodename)
 
@@ -117,6 +87,29 @@ class TwistToMotors(Node):
 
         self.publish_tick_counter()
 
+    def callback_lwheel_vtarget(self, msg):
+        input = msg.data
+        if input < 0:
+            self.lmotor.reverse()
+        else:
+            self.lmotor.reverse(False)
+        if abs(input) >= MIN_SPEED:
+            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
+        else:
+            power = 0
+        self.lmotor.wheel(power)
+
+    def callback_rwheel_vtarget(self, msg):
+        input = msg.data
+        if input < 0:
+            self.rmotor.reverse()
+        else:
+            self.rmotor.reverse(False)
+        if abs(input) >= MIN_SPEED:
+            power = ( abs(input) + MOTOR_SHIFT ) * MOTOR_ROC
+        else:
+            power = 0
+        self.rmotor.wheel(power)
 
     def twist_callback(self, msg):
         self.ticks_since_target = 0
@@ -125,10 +118,10 @@ class TwistToMotors(Node):
 
     def publish_tick_counter(self, event=None):
         ltick_msg = Int16()
-        ltick_msg.data = int(self.motor.lmotor.tick_counter)
+        ltick_msg.data = int(self.lmotor.tick_counter)
         self.lwheel_tick_pub.publish(ltick_msg)
         rtick_msg = Int16()
-        rtick_msg.data = int(self.motor.rmotor.tick_counter)
+        rtick_msg.data = int(self.rmotor.tick_counter)
         self.rwheel_tick_pub.publish(rtick_msg)
 
 
