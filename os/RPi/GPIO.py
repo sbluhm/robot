@@ -64,7 +64,7 @@ class PWM():
         if self.PWM_PIN == 12:
             global _current_dutycycle_right
             _current_dutycycle_right = dutycycle
-        if self.PWM_PIN == 12:
+        if self.PWM_PIN == 13:
             global _current_dutycycle_left
             _current_dutycycle_left = dutycycle
         return True
