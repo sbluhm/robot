@@ -81,7 +81,7 @@ RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recomm
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
-RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexec/' /ros_entrypoint.sh
+RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
 EOF
