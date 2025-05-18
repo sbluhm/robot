@@ -3,7 +3,7 @@
 
 apt-get install -y ros-jazzy-ros2-control ros-jazzy-ros2-controllers ros-jazzy-ros2-control-cmake
 apt-get install -y unzip
-cd /tmp
+cd ~/
 curl -O -J -L -s https://github.com/joan2937/pigpio/archive/master.zip
 unzip pigpio-master.zip
 cd pigpio-master

@@ -35,11 +35,6 @@ endforeach()
 
 find_library(PIGPIO_LIB pigpio)
 
-target_link_libraries(${PROJECT_NAME}
-  PRIVATE
-    ${PIGPIO_LIB}
-)
-
 ## COMPILE
 add_library(
   ros2_control_demo_example_10
@@ -54,6 +49,11 @@ $<INSTALL_INTERFACE:include/ros2_control_demo_example_10>
 ament_target_dependencies(
   ros2_control_demo_example_10 PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
+
+target_link_libraries(${PROJECT_NAME}
+  PRIVATE
+    ${PIGPIO_LIB}
 )
 
 # Export hardware plugins
