@@ -85,8 +85,7 @@ RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
-RUN cd ~; curl -O -J -L -s https://github.com/joan2937/pigpio/archive/master.zip; unzip pigpio-master.zip; cd pigpio-master
-RUN make; make install
+RUN cd /usr/local/src; curl -O -J -L -s https://github.com/joan2937/pigpio/archive/master.zip; unzip pigpio-master.zip; cd pigpio-master make; make install
 
 EOF
 
