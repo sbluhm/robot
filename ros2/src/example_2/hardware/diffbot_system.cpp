@@ -23,6 +23,9 @@
 #include <sstream>
 #include <vector>
 
+#include <pigpio.h>
+
+
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -93,6 +96,19 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     }
   }
 
+
+  gpioInitialise();
+// Left wheel
+  gpioSetMode(6, PI_OUPUT); // Reverse
+  gpioSetMode(26, PI_OUPUT); // Brake
+  gpioHardwarePWM(13, 0, 0); // PWM
+  gpioSetMode(16, PI_INPUT); // Speed Pulse
+// Right wheel
+  gpioSetMode(5, PI_OUPUT); // Reverse - needs to be inverted
+  gpioSetMode(25, PI_OUPUT); // Brake
+  gpioHardwarePWM(12, 0, 0); // PWM
+  gpioSetMode(19, PI_INPUT); // Speed Pulse
+
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -160,6 +176,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
+  gpioTerminate();
   RCLCPP_INFO(get_logger(), "Successfully deactivated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -206,6 +223,22 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
 
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << "command " << get_command(name) << " for '" << name << "'!";
+    if( name == "left_wheel_joint/velocity" ) {
+            if( get_command(name) < 0 ) {
+                    gpioWrite(6, PI_ON);
+            } else {
+                    gpioWrite(6, PI_OFF);
+            }
+//          MIN_SPEED = 0.03;
+            int power = 0;
+            if( abs(get_command(name)) >= 0.02 ) {
+// MOTOR_SHIFT = -0.155436252405753
+// MOTOR_ROC = 32.2418230613342
+                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 10000 );
+            }
+            gpioHardwarePWM(13, 10000, power );
+    }
+
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
