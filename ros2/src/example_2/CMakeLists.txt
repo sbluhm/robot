@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_2 LANGUAGES CXX)
 
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /usr/local/src/pigpio-master/util/ )
+
 find_package(ros2_control_cmake REQUIRED)
 set_compiler_options()
 export_windows_symbols()
@@ -11,6 +13,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  pigpio
 )
 
 # Specify the required version of ros2_control
