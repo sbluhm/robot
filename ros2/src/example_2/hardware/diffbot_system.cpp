@@ -99,13 +99,13 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
 
   gpioInitialise();
 // Left wheel
-  gpioSetMode(6, PI_OUPUT); // Reverse
-  gpioSetMode(26, PI_OUPUT); // Brake
+  gpioSetMode(6, PI_OUTPUT); // Reverse
+  gpioSetMode(26, PI_OUTPUT); // Brake
   gpioHardwarePWM(13, 0, 0); // PWM
   gpioSetMode(16, PI_INPUT); // Speed Pulse
 // Right wheel
-  gpioSetMode(5, PI_OUPUT); // Reverse - needs to be inverted
-  gpioSetMode(25, PI_OUPUT); // Brake
+  gpioSetMode(5, PI_OUTPUT); // Reverse - needs to be inverted
+  gpioSetMode(25, PI_OUTPUT); // Brake
   gpioHardwarePWM(12, 0, 0); // PWM
   gpioSetMode(19, PI_INPUT); // Speed Pulse
 
