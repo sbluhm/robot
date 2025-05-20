@@ -1,4 +1,0 @@
-/zs_x11:
-  ros__parameters:
-    ~max_speed: 50
-    ~scale_speed: 50
