@@ -29,7 +29,7 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "hardware/include/ros2_control_demo_example_2/zs_x11_driver.hpp"
+#include "ros2_control_demo_example_2/zs_x11_driver.hpp"
 
 
 namespace ros2_control_demo_example_2
