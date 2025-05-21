@@ -221,8 +221,7 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
     // Simulate sending commands to the hardware
     set_state(name, get_command(name));
 
-    ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << "command " << get_command(name) << " for '" << name << "'!";
+    int power = 0;
     if( name == "left_wheel_joint/velocity" ) {
             if( get_command(name) < 0 ) {
                     gpioWrite(6, PI_ON);
@@ -230,14 +229,32 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
                     gpioWrite(6, PI_OFF);
             }
 //          MIN_SPEED = 0.03;
-            int power = 0;
+            power = 0;
             if( abs(get_command(name)) >= 0.02 ) {
 // MOTOR_SHIFT = -0.155436252405753
 // MOTOR_ROC = 32.2418230613342
-                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 10000 );
+                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 100 );
             }
             gpioHardwarePWM(13, 10000, power );
     }
+    if( name == "left_wheel_joint/velocity" ) {
+            if( get_command(name) < 0 ) {
+                    gpioWrite(5, PI_ON);
+            } else {
+                    gpioWrite(5, PI_OFF);
+            }
+//          MIN_SPEED = 0.03;
+            power = 0;
+            if( abs(get_command(name)) >= 0.02 ) {
+// MOTOR_SHIFT = -0.155436252405753
+// MOTOR_ROC = 32.2418230613342
+                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 100 );
+            }
+            ss << "PWM Result: " << gpioHardwarePWM(12, 10000, power ) << "\n";
+    }
+
+    ss << std::fixed << std::setprecision(2) << std::endl
+       << "\t" << "command " << get_command(name) << " Power= " << power <<  " for '" << name << "'!";
 
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
