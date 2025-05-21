@@ -129,14 +129,11 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_configure(
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-hardware_interface::CallbackReturn DiffDriveArduinoHardware::on_cleanup(
+hardware_interface::CallbackReturn DiffBotSystemHardware::on_cleanup(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
   RCLCPP_INFO(get_logger(), "Cleaning up ...please wait...");
-  if (motor_driver_.connected())
-  {
-    motor_driver_.disconnect();
-  }
+  motor_driver_.disconnect();
   RCLCPP_INFO(get_logger(), "Successfully cleaned up!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
