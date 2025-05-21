@@ -41,19 +41,8 @@ public:
 
   std::string send_msg(const std::string &msg_to_send, bool print_output = false)
   {
-    serial_conn_.FlushIOBuffers(); // Just in case
-    serial_conn_.Write(msg_to_send);
 
     std::string response = "";
-    try
-    {
-      // Responses end with \r\n so we will read up to (and including) the \n.
-      serial_conn_.ReadLine(response, '\n', timeout_ms_);
-    }
-    catch (const LibSerial::ReadTimeout&)
-    {
-        std::cerr << "The ReadByte() call has timed out." << std::endl ;
-    }
 
     if (print_output)
     {
@@ -122,7 +111,6 @@ public:
   }
 
 private:
-    LibSerial::SerialPort serial_conn_;
     int timeout_ms_;
 };
 
