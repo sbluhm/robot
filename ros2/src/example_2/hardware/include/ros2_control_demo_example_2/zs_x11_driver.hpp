@@ -73,10 +73,10 @@ public:
   void set_motor_values(double left, double right)
   {
     const double RADIUS = 0.08; // TODO get radius from robot description)
-    const double MOTOR_SHIFT = -0.155436252405753
-    const double MOTOR_ROC = 32.2418230613342
-    const double MIN_SPEED = 0.03
-    const double PWM_FREQUENCY = 10000
+    const double MOTOR_SHIFT = -0.155436252405753;
+    const double MOTOR_ROC = 32.2418230613342;
+    const double MIN_SPEED = 0.03;
+    const double PWM_FREQUENCY = 10000;
 
     int power = 0;
 
@@ -87,7 +87,7 @@ public:
     }
     power = 0;
     if( abs(left*RADIUS) >= MIN_SPEED ) {
-        power = static_cast<int>(round( abs(left * RADIUS) MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
+        power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     gpioHardwarePWM(13, PWM_FREQUENCY, power );
 
@@ -98,7 +98,7 @@ public:
     }
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
-        power = static_cast<int>(round( abs(right * RADIUS) MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
+        power = static_cast<int>(round( abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     gpioHardwarePWM(12, PWM_FREQUENCY, power );
   }

@@ -160,10 +160,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
   {
     set_command(name, get_state(name));
   }
-  if (!motor_driver_.connected())
-  {
-    return hardware_interface::CallbackReturn::ERROR;
-  }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
 
@@ -227,7 +223,6 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
     // Simulate sending commands to the hardware
     set_state(name, get_command(name));
 
-    int power = 0;
     double motor_value_l = 0;
     double motor_value_r = 0;
 
