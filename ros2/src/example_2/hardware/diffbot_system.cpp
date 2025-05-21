@@ -23,9 +23,6 @@
 #include <sstream>
 #include <vector>
 
-#include <pigpio.h>
-
-
 #include "hardware_interface/lexical_casts.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -96,19 +93,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     }
   }
 
-
-  gpioInitialise();
-// Left wheel
-  gpioSetMode(6, PI_OUTPUT); // Reverse
-  gpioSetMode(26, PI_OUTPUT); // Brake
-  gpioHardwarePWM(13, 0, 0); // PWM
-  gpioSetMode(16, PI_INPUT); // Speed Pulse
-// Right wheel
-  gpioSetMode(5, PI_OUTPUT); // Reverse - needs to be inverted
-  gpioSetMode(25, PI_OUTPUT); // Brake
-  gpioHardwarePWM(12, 0, 0); // PWM
-  gpioSetMode(19, PI_INPUT); // Speed Pulse
-
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
@@ -134,7 +118,26 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_configure(
   {
     set_command(name, 0.0);
   }
+  if (motor_driver_.connect() < 0)
+  {
+    return hardware_interface::CallbackReturn::ERROR;
+  }
+
+
   RCLCPP_INFO(get_logger(), "Successfully configured!");
+
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
+
+hardware_interface::CallbackReturn DiffDriveArduinoHardware::on_cleanup(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  RCLCPP_INFO(get_logger(), "Cleaning up ...please wait...");
+  if (motor_driver_.connected())
+  {
+    motor_driver_.disconnect();
+  }
+  RCLCPP_INFO(get_logger(), "Successfully cleaned up!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -157,6 +160,10 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
   {
     set_command(name, get_state(name));
   }
+  if (!motor_driver_.connected())
+  {
+    return hardware_interface::CallbackReturn::ERROR;
+  }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
 
@@ -176,7 +183,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
   }
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
-  gpioTerminate();
   RCLCPP_INFO(get_logger(), "Successfully deactivated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -222,39 +228,18 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
     set_state(name, get_command(name));
 
     int power = 0;
+    double motor_value_l = 0;
+    double motor_value_r = 0;
+
     if( name == "left_wheel_joint/velocity" ) {
-            if( get_command(name) < 0 ) {
-                    gpioWrite(6, PI_ON);
-            } else {
-                    gpioWrite(6, PI_OFF);
-            }
-//          MIN_SPEED = 0.03;
-            power = 0;
-            if( abs(get_command(name)) >= 0.02 ) {
-// MOTOR_SHIFT = -0.155436252405753
-// MOTOR_ROC = 32.2418230613342
-                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 100 );
-            }
-            gpioHardwarePWM(13, 10000, power );
+	    motor_value_l = get_command(name);
+    } else if ( name == "right_wheel_joint/velocity" ) {
+	    motor_value_r = get_command(name);
     }
-    if( name == "left_wheel_joint/velocity" ) {
-            if( get_command(name) < 0 ) {
-                    gpioWrite(5, PI_ON);
-            } else {
-                    gpioWrite(5, PI_OFF);
-            }
-//          MIN_SPEED = 0.03;
-            power = 0;
-            if( abs(get_command(name)) >= 0.02 ) {
-// MOTOR_SHIFT = -0.155436252405753
-// MOTOR_ROC = 32.2418230613342
-                    power = static_cast<int>(round( abs(get_command(name)) -0.155436252405753 ) * 32.2418230613342 * 100 );
-            }
-            ss << "PWM Result: " << gpioHardwarePWM(12, 10000, power ) << "\n";
-    }
+    motor_driver_.set_motor_values(motor_value_l, motor_value_r);
 
     ss << std::fixed << std::setprecision(2) << std::endl
-       << "\t" << "command " << get_command(name) << " Power= " << power <<  " for '" << name << "'!";
+       << "\t" << "command " << get_command(name) <<  " for '" << name << "'!";
 
   }
   RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());

@@ -29,6 +29,8 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
+#include "ros2_control_demo_example_2/zs_x11_driver.hpp"
+
 
 namespace ros2_control_demo_example_2
 {
@@ -56,6 +58,7 @@ public:
     const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
+  ZS_X11_Driver motor_driver_;
   // Parameters for the DiffBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
