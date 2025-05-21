@@ -4,7 +4,6 @@
 // #include <cstring>
 #include <sstream>
 // #include <cstdlib>
-#include <libserial/SerialPort.h>
 #include <iostream>
 
 #include <pigpio.h>
