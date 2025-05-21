@@ -16,9 +16,9 @@ public:
 
   ZS_X11_Driver() = default;
 
-  void connect()
+  int connect()
   {  
-    gpioInitialise();
+    int init_result = gpioInitialise();
 // Left wheel
     gpioSetMode(6, PI_OUTPUT); // Reverse
     gpioSetMode(26, PI_OUTPUT); // Brake
@@ -29,8 +29,7 @@ public:
     gpioSetMode(25, PI_OUTPUT); // Brake
     gpioHardwarePWM(12, 0, 0); // PWM
     gpioSetMode(19, PI_INPUT); // Speed Pulse
-
-    timeout_ms_ = timeout_ms;
+    return init_result;
   }
 
   void disconnect()
