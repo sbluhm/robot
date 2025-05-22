@@ -214,21 +214,28 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
+  double motor_value_l = 0;
+  double motor_value_r = 0;
+  bool speed_changed = false;
+
+
   ss << "Writing commands:";
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
     // Simulate sending commands to the hardware
     set_state(name, get_command(name));
 
-    double motor_value_l = 0;
-    double motor_value_r = 0;
-
-    if( name == "left_wheel_joint/velocity" ) {
+    if( name == "left_wheel_joint/velocity"  && motor_value_l != get_command(name) ) {
 	    motor_value_l = get_command(name);
-    } else if ( name == "right_wheel_joint/velocity" ) {
+	    speed_changed  = true;
+    } else if ( name == "right_wheel_joint/velocity" && motor_value_r != get_command(name) ) {
 	    motor_value_r = get_command(name);
+	    speed_changed  = true;
     }
-    motor_driver_.set_motor_values(motor_value_l, motor_value_r);
+    if( speed_changed ) {
+      motor_driver_.set_motor_values(motor_value_l, motor_value_r);
+      speed_changed = false;
+    }
 
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << "command " << get_command(name) <<  " for '" << name << "'!";
@@ -241,6 +248,9 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
 }
 
 }  // namespace ros2_control_demo_example_2
+
+// Define the static instance pointer
+ZS_X11_Driver* ZS_X11_Driver::instance_ = nullptr;
 
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(

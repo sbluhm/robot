@@ -13,8 +13,31 @@ class ZS_X11_Driver
 {
 
 public:
+  ZS_X11_Driver() {
+    instance_ = this;
+  }
 
-  ZS_X11_Driver() = default;
+  int tick_counter_l = 0;
+  int tick_counter_r = 0;
+  int _direction_l = 1;
+  int _direction_r = 1;
+
+  static void leftSpeedPulseCallback(int gpio, int level, uint32_t tick)
+  {
+    if (instance_) {
+	  instance_->tick_counter_l += instance_->_direction_l;
+          std::cout << "Left Interrupt. Tick counter: " << instance_->tick_counter_l << std::endl;
+    }
+  }
+
+  static void rightSpeedPulseCallback(int gpio, int level, uint32_t tick)
+  {
+    if (instance_) {
+          instance_->tick_counter_r += instance_->_direction_r;
+          std::cout << "Right Interrupt. Tick counter: " << instance_->tick_counter_r << std::endl;
+    }
+  }
+
 
   int connect()
   {  
@@ -23,43 +46,28 @@ public:
     gpioSetMode(6, PI_OUTPUT); // Reverse
     gpioSetMode(26, PI_OUTPUT); // Brake
     gpioHardwarePWM(13, 0, 0); // PWM
-    gpioSetMode(16, PI_INPUT); // Speed Pulse
+//    gpioSetMode(16, PI_INPUT); // Speed Pulse
+    gpioSetISRFunc(16, RISING_EDGE, 0, leftSpeedPulseCallback);
 // Right wheel
     gpioSetMode(5, PI_OUTPUT); // Reverse - needs to be inverted
     gpioSetMode(25, PI_OUTPUT); // Brake
     gpioHardwarePWM(12, 0, 0); // PWM
-    gpioSetMode(19, PI_INPUT); // Speed Pulse
+//    gpioSetMode(19, PI_INPUT); // Speed Pulse
+    gpioSetISRFunc(19, RISING_EDGE, 0, rightSpeedPulseCallback);
     return init_result;
   }
 
   void disconnect()
   {
+    gpioSetISRFunc(16, RISING_EDGE, 0, nullptr);
+    gpioSetISRFunc(19, RISING_EDGE, 0, nullptr);
     gpioTerminate();
   }
 
 
-  std::string send_msg(const std::string &msg_to_send, bool print_output = false)
-  {
-
-    std::string response = "";
-
-    if (print_output)
-    {
-      std::cout << "Sent: " << msg_to_send << " Recv: " << response << std::endl;
-    }
-
-    return response;
-  }
-
-
-  void send_empty_msg()
-  {
-    std::string response = send_msg("\r");
-  }
-
   void read_encoder_values(int &val_1, int &val_2)
   {
-    std::string response = send_msg("e\r");
+    std::string response = "send_msg(";
 
     std::string delimiter = " ";
     size_t del_pos = response.find(delimiter);
@@ -76,41 +84,45 @@ public:
     const double MOTOR_ROC = 32.2418230613342;
     const double MIN_SPEED = 0.03;
     const double PWM_FREQUENCY = 10000;
-
+    int result=0;
     int power = 0;
 
     if( left < 0 ) {
         gpioWrite(6, PI_ON);
+	_direction_l = -1;
     } else {
         gpioWrite(6, PI_OFF);
+	_direction_l = 1;
     }
     power = 0;
     if( abs(left*RADIUS) >= MIN_SPEED ) {
         power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
-    gpioHardwarePWM(13, PWM_FREQUENCY, power );
+    result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
+    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
 
-    if( right < 0 ) {
+    if( right > 0 ) {
         gpioWrite(5, PI_ON);
+        _direction_r = 1;
     } else {
         gpioWrite(5, PI_OFF);
+        _direction_r = -1;
     }
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
-        power = static_cast<int>(round( abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
+        power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
-    gpioHardwarePWM(12, PWM_FREQUENCY, power );
+    result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
+    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
   }
 
-  void set_pid_values(int k_p, int k_d, int k_i, int k_o)
-  {
-    std::stringstream ss;
-    ss << "u " << k_p << ":" << k_d << ":" << k_i << ":" << k_o << "\r";
-    send_msg(ss.str());
+  ~ZS_X11_Driver() {
+    disconnect();
   }
 
 private:
-    int timeout_ms_;
+  int timeout_ms_;
+  static ZS_X11_Driver* instance_;
 };
 
-#endif // DIFFDRIVE_ARDUINO_ARDUINO_COMMS_HPP
+#endif // ROS2_CONTROL_DEMO_EXAMPLE_2__ZS_X11_DRIVER_HPP
