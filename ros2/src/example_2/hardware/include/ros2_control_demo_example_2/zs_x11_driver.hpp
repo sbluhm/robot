@@ -76,7 +76,7 @@ public:
     const double MOTOR_ROC = 32.2418230613342;
     const double MIN_SPEED = 0.03;
     const double PWM_FREQUENCY = 10000;
-
+    int result=0;
     int power = 0;
 
     if( left < 0 ) {
@@ -88,7 +88,8 @@ public:
     if( abs(left*RADIUS) >= MIN_SPEED ) {
         power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
-    gpioHardwarePWM(13, PWM_FREQUENCY, power );
+    result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
+    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result "\n" << std::endl;
 
     if( right < 0 ) {
         gpioWrite(5, PI_ON);
@@ -97,20 +98,14 @@ public:
     }
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
-        power = static_cast<int>(round( abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
+        power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
-    gpioHardwarePWM(12, PWM_FREQUENCY, power );
-  }
-
-  void set_pid_values(int k_p, int k_d, int k_i, int k_o)
-  {
-    std::stringstream ss;
-    ss << "u " << k_p << ":" << k_d << ":" << k_i << ":" << k_o << "\r";
-    send_msg(ss.str());
+    result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
+    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right" << "Power: " << power << " Result: " << result "\n" << std::endl;
   }
 
 private:
     int timeout_ms_;
 };
 
-#endif // DIFFDRIVE_ARDUINO_ARDUINO_COMMS_HPP
+#endif // ROS2_CONTROL_DEMO_EXAMPLE_2__ZS_X11_DRIVER_HPP
