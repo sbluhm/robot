@@ -91,7 +91,7 @@ public:
     result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
     std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result "\n" << std::endl;
 
-    if( right < 0 ) {
+    if( right > 0 ) {
         gpioWrite(5, PI_ON);
     } else {
         gpioWrite(5, PI_OFF);
