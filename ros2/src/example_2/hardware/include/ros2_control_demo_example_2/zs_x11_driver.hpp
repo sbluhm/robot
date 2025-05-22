@@ -22,14 +22,14 @@ public:
 
   void leftSpeedPulseCallback()
   {
-	  self.tick_counter_l += this->_direction_l;
-          std::cout << "Left Interrupt. Tick counter: " << this.tick_counter_l << std::endl;
+	  this->tick_counter_l += this->_direction_l;
+          std::cout << "Left Interrupt. Tick counter: " << this->tick_counter_l << std::endl;
   }
 
   void rightSpeedPulseCallback()
   {
-          self.tick_counter_r += this->_direction_r;
-          std::cout << "Right Interrupt. Tick counter: " << this.tick_counter_r << std::endl;
+          this->tick_counter_r += this->_direction_r;
+          std::cout << "Right Interrupt. Tick counter: " << this->tick_counter_r << std::endl;
   }
 
 
@@ -59,14 +59,9 @@ public:
   }
 
 
-  void send_empty_msg()
-  {
-    std::string response = send_msg("\r");
-  }
-
   void read_encoder_values(int &val_1, int &val_2)
   {
-    std::string response = send_msg("e\r");
+    std::string response = "send_msg(";
 
     std::string delimiter = " ";
     size_t del_pos = response.find(delimiter);
