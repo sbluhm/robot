@@ -15,6 +15,23 @@ class ZS_X11_Driver
 public:
 
   ZS_X11_Driver() = default;
+  int tick_counter_l = 0;
+  int tick_counter_r = 0;
+  int _direction_l = 1;
+  int _direction_r = 1;
+
+  void leftSpeedPulseCallback()
+  {
+	  self.tick_counter_l += this->_direction_l;
+          std::cout << "Left Interrupt. Tick counter: " << this.tick_counter_l << std::endl;
+  }
+
+  void rightSpeedPulseCallback()
+  {
+          self.tick_counter_r += this->_direction_r;
+          std::cout << "Right Interrupt. Tick counter: " << this.tick_counter_r << std::endl;
+  }
+
 
   int connect()
   {  
@@ -23,32 +40,22 @@ public:
     gpioSetMode(6, PI_OUTPUT); // Reverse
     gpioSetMode(26, PI_OUTPUT); // Brake
     gpioHardwarePWM(13, 0, 0); // PWM
-    gpioSetMode(16, PI_INPUT); // Speed Pulse
+//    gpioSetMode(16, PI_INPUT); // Speed Pulse
+    gpioSetISRFunc(16, RISING_EDGE, 0, leftSpeedPulseCallback);
 // Right wheel
     gpioSetMode(5, PI_OUTPUT); // Reverse - needs to be inverted
     gpioSetMode(25, PI_OUTPUT); // Brake
     gpioHardwarePWM(12, 0, 0); // PWM
-    gpioSetMode(19, PI_INPUT); // Speed Pulse
+//    gpioSetMode(19, PI_INPUT); // Speed Pulse
+    gpioSetISRFunc(19, RISING_EDGE, 0, rightSpeedPulseCallback);
     return init_result;
   }
 
   void disconnect()
   {
+    gpioSetISRFunc(16, RISING_EDGE, 0, nullptr);
+    gpioSetISRFunc(19, RISING_EDGE, 0, nullptr);
     gpioTerminate();
-  }
-
-
-  std::string send_msg(const std::string &msg_to_send, bool print_output = false)
-  {
-
-    std::string response = "";
-
-    if (print_output)
-    {
-      std::cout << "Sent: " << msg_to_send << " Recv: " << response << std::endl;
-    }
-
-    return response;
   }
 
 
@@ -81,27 +88,31 @@ public:
 
     if( left < 0 ) {
         gpioWrite(6, PI_ON);
+	this->_direction_l = -1;
     } else {
         gpioWrite(6, PI_OFF);
+	this->_direction_l = 1;
     }
     power = 0;
     if( abs(left*RADIUS) >= MIN_SPEED ) {
         power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
-    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result "\n" << std::endl;
+    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
 
     if( right > 0 ) {
         gpioWrite(5, PI_ON);
+        this->_direction_r = 1;
     } else {
         gpioWrite(5, PI_OFF);
+        this->_direction_r = -1;
     }
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
         power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
-    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right" << "Power: " << power << " Result: " << result "\n" << std::endl;
+    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
   }
 
 private:
