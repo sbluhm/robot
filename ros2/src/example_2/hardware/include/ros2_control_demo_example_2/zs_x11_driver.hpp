@@ -13,17 +13,16 @@ class ZS_X11_Driver
 {
 
 public:
-
-  ZS_X11_Driver() {
-    instance_ = this;
-  }
+  ZS_X11_Driver() {
+    instance_ = this;
+  }
 
   int tick_counter_l = 0;
   int tick_counter_r = 0;
   int _direction_l = 1;
   int _direction_r = 1;
 
-  static void leftSpeedPulseCallback()
+  static void leftSpeedPulseCallback(int gpio, int level, uint32_t tick)
   {
     if (instance_) {
 	  instance_->tick_counter_l += instance_->_direction_l;
@@ -31,9 +30,9 @@ public:
     }
   }
 
-  static void rightSpeedPulseCallback()
+  static void rightSpeedPulseCallback(int gpio, int level, uint32_t tick)
   {
-    if (instance_) {
+    if (instance_) {
           instance_->tick_counter_r += instance_->_direction_r;
           std::cout << "Right Interrupt. Tick counter: " << instance_->tick_counter_r << std::endl;
     }
@@ -122,8 +121,8 @@ public:
   }
 
 private:
-    int timeout_ms_;
-  static ZS_X11_Driver* instance_;
+  int timeout_ms_;
+  static ZS_X11_Driver* instance_;
 };
 
 #endif // ROS2_CONTROL_DEMO_EXAMPLE_2__ZS_X11_DRIVER_HPP
