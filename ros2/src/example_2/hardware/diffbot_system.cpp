@@ -249,6 +249,9 @@ hardware_interface::return_type ros2_control_demo_example_2 ::DiffBotSystemHardw
 
 }  // namespace ros2_control_demo_example_2
 
+// Define the static instance pointer
+ZS_X11_Driver* ZS_X11_Driver::instance_ = nullptr;
+
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(
   ros2_control_demo_example_2::DiffBotSystemHardware, hardware_interface::SystemInterface)
