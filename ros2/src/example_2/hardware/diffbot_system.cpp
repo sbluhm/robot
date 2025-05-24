@@ -39,6 +39,9 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  signed long wheel_tick_count_l = 0;
+  signed long wheel_tick_count_r = 0;
+
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
@@ -184,14 +187,47 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
 hardware_interface::return_type DiffBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
+
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
   ss << "Reading states:";
   ss << std::fixed << std::setprecision(2);
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
+    comms_.read_encoder_values(wheel_tick_count_l, wheel_tick_count_r);
+
     if (descr.get_interface_name() == hardware_interface::HW_IF_POSITION)
     {
+
+      ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
+
+      if( name == "left_wheel_joint/velocity" ) {
+	      wheel_position_l
+              motor_value_l = get_command(name);
+              speed_changed  = true;
+
+/*
+position = wheel_position_l * rads_per_count;
+velocity = (wheel_l_.pos - pos_prev) / period.seconds();
+
+
+  double delta_seconds = period.seconds();
+
+  double pos_prev = wheel_l_.pos;
+  wheel_l_.pos = wheel_l_.calc_enc_angle();
+  wheel_l_.vel = (wheel_l_.pos - pos_prev) / delta_seconds;
+
+  pos_prev = wheel_r_.pos;
+  wheel_r_.pos = wheel_r_.calc_enc_angle();
+  wheel_r_.vel = (wheel_r_.pos - pos_prev) / delta_seconds;
+
+
+
+      } else if ( name == "right_wheel_joint/velocity" ) {
+              motor_value_r = get_command(name);
+              speed_changed  = true;
+      }
+  */    
       // Simulate DiffBot wheels's movement as a first-order system
       // Update the joint status: this is a revolute joint without any limit.
       // Simply integrates
