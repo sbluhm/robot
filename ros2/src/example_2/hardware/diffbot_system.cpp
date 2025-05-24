@@ -39,9 +39,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  signed long wheel_tick_count_l = 0;
-  signed long wheel_tick_count_r = 0;
-
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   hw_start_sec_ =
     hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
