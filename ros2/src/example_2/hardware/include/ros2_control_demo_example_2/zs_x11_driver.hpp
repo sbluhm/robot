@@ -78,7 +78,6 @@ public:
     const double MOTOR_ROC = 32.2418230613342;
     const double MIN_SPEED = 0.03;
     const double PWM_FREQUENCY = 10000;
-    int result=0;
     int power = 0;
 
     if( left < 0 ) {
