@@ -17,10 +17,10 @@ public:
     instance_ = this;
   }
 
-  int tick_counter_l = 0;
-  int tick_counter_r = 0;
-  int _direction_l = 1;
-  int _direction_r = 1;
+  signed long tick_counter_l = 0;
+  signed long tick_counter_r = 0;
+  signed char _direction_l = 1;
+  signed char _direction_r = 1;
 
   static void leftSpeedPulseCallback(int gpio, int level, uint32_t tick)
   {
