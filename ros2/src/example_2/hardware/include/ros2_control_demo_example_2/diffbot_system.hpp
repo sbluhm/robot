@@ -62,6 +62,8 @@ public:
 
 private:
   ZS_X11_Driver motor_driver_;
+  signed long wheel_tick_count_l = 0;
+  signed long wheel_tick_count_r = 0;
   // Parameters for the DiffBot simulation
   double hw_start_sec_;
   double hw_stop_sec_;
