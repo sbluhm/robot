@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(ros2_control_demo_example_2 LANGUAGES CXX)
 
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /usr/local/src/pigpio-master/util/ )
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /usr/local/src/pigpio/util/ )
 
 find_package(ros2_control_cmake REQUIRED)
 set_compiler_options()
