@@ -1,0 +1,12 @@
+--- pigpio.c.orig	2025-05-24 06:39:22.986415653 +0200
++++ pigpio.c	2025-05-24 06:48:16.708920103 +0200
+@@ -11830,6 +11830,9 @@
+    int fd;
+    int err;
+ 
++   // Patched by bluhmbot install script (see gh#613)
++   gpio += 512; // Shifting GPIO numbering to start with 512
++
+    DBG(DBG_INTERNAL,
+       "gpio=%d edge=%d timeout=%d function=%08"PRIXPTR" user=%d userdata=%08"PRIXPTR,
+       gpio, edge, timeout, (uintptr_t)f, user, (uintptr_t)userdata);
