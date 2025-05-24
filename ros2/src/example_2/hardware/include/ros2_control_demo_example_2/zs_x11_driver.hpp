@@ -65,7 +65,7 @@ public:
   }
 
 
-  void read_encoder_values(int &val_1, int &val_2)
+  void read_encoder_values(signed long &val_1, signed long &val_2)
   {
     val_1 = instance_->tick_counter_l;
     val_2 = instance_->tick_counter_l;
