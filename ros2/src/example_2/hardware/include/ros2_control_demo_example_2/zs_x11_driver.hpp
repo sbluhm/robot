@@ -92,7 +92,7 @@ public:
     if( abs(left*RADIUS) >= MIN_SPEED ) {
         power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
-    result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
+    result = gpioHardwarePWM(13, PWM_FREQUENCY, power );
 //    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
 
     if( right > 0 ) {
@@ -108,6 +108,7 @@ public:
     }
     result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
 //    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
+    result;    
   }
 
   ~ZS_X11_Driver() {
