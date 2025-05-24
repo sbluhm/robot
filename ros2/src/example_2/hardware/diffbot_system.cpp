@@ -184,7 +184,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
 hardware_interface::return_type DiffBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-
+  const float PI=
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
   ss << "Reading states:";
@@ -197,39 +197,34 @@ hardware_interface::return_type DiffBotSystemHardware::read(
     {
 
       ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
+
+      if( name == "left_wheel_joint/position" ) {
+        double position = wheel_position_l * 2*M_PI/45;
+        set_state(name, position);
+
 /*
-      if( name == "left_wheel_joint/velocity" ) {
-	      wheel_position_l
-              motor_value_l = get_command(name);
-              speed_changed  = true;
-
-
-position = wheel_position_l * rads_per_count;
-velocity = (wheel_l_.pos - pos_prev) / period.seconds();
-
+  velocity = (wheel_l_.pos - pos_prev) / period.seconds();
 
   double delta_seconds = period.seconds();
 
   double pos_prev = wheel_l_.pos;
-  wheel_l_.pos = wheel_l_.calc_enc_angle();
   wheel_l_.vel = (wheel_l_.pos - pos_prev) / delta_seconds;
 
   pos_prev = wheel_r_.pos;
-  wheel_r_.pos = wheel_r_.calc_enc_angle();
   wheel_r_.vel = (wheel_r_.pos - pos_prev) / delta_seconds;
 
+*/
 
-
-      } else if ( name == "right_wheel_joint/velocity" ) {
-              motor_value_r = get_command(name);
-              speed_changed  = true;
+      } else if ( name == "right_wheel_joint/position" ) {
+        double position = wheel_position_r * 2*M_PI/45;
+        set_state(name, position);
       }
-  */    
+    
       // Simulate DiffBot wheels's movement as a first-order system
       // Update the joint status: this is a revolute joint without any limit.
       // Simply integrates
       auto velo = get_command(descr.get_prefix_name() + "/" + hardware_interface::HW_IF_VELOCITY);
-      set_state(name, get_state(name) + period.seconds() * velo);
+//      set_state(name, get_state(name) + period.seconds() * velo);
 
       ss << std::endl
          << "\t position " << get_state(name) << " and velocity " << velo << " for '" << name
