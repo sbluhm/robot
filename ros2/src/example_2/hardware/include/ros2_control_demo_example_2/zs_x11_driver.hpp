@@ -79,6 +79,7 @@ public:
     const double MIN_SPEED = 0.03;
     const double PWM_FREQUENCY = 10000;
     int power = 0;
+    int result = 0;
 
     if( left < 0 ) {
         gpioWrite(6, PI_ON);
