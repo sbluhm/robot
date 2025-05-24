@@ -194,19 +194,19 @@ hardware_interface::return_type DiffBotSystemHardware::read(
   ss << std::fixed << std::setprecision(2);
   for (const auto & [name, descr] : joint_state_interfaces_)
   {
-    comms_.read_encoder_values(wheel_tick_count_l, wheel_tick_count_r);
+    motor_driver_.read_encoder_values(wheel_tick_count_l, wheel_tick_count_r);
 
     if (descr.get_interface_name() == hardware_interface::HW_IF_POSITION)
     {
 
       ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
-
+/*
       if( name == "left_wheel_joint/velocity" ) {
 	      wheel_position_l
               motor_value_l = get_command(name);
               speed_changed  = true;
 
-/*
+
 position = wheel_position_l * rads_per_count;
 velocity = (wheel_l_.pos - pos_prev) / period.seconds();
 
