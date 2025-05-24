@@ -17,16 +17,16 @@ public:
     instance_ = this;
   }
 
-  int tick_counter_l = 0;
-  int tick_counter_r = 0;
-  int _direction_l = 1;
-  int _direction_r = 1;
+  signed long tick_counter_l = 0;
+  signed long tick_counter_r = 0;
+  signed char _direction_l = 1;
+  signed char _direction_r = 1;
 
   static void leftSpeedPulseCallback(int gpio, int level, uint32_t tick)
   {
     if (instance_) {
 	  instance_->tick_counter_l += instance_->_direction_l;
-          std::cout << "Left Interrupt. Tick counter: " << instance_->tick_counter_l << std::endl;
+//          std::cout << "Left Interrupt. Tick counter: " << instance_->tick_counter_l << std::endl;
     }
   }
 
@@ -34,7 +34,7 @@ public:
   {
     if (instance_) {
           instance_->tick_counter_r += instance_->_direction_r;
-          std::cout << "Right Interrupt. Tick counter: " << instance_->tick_counter_r << std::endl;
+//          std::cout << "Right Interrupt. Tick counter: " << instance_->tick_counter_r << std::endl;
     }
   }
 
@@ -67,16 +67,10 @@ public:
 
   void read_encoder_values(int &val_1, int &val_2)
   {
-    std::string response = "send_msg(";
-
-    std::string delimiter = " ";
-    size_t del_pos = response.find(delimiter);
-    std::string token_1 = response.substr(0, del_pos);
-    std::string token_2 = response.substr(del_pos + delimiter.length());
-
-    val_1 = std::atoi(token_1.c_str());
-    val_2 = std::atoi(token_2.c_str());
+    val_1 = instance_->tick_counter_l;
+    val_2 = instance_->tick_counter_l;
   }
+
   void set_motor_values(double left, double right)
   {
     const double RADIUS = 0.08; // TODO get radius from robot description)
@@ -99,7 +93,7 @@ public:
         power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     result=gpioHardwarePWM(13, PWM_FREQUENCY, power );
-    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
+//    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
 
     if( right > 0 ) {
         gpioWrite(5, PI_ON);
@@ -113,7 +107,7 @@ public:
         power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
     }
     result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
-    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
+//    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
   }
 
   ~ZS_X11_Driver() {
