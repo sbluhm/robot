@@ -185,10 +185,10 @@ hardware_interface::return_type DiffBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  std::stringstream ss;
+/*  std::stringstream ss;
   ss << "Reading states:";
   ss << std::fixed << std::setprecision(2);
-  for (const auto & [name, descr] : joint_state_interfaces_)
+*/  for (const auto & [name, descr] : joint_state_interfaces_)
   {
     motor_driver_.read_encoder_values(wheel_tick_count_l, wheel_tick_count_r);
 
@@ -222,7 +222,7 @@ hardware_interface::return_type DiffBotSystemHardware::read(
       // Simulate DiffBot wheels's movement as a first-order system
       // Update the joint status: this is a revolute joint without any limit.
       // Simply integrates
-      auto velo = get_command(descr.get_prefix_name() + "/" + hardware_interface::HW_IF_VELOCITY);
+//      auto velo = get_command(descr.get_prefix_name() + "/" + hardware_interface::HW_IF_VELOCITY);
 //      set_state(name, get_state(name) + period.seconds() * velo);
 /*
       ss << std::endl
@@ -230,7 +230,7 @@ hardware_interface::return_type DiffBotSystemHardware::read(
          << "'!"; */
     }
   }
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
+//  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;

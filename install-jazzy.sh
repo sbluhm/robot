@@ -66,7 +66,7 @@ git checkout Dockerfile --quiet
 cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
-    vim unzip less\
+    vim \
     ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
     ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers ros-${ROS_DISTRO}-ros2-control-cmake \
     v4l-utils \
