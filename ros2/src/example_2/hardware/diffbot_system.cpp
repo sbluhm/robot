@@ -198,7 +198,7 @@ hardware_interface::return_type DiffBotSystemHardware::read(
       ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
 
       if( name == "left_wheel_joint/position" ) {
-        double position = wheel_position_l * 2*M_PI/45;
+        double position = static_cast<double>(wheel_tick_count_l) * 2*M_PI/45;
         set_state(name, position);
 
 /*
@@ -215,7 +215,7 @@ hardware_interface::return_type DiffBotSystemHardware::read(
 */
 
       } else if ( name == "right_wheel_joint/position" ) {
-        double position = wheel_position_r * 2*M_PI/45;
+        double position = static_cast<double>(wheel_tick_count_r) * 2*M_PI/45;
         set_state(name, position);
       }
     

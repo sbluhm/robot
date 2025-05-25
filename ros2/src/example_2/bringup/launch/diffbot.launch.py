@@ -109,6 +109,13 @@ def generate_launch_description():
         ],
     )
 
+    odpm_map_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher',
+        arguments=['0', '0', '0.15', '0', '0', '0', 'odom', 'map'],
+    )
+
     # Delay rviz start after `joint_state_broadcaster`
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -130,6 +137,7 @@ def generate_launch_description():
         control_node,
         robot_state_pub_node,
         robot_controller_spawner,
+        odpm_map_tf,
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
     ]
