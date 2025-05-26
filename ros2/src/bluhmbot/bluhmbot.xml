@@ -1,9 +1,0 @@
-<library path="bluhmbot">
-  <class name="bluhmbot/DiffBotSystemHardware"
-         type="bluhmbot::DiffBotSystemHardware"
-         base_class_type="hardware_interface::SystemInterface">
-    <description>
-      The ros2_control Bluhmbot drive train. It uses velocity command and position state interface.
-    </description>
-  </class>
-</library>

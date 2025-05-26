@@ -70,6 +70,12 @@ install(
   DIRECTORY bringup/launch bringup/config
   DESTINATION share/ros2_control_demo_example_2
 )
+install(
+  DIRECTORY rviz
+  DESTINATION share/ros2_control_demo_example_2
+)
+
+
 install(TARGETS ros2_control_demo_example_2
   EXPORT export_ros2_control_demo_example_2
   ARCHIVE DESTINATION lib
