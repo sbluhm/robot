@@ -29,10 +29,10 @@
 #include "rclcpp/time.hpp"
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
-#include "ros2_control_demo_example_2/zs_x11_driver.hpp"
+#include "bluhmbot/zs_x11_driver.hpp"
 
 
-namespace ros2_control_demo_example_2
+namespace bluhmbot
 {
 class DiffBotSystemHardware : public hardware_interface::SystemInterface
 {
@@ -69,6 +69,6 @@ private:
   double hw_stop_sec_;
 };
 
-}  // namespace ros2_control_demo_example_2
+}  // namespace bluhmbot
 
 #endif  // ROS2_CONTROL_DEMO_EXAMPLE_2__DIFFBOT_SYSTEM_HPP_
