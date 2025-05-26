@@ -68,6 +68,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim \
     ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
+    ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers ros-${ROS_DISTRO}-ros2-control-cmake \
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
     ros-${ROS_DISTRO}-navigation2 \
@@ -84,6 +85,7 @@ RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
+RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/master/os/pigpio/pigpio-install.sh | bash
 EOF
 
 # Install additional packages on dev machine for navigation simulation
