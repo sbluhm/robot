@@ -94,6 +94,7 @@ cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-${ROS_DISTRO}-turtlebot3-gazebo 
+RUN ln -sf /root/robot/os/start-mock.sh /start
 EOF
 fi
 
