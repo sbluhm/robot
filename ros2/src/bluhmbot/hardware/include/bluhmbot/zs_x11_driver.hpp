@@ -92,7 +92,7 @@ public:
     power = 0;
     if( abs(left*RADIUS) >= MIN_SPEED ) {
 //        power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-	power = static_cast<int>( A * EXP(-B * abs(left*RADIUS)) + C ) * 10000 ;
+	power = static_cast<int>( A * exp(-B * abs(left*RADIUS)) + C ) * 10000 ;
 //	power = static_cast<int>( abs(left*RADIUS) / 5 * 1000000   );
     }
     result = gpioHardwarePWM(13, PWM_FREQUENCY, power );
@@ -108,7 +108,7 @@ public:
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
 //        power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-        power = static_cast<int>( A * EXP(-B * abs(right*RADIUS)) + C ) * 10000 ;
+        power = static_cast<int>( A * exp(-B * abs(right*RADIUS)) + C ) * 10000 ;
 //	power = static_cast<int>( abs(right*RADIUS) / 5 * 1000000   );
     }
     result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
