@@ -92,11 +92,11 @@ public:
     power = 0;
     if( abs(left*RADIUS) >= MIN_SPEED ) {
 //        power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-	power = static_cast<int>( A * exp(-B * abs(left*RADIUS)) + C ) * 10000 ;
+	power = static_cast<int>( ( A * exp(-B * abs(left*RADIUS)) + C ) *left*RADIUS* 10000  );
 //	power = static_cast<int>( abs(left*RADIUS) / 5 * 1000000   );
     }
     result = gpioHardwarePWM(13, PWM_FREQUENCY, power );
-//    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << "Input: " << left << "Power: " << power << " Result: " << result << std::endl;
+//    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << " - Input: " << left << " - Power: " << power << " - Result: " << result << std::endl;
 
     if( right > 0 ) {
         gpioWrite(5, PI_ON);
@@ -108,11 +108,11 @@ public:
     power = 0;
     if( abs(right*RADIUS) >= MIN_SPEED ) {
 //        power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-        power = static_cast<int>( A * exp(-B * abs(right*RADIUS)) + C ) * 10000 ;
+        power = static_cast<int>(( A * exp(-B * abs(right*RADIUS)) + C ) *left*RADIUS* 10000 );
 //	power = static_cast<int>( abs(right*RADIUS) / 5 * 1000000   );
     }
     result=gpioHardwarePWM(12, PWM_FREQUENCY, power );
-//    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << "Input: " << right << "Power: " << power << " Result: " << result << std::endl;
+//    std::cout << "PIN12 PWM: " << PWM_FREQUENCY << " - Input: " << right << " - Power: " << power << " - Result: " << result << std::endl;
     result;    
   }
 
