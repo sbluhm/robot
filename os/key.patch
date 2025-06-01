@@ -1,0 +1,13 @@
+--- Dockerfile	2025-06-02 15:08:20.802089737 +0200
++++ Dockerfile.new	2025-06-02 15:08:41.057369152 +0200
+@@ -2,6 +2,10 @@
+ # generated from docker_images_ros2/create_ros_image.Dockerfile.em
+ FROM osrf/ros:jazzy-desktop-noble
+ 
++RUN rm /etc/apt/sources.list.d/ros2-latest.list
++RUN curl -L -s -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/1.1.0/ros2-apt-source_1.1.0.noble_all.deb"
++RUN apt-get install /tmp/ros2-apt-source.deb
++
+ # install ros2 packages
+ RUN apt-get update && apt-get install -y --no-install-recommends \
+     ros-jazzy-desktop-full=0.11.0-1* \
