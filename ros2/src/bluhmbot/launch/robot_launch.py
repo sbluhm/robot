@@ -15,10 +15,8 @@ from nav2_common.launch import RewrittenYaml
 
 def generate_launch_description():
     bringup_dir = get_package_share_directory('bluhmbot')
-    pkg_share = get_package_share_directory('bluhmbot')
-    nav2_bringup_dir = get_package_share_directory('nav2_bringup')
 
-    default_model_path = os.path.join(pkg_share, 'description', 'bluhmbot_description.sdf')
+    default_model_path = os.path.join(bringup_dir, 'description', 'bluhmbot_description.sdf')
 
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
@@ -187,10 +185,10 @@ def generate_launch_description():
 #                'namespace': namespace,
                 'map': map_yaml_file,
 #                'use_sim_time': use_sim_time,
-                'autostart': True,
+                'autostart': 'true',
                 'params_file': params_file,
 #                'use_composition': use_composition,
-                'use_respawn': True,
+                'use_respawn': 'true',
                 'container_name': 'nav2_container',
             }.items(),
         )
