@@ -246,7 +246,7 @@ hardware_interface::return_type bluhmbot ::DiffBotSystemHardware::write(
   bool speed_changed = false;
 
 
-  ss << "Writing commands:";
+//  ss << "Writing commands:";
   for (const auto & [name, descr] : joint_command_interfaces_)
   {
     // Simulate sending commands to the hardware
