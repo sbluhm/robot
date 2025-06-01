@@ -39,7 +39,7 @@ def generate_launch_description():
     )
     declare_map_yaml_cmd = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(bringup_dir, 'maps', 'tb3_sandbox.yaml'),
+        default_value=os.path.join(bringup_dir, 'maps', 'depot.yaml'),
         description='Full path to map yaml file to load'
     )
     declare_params_file_cmd = DeclareLaunchArgument(
@@ -184,10 +184,14 @@ def generate_launch_description():
                 os.path.join(bringup_dir, 'launch', 'localization_launch.py')
             ),
             launch_arguments={
+#                'namespace': namespace,
                 'map': map_yaml_file,
-#                'autostart': True,
+#                'use_sim_time': use_sim_time,
+                'autostart': True,
                 'params_file': params_file,
-#                'use_respawn': True,
+#                'use_composition': use_composition,
+                'use_respawn': True,
+                'container_name': 'nav2_container',
             }.items(),
         )
 
