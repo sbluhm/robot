@@ -32,5 +32,5 @@ for x in range (10,255,10):
     time.sleep(5)
     tick_counter=0
     time.sleep(65)
-    print( f"Power: {int(x/255*100)} - ticks: {tick_counter} -- Speed: {tick_counter/90 / 65}")
+    print( f"In: {x} - Power: {x/255*100} - ticks: {tick_counter} -- Speed: {tick_counter/90 / 65}")
 
