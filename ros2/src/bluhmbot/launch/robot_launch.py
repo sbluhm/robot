@@ -216,15 +216,15 @@ def generate_launch_description():
 
 
     nodes = [
-        status_led,
+#        status_led,
         control_node,
-        imu,
+#        imu,
         robot_state_publisher_node,
         robot_controller_spawner,
         odom_map_tf,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
-        utility_motors,
-        camera,
+#        utility_motors,
+#        camera,
         map_server_node,
         localization_launch,
 #        battery_management,
