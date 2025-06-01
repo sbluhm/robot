@@ -34,21 +34,19 @@ from nav2_common.launch import ReplaceString, RewrittenYaml
 
 def generate_launch_description():
     # Get the launch directory
-    bringup_dir = get_package_share_directory('nav2_bringup')
+    bringup_dir = get_package_share_directory('bluhmbot')
     launch_dir = os.path.join(bringup_dir, 'launch')
 
     # Create the launch configuration variables
     namespace = LaunchConfiguration('namespace')
     use_namespace = LaunchConfiguration('use_namespace')
     slam = LaunchConfiguration('slam')
-    map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
     params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
     use_composition = LaunchConfiguration('use_composition')
     use_respawn = LaunchConfiguration('use_respawn')
     log_level = LaunchConfiguration('log_level')
-    use_localization = LaunchConfiguration('use_localization')
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -96,15 +94,6 @@ def generate_launch_description():
         'slam', default_value='False', description='Whether run a SLAM'
     )
 
-    declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map', default_value='', description='Full path to map yaml file to load'
-    )
-
-    declare_use_localization_cmd = DeclareLaunchArgument(
-        'use_localization', default_value='True',
-        description='Whether to enable localization or not'
-    )
-
     declare_use_sim_time_cmd = DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
@@ -113,7 +102,7 @@ def generate_launch_description():
 
     declare_params_file_cmd = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(bringup_dir, 'params', 'nav2_params.yaml'),
+        default_value=os.path.join(bringup_dir, 'config', 'nav2_params.yaml'),
         description='Full path to the ROS2 parameters file to use for all launched nodes',
     )
 
@@ -157,29 +146,13 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource(
                     os.path.join(launch_dir, 'slam_launch.py')
                 ),
-                condition=IfCondition(PythonExpression([slam, ' and ', use_localization])),
+                condition=IfCondition(PythonExpression([slam])),
                 launch_arguments={
                     'namespace': namespace,
                     'use_sim_time': use_sim_time,
                     'autostart': autostart,
                     'use_respawn': use_respawn,
                     'params_file': params_file,
-                }.items(),
-            ),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(
-                    os.path.join(launch_dir, 'localization_launch.py')
-                ),
-                condition=IfCondition(PythonExpression(['not ', slam, ' and ', use_localization])),
-                launch_arguments={
-                    'namespace': namespace,
-                    'map': map_yaml_file,
-                    'use_sim_time': use_sim_time,
-                    'autostart': autostart,
-                    'params_file': params_file,
-                    'use_composition': use_composition,
-                    'use_respawn': use_respawn,
-                    'container_name': 'nav2_container',
                 }.items(),
             ),
             IncludeLaunchDescription(
@@ -209,14 +182,12 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_use_namespace_cmd)
     ld.add_action(declare_slam_cmd)
-    ld.add_action(declare_map_yaml_cmd)
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_use_composition_cmd)
     ld.add_action(declare_use_respawn_cmd)
     ld.add_action(declare_log_level_cmd)
-    ld.add_action(declare_use_localization_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(bringup_cmd_group)

@@ -80,11 +80,14 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 
 RUN if [[ `uname -m` != "x86_64" ]]; then apt-get install -y --no-install-recommends python3-rpi-lgpio; fi
 RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
+RUN echo 'alias cdb="cd ~/robot/ros2/src/bluhmbot"' >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
+RUN ln -s /root/robot/os/nav2.sh /nav2
+RUN ln -s /root/robot/os/rviz.sh /rviz
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/master/os/pigpio/pigpio-install.sh | bash
 EOF
 
@@ -93,6 +96,7 @@ if [[ `uname -m` == "x86_64" ]]; then
 cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
+    ros-jazzy-nav2-loopback-sim ros-jazzy-nav2-minimal-tb3-sim ros-jazzy-slam-toolbox ros-jazzy-turtlebot3-bringup ros-jazzy-slam-toolbox \
     ros-${ROS_DISTRO}-turtlebot3-gazebo 
 RUN ln -sf /root/robot/os/start-mock.sh /start
 EOF
@@ -101,7 +105,7 @@ fi
 cat >> Dockerfile << EOF
 RUN git clone -b $GIT_CURRENT_BRANCH  https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
 RUN /update
-RUN if [[ `uname -m` == "x86_64" ]]; then mkdir -p  /lib/python3.12/RPi; cp /root/robot/os/RPi/* /lib/python3.12/RPi; fi
+RUN if [[ `uname -m` == "x86_64" ]]; then ln -s /root/robot/os/RPi /lib/python3.12/RPi; fi
 EOF
 
 
