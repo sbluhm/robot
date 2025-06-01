@@ -2,7 +2,8 @@
 ROS_DISTRO=jazzy
 UBUNTU_DISTRO=noble
 SCOPE=$1
-cd "$(dirname "$(readlink -f "$0")")"
+SCRIPT_LOCATION=$(dirname "$(readlink -f "$0")")
+cd ${SCRIPT_LOCATION}
 GIT_CURRENT_BRANCH=$(git branch --show-current)
 
 echo "Preparing ROS Distro $ROS_DISTRO on git branch $GIT_CURRENT_BRANCH"
@@ -59,6 +60,8 @@ else
 fi
 git checkout Dockerfile --quiet
 
+patch -p1 Dockerfile < ${SCRIPT_LOCATION}/os/key.patch
+
 # Dev environment:
 # ros-humble-robot-localization
 
@@ -89,6 +92,7 @@ RUN ln -s /root/robot/os/start.sh /start
 RUN ln -s /root/robot/os/nav2.sh /nav2
 RUN ln -s /root/robot/os/rviz.sh /rviz
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/rpi_pwm/rpi_pwm-install.sh | bash
+RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/opennav_coverage/opennav_coverage-install.sh | bash
 EOF
 
 # Install additional packages on dev machine for navigation simulation
@@ -97,7 +101,8 @@ cat >> Dockerfile << EOF
 RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-jazzy-nav2-loopback-sim ros-jazzy-nav2-minimal-tb3-sim ros-jazzy-slam-toolbox ros-jazzy-turtlebot3-bringup ros-jazzy-slam-toolbox \
-    ros-${ROS_DISTRO}-turtlebot3-gazebo 
+    ros-${ROS_DISTRO}-turtlebot3-gazebo \
+    ros-${ROS_DISTRO}-nav2-minimal-tb3-sim
 RUN ln -sf /root/robot/os/start-mock.sh /start
 EOF
 fi
