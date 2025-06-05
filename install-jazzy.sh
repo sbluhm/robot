@@ -60,7 +60,7 @@ else
 fi
 git checkout Dockerfile --quiet
 
-patch -p1 Dockerfile < ${SCRIPT_LOCATION}/os/key.patch
+#patch -p1 Dockerfile < ${SCRIPT_LOCATION}/os/key.patch
 
 # Dev environment:
 # ros-humble-robot-localization
@@ -92,7 +92,7 @@ RUN ln -s /root/robot/os/start.sh /start
 RUN ln -s /root/robot/os/nav2.sh /nav2
 RUN ln -s /root/robot/os/rviz.sh /rviz
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/pigpio/pigpio-install.sh | bash
-RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/opennav_coverage/opennav_coverage-install.sh | bash
+RUN source "/opt/ros/$ROS_DISTRO/setup.bash"; curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/opennav_coverage/opennav_coverage-install.sh | bash
 EOF
 
 # Install additional packages on dev machine for navigation simulation
@@ -102,7 +102,7 @@ RUN apt-get install -y --no-install-recommends \
     ros-dev-tools \
     ros-jazzy-nav2-loopback-sim ros-jazzy-nav2-minimal-tb3-sim ros-jazzy-slam-toolbox ros-jazzy-turtlebot3-bringup ros-jazzy-slam-toolbox \
     ros-${ROS_DISTRO}-turtlebot3-gazebo \
-    ros-${ROS_DISTRO}-nav2-minimal-tb3-sim
+    ros-${ROS_DISTRO}-nav2-minimal-tb3-sim ros-${ROS_DISTRO}-nav2-bringup
 RUN ln -sf /root/robot/os/start-mock.sh /start
 EOF
 fi
