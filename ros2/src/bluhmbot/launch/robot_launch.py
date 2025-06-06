@@ -177,22 +177,6 @@ def generate_launch_description():
                 ('/image_raw/zstd', '/camera/image_raw/zstd'),
             ])
             
-    localization_launch = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(bringup_dir, 'launch', 'localization_launch.py')
-            ),
-            launch_arguments={
-#                'namespace': namespace,
-                'map': map_yaml_file,
-#                'use_sim_time': use_sim_time,
-                'autostart': 'true',
-                'params_file': params_file,
-#                'use_composition': use_composition,
-                'use_respawn': 'true',
-                'container_name': 'nav2_container',
-            }.items(),
-        )
-
     map_server_node = Node(
         package='nav2_map_server',
         executable='map_server',
@@ -226,7 +210,6 @@ def generate_launch_description():
 #        utility_motors,
 #        camera,
         map_server_node,
-        localization_launch,
 #        battery_management,
     ]
 
