@@ -81,6 +81,11 @@ install(
   DESTINATION share/bluhmbot
 )
 
+# Install Python scripts
+install(PROGRAMS
+  src/initialpose_to_static_tf/initialpose_to_static_tf.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(TARGETS bluhmbot
   EXPORT export_bluhmbot
