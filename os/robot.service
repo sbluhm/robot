@@ -9,9 +9,6 @@ WorkingDirectory=/tmp
 #ExecStart=/root/robot/gamepad.py
 ExecStart=sudo docker run  --net=host --hostname=ros2-$(hostname) --privileged --cidfile /tmp/docker-robot_service.cid ros_docker ros2 launch robot_launcher robot_launch.py
 ExecStop=docker stop $(cat /tmp/docker-robot_service.cid)
-SyslogIdentifier=robot
-StandardOutput=syslog
-StandardError=syslog
 Restart=always
 RestartSec=3
 
