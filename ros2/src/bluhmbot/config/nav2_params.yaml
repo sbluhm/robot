@@ -47,23 +47,31 @@ bt_navigator:
     default_server_timeout: 20
     wait_for_service_timeout: 1000
     action_server_result_timeout: 900.0
-    navigators: ["navigate_to_pose", "navigate_through_poses"]
+    navigators: ["navigate_to_pose", "navigate_through_poses", "navigate_complete_coverage"]
     navigate_to_pose:
       plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
     navigate_through_poses:
       plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
+    navigate_complete_coverage:
+      plugin: "opennav_coverage_navigator/CoverageNavigator"
     # 'default_nav_through_poses_bt_xml' and 'default_nav_to_pose_bt_xml' are use defaults:
     # nav2_bt_navigator/navigate_to_pose_w_replanning_and_recovery.xml
     # nav2_bt_navigator/navigate_through_poses_w_replanning_and_recovery.xml
+    # 'default_coverage_bt_xml' uses defaults:
+    # opennav_coverage_bt/behavior_tree/navigate_w_basic_complete_coverage.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-
+    default_coverage_bt_xml: /root/ros2/opennav_coverage/opennav_coverage_bt/behavior_trees/navigate_w_basic_complete_coverage_nav_to_start.xml
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
     # Built-in plugins are added automatically
     # plugin_lib_names: []
+    plugin_lib_names:
+      - opennav_compute_complete_coverage_action_bt_node
+      - opennav_cancel_complete_coverage_action_bt_node
 
     error_code_names:
       - compute_path_error_code
       - follow_path_error_code
+      - compute_coverage_error_code
 
 controller_server:
   ros__parameters:
@@ -71,7 +79,7 @@ controller_server:
     costmap_update_timeout: 0.30
     min_x_velocity_threshold: 0.027
     min_y_velocity_threshold: 0.5
-    min_theta_velocity_threshold: 0.001
+    min_theta_velocity_threshold: 0.027
     failure_tolerance: 0.3
     progress_checker_plugins: ["progress_checker"]
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
@@ -442,3 +450,15 @@ loopback_simulator:
     map_frame_id: "map"
     scan_frame_id: "base_scan"  # tb4_loopback_simulator.launch.py remaps to 'rplidar_link'
     update_duration: 0.02
+
+coverage_server:
+  ros__parameters:
+    default_headland_width: 0.25
+    robot_width: 0.46
+    operation_width: 0.46
+    min_turning_radius: 0.1
+    linear_curv_change: 200.0
+    coordinates_in_cartesian_frame: true
+    default_allow_overlap: false
+    default_swath_angle_type: "SET_ANGLE"
+    default_swath_angle: 0.0 # We know its aligned for the demo

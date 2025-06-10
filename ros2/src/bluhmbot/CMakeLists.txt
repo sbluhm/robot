@@ -65,7 +65,7 @@ install(
   DESTINATION share/bluhmbot
 )
 install(
-  DIRECTORY bringup/launch  config launch
+  DIRECTORY config launch
   DESTINATION share/bluhmbot
 )
 
@@ -102,7 +102,6 @@ if(BUILD_TESTING)
 
   ament_add_pytest_test(example_2_urdf_xacro test/test_urdf_xacro.py)
   ament_add_pytest_test(view_example_2_launch test/test_view_robot_launch.py)
-  ament_add_pytest_test(run_example_2_launch test/test_diffbot_launch.py)
 endif()
 
 ## EXPORTS

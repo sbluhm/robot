@@ -10,6 +10,7 @@ if [ $? -gt 0 ]; then
     sudo docker run -it --net=host --privileged --env="DISPLAY=$DISPLAY" --volume="${XAUTHORITY}:/root/.Xauthority" --hostname=ros2-$(hostname) ros_docker_${ROS_DISTRO}
   else
     sudo docker run -it --net=host --hostname=ros2-$(hostname) --privileged ros_docker_${ROS_DISTRO}
+    #sudo docker run -it --net=host --hostname=ros2-$(hostname) -v /root/ros2:/root/ros2 --privileged ros_docker_${ROS_DISTRO}
   fi
 else
   echo "Connecting to existing container..."

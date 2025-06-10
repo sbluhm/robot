@@ -138,7 +138,7 @@ public:
     float speed_l = std::abs(static_cast<float>(left)) * RADIUS;
     if( speed_l >= MIN_SPEED ) {
 //        power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-	power = ( A * std::exp(-B * speed_l) + C ) * speed_l *2;
+	power = ( A * std::exp(-B * speed_l) + C ) * speed_l;
 //	power = static_cast<int>( abs(left*RADIUS) / 5 * 1000000   );
     }
     pwm_left.setDutyCycle(power);
@@ -161,7 +161,7 @@ public:
     float speed_r = std::abs(static_cast<float>(right)) * RADIUS;
     if( speed_r >= MIN_SPEED ) {
 //        power = static_cast<int>( round(abs(right * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
-        power = ( A * std::exp(-B * speed_r) + C ) * speed_r *2;
+        power = ( A * std::exp(-B * speed_r) + C ) * speed_r;
 //	power = static_cast<int>( abs(right*RADIUS) / 5 * 1000000   );
     }
     pwm_right.setDutyCycle(power);
