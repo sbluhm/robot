@@ -172,6 +172,7 @@ if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
   chmod a+x robot.py
   chmod a+x gamepad.py
   chmod a+x install.sh
+  ln -s /start /root/robot/start-container.sh
   # this should be a dynamic link
 fi
 
