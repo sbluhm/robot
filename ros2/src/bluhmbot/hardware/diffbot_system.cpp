@@ -39,13 +39,6 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
-  hw_start_sec_ =
-    hardware_interface::stod(info_.hardware_parameters["example_param_hw_start_duration_sec"]);
-  hw_stop_sec_ =
-    hardware_interface::stod(info_.hardware_parameters["example_param_hw_stop_duration_sec"]);
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
-
   for (const hardware_interface::ComponentInfo & joint : info_.joints)
   {
     // DiffBotSystem has exactly two states and one command interface on each joint
@@ -99,15 +92,8 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_init(
 hardware_interface::CallbackReturn DiffBotSystemHardware::on_configure(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(get_logger(), "Configuring ...please wait...");
 
-  for (int i = 0; i < hw_start_sec_; i++)
-  {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_start_sec_ - i);
-  }
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // reset values always when configuring hardware
   for (const auto & [name, descr] : joint_state_interfaces_)
@@ -120,6 +106,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_configure(
   }
   if (motor_driver_.connect() < 0)
   {
+    RCLCPP_ERROR(get_logger(), "motor_driver_.connect() failed!");
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -142,15 +129,7 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_cleanup(
 hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(get_logger(), "Activating ...please wait...");
-
-  for (auto i = 0; i < hw_start_sec_; i++)
-  {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_start_sec_ - i);
-  }
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   // command and state should be equal when starting
   for (const auto & [name, descr] : joint_command_interfaces_)
@@ -159,32 +138,21 @@ hardware_interface::CallbackReturn DiffBotSystemHardware::on_activate(
   }
 
   RCLCPP_INFO(get_logger(), "Successfully activated!");
-
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::CallbackReturn DiffBotSystemHardware::on_deactivate(
   const rclcpp_lifecycle::State & /*previous_state*/)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   RCLCPP_INFO(get_logger(), "Deactivating ...please wait...");
 
-  for (auto i = 0; i < hw_stop_sec_; i++)
-  {
-    rclcpp::sleep_for(std::chrono::seconds(1));
-    RCLCPP_INFO(get_logger(), "%.1f seconds left...", hw_stop_sec_ - i);
-  }
-  // END: This part here is for exemplary purposes - Please do not copy to your production code
-
   RCLCPP_INFO(get_logger(), "Successfully deactivated!");
-
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 hardware_interface::return_type DiffBotSystemHardware::read(
   const rclcpp::Time & /*time*/, const rclcpp::Duration & period)
 {
-  // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
 /*  std::stringstream ss;
   ss << "Reading states:";
   ss << std::fixed << std::setprecision(2);
@@ -197,26 +165,14 @@ hardware_interface::return_type DiffBotSystemHardware::read(
 
       if( name == "left_wheel_joint/position" ) {
 //	ss << std::endl << "Wheel Tick state left: " << wheel_tick_count_l << "Name: " << name;
-        double position = static_cast<double>(wheel_tick_count_l) * 2*M_PI/45;
-        set_state(name, position);
+        double position_l = static_cast<double>(wheel_tick_count_l) * 2*M_PI/45;
+        set_state("left_wheel_joint/position", position_l);
 
-/*
-  velocity = (wheel_l_.pos - pos_prev) / period.seconds();
-
-  double delta_seconds = period.seconds();
-
-  double pos_prev = wheel_l_.pos;
-  wheel_l_.vel = (wheel_l_.pos - pos_prev) / delta_seconds;
-
-  pos_prev = wheel_r_.pos;
-  wheel_r_.vel = (wheel_r_.pos - pos_prev) / delta_seconds;
-
-*/
 
       } else if ( name == "right_wheel_joint/position" ) {
 //	ss << std::endl << "Wheel Tick state right: " << wheel_tick_count_r << "Name: " << name;
-        double position = static_cast<double>(wheel_tick_count_r) * 2*M_PI/45;
-        set_state(name, position);
+        double position_r = static_cast<double>(wheel_tick_count_r) * 2*M_PI/45;
+        set_state("right_wheel_joint/position", position_r);
       }
     
       // Simulate DiffBot wheels's movement as a first-order system
@@ -241,34 +197,16 @@ hardware_interface::return_type bluhmbot ::DiffBotSystemHardware::write(
 {
   // BEGIN: This part here is for exemplary purposes - Please do not copy to your production code
   std::stringstream ss;
-  double motor_value_l = 0;
-  double motor_value_r = 0;
-  bool speed_changed = false;
-
 
 //  ss << "Writing commands:";
-  for (const auto & [name, descr] : joint_command_interfaces_)
-  {
-    // Simulate sending commands to the hardware
-    set_state(name, get_command(name));
-
-    if( name == "left_wheel_joint/velocity"  && motor_value_l != get_command(name) ) {
-	    motor_value_l = get_command(name);
-	    speed_changed  = true;
-    } else if ( name == "right_wheel_joint/velocity" && motor_value_r != get_command(name) ) {
-	    motor_value_r = get_command(name);
-	    speed_changed  = true;
-    }
-    if( speed_changed ) {
-      motor_driver_.set_motor_values(motor_value_l, motor_value_r);
-      speed_changed = false;
-    }
+  double motor_value_l = get_command("left_wheel_joint/velocity");
+  double motor_value_r = get_command("right_wheel_joint/velocity");
+  motor_driver_.set_motor_values(motor_value_l, motor_value_r);
 /*
     ss << std::fixed << std::setprecision(2) << std::endl
        << "\t" << "command " << get_command(name) <<  " for '" << name << "'!";
 */
-  }
-  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
+//  RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 500, "%s", ss.str().c_str());
   // END: This part here is for exemplary purposes - Please do not copy to your production code
 
   return hardware_interface::return_type::OK;

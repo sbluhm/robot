@@ -1,13 +1,13 @@
 # Used Raspi Connections
-01 - 3v3    - lsm6ds3 vcc
+01 - 3v3    - lsm6ds3 vcc gelb
 02 - 5v     - Raspberry Power in orange
-03 - SDA    - lsm6ds3 smbus data
+03 - SDA    - lsm6ds3 smbus data lila
 04 - 5v     - irf3205 blau
-05 - SCL    - lsm6ds3 smbus clock
+05 - SCL    - lsm6ds3 smbus clock blau
 06 - GND    - Raspberry ground gelb
-07 - GPIO4  - 
-08 - GPIO14 - 
-09 - GND    - lsm6ds3 ground
+07 - GPIO4  - right zs_x11 speed pulse weiss
+08 - GPIO14 - left zs_x11 speed pulse lila
+09 - GND    - lsm6ds3 ground grün
 10 - GPIO15 - 
 11 - GPIO17 - 
 12 - GPIO18 - 
@@ -20,8 +20,8 @@
 19 - GPIO10 - irf3205/ZK-BM1 PWM1 FWD grün
 20 - GND    - level shifter gnd schwarz
 21 - GPIO9  - l298n/irf3205 PWM1/ZK-BM1 PWM1 REV gelb 
-22 - GPIO25 - right ZS_x11 brake
-23 - GPIO11 - l298b/irf3205 PWM2/ZK-BM1 PWM2 REV rot
+22 - GPIO25 - right ZS_x11 brake braun
+23 - GPIO11 - 
 24 - GPIO8  - l298n/irf3205 DIR2/ZK-BM1 PWM2 FWD orange
 25 - GND    - irf3205/ZK-BM1 braun
 26 - GPIO7  - l298n/irf3205 DIR1/ZK-BM1 PWM1 FWD grün
@@ -33,9 +33,9 @@
 32 - GPIO12 - right zs_x11 PWM0 speed lila
 33 - GPIO13 - left zs_x11 PWM1 speed weiss
 34 - GND    - left zs_x11 ground schwarz
-35 - GPIO19 - left zs_x11 speed pulse weiss
-36 - GPIO16 - left zs_x11 speed pulse lila
-37 - GPIO26 - right zs_x11 brake lila
+35 - GPIO19 - l298b/irf3205 PWM2/ZK-BM1 PWM2 REV rot
+36 - GPIO16 - left zs_x11 brake lila 
+37 - GPIO26 - 
 38 - GPIO20 - 
 39 - GND    - 
 40 - GPIO21 - 
