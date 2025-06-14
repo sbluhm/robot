@@ -38,22 +38,41 @@ public:
   {
     chip = gpiod_chip_open(CHIP_NAME);
     if (!chip) {
-	std::cerr << "Failed to open GPIO chip\n";
+	std::cerr << "[ERROR] Failed to open GPIO chip: " << CHIP_NAME << "\n";
         return 1;
     }
 
 
     // Configure output lines
+    // LEFT REVERSE
     left_reverse = gpiod_chip_get_line(chip, LEFT_REVERSE);
-    gpiod_line_request_output(left_reverse, "gpio_output", 0);
+    if (!left_reverse || gpiod_line_request_output(left_reverse, "gpio_output", 0) < 0) {
+        std::cerr << "[ERROR] Failed to configure LEFT_REVERSE line\n";
+	return 1;
+    }
+
+    // RIGHT SPEED PULSE
     right_reverse = gpiod_chip_get_line(chip, RIGHT_REVERSE);
-    gpiod_line_request_output(right_reverse, "gpio_output", 1);
+    if (!right_reverse || gpiod_line_request_output(right_reverse, "gpio_output", 1) < 0) {
+	std::cerr << "[ERROR] Failed to configure RIGHT_REVERSE line\n";
+	return 1;
+    }
 
     // Configure input line with rising edge detection
+
+    // LEFT SPEED PULSE
     left_speed_pulse = gpiod_chip_get_line(chip, LEFT_SPEED_PULSE);
-    gpiod_line_request_rising_edge_events(left_speed_pulse, "gpio_interrupt");
+    if (!left_speed_pulse || gpiod_line_request_rising_edge_events(left_speed_pulse, "gpio_interrupt") < 0) {
+	std::cerr << "[ERROR] Failed to configure LEFT_SPEED_PULSE line\n";
+	return 1;
+    }
+
+    // RIGHT SPEED PULSE
     right_speed_pulse = gpiod_chip_get_line(chip, RIGHT_SPEED_PULSE);
-    gpiod_line_request_rising_edge_events(right_speed_pulse, "gpio_interrupt");
+    if (!right_speed_pulse || gpiod_line_request_rising_edge_events(right_speed_pulse, "gpio_interrupt") < 0) {
+	std::cerr << "[ERROR] Failed to configure RIGHT_SPEED_PULSE line\n";
+	return 1;
+    }
 
 // Left wheel
 //    gpioSetMode(26, PI_OUTPUT); // Brake
@@ -66,6 +85,8 @@ public:
     
     tleft = std::thread(&ZS_X11_Driver::leftSpeedPulseMonitor, this);
     tright = std::thread(&ZS_X11_Driver::rightSpeedPulseMonitor, this);
+
+    std::cout << "[INFO] ZS_X11_Driver successfully connected.\n";
 
     return 0;
   }
@@ -101,14 +122,19 @@ public:
     const float C = 39.948085f;
     float power = 0.0f;
 
-    if( left < 0 ) {
-	gpiod_line_set_value(left_reverse, 1);
-	_direction_l = -1;
+    // LEFT MOTOR
+    if (left_reverse && gpiod_line_is_requested(left_reverse)) {
+        if( left < 0 ) {
+            gpiod_line_set_value(left_reverse, 1);
+            _direction_l = -1;
+        } else {
+            gpiod_line_set_value(left_reverse, 0);
+	    _direction_l = 1;
+        }
     } else {
-	gpiod_line_set_value(left_reverse, 0);
-	_direction_l = 1;
+        std::cerr << "[ERROR] left_reverse line is not valid or not requested.\n";
     }
-    power = 0;
+
     float speed_l = std::abs(static_cast<float>(left)) * RADIUS;
     if( speed_l >= MIN_SPEED ) {
 //        power = static_cast<int>(round( abs(left * RADIUS) + MOTOR_SHIFT ) * MOTOR_ROC * 10000 );
@@ -118,13 +144,19 @@ public:
     pwm_left.setDutyCycle(power);
 //    std::cout << "PIN13 PWM: " << PWM_FREQUENCY << " - Input: " << left << " - Power: " << power << " - Result: " << result << std::endl;
 
-    if( right > 0 ) {
-        gpiod_line_set_value(right_reverse, 1);
-        _direction_r = 1;
+    // RIGHT MOTOR
+    if (right_reverse && gpiod_line_is_requested(right_reverse)) {
+        if( right > 0 ) {
+            gpiod_line_set_value(right_reverse, 1);
+            _direction_r = 1;
+        } else {
+            gpiod_line_set_value(right_reverse, 0);
+            _direction_r = -1;
+        }
     } else {
-        gpiod_line_set_value(right_reverse, 0);
-        _direction_r = -1;
+        std::cerr << "[ERROR] right_reverse line is not valid or not requested.\n";
     }
+
     power = 0;
     float speed_r = std::abs(static_cast<float>(right)) * RADIUS;
     if( speed_r >= MIN_SPEED ) {
