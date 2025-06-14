@@ -86,7 +86,7 @@ public:
     tleft = std::thread(&ZS_X11_Driver::leftSpeedPulseMonitor, this);
     tright = std::thread(&ZS_X11_Driver::rightSpeedPulseMonitor, this);
 
-    std::cout << "[INFO] ZS_X11_Driver successfully connected.\n";
+    std::cout << "[INFO] ZS_X11_Driver successfully connected.\n";
 
     return 0;
   }
