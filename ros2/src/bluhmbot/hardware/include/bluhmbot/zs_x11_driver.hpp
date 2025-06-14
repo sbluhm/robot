@@ -14,8 +14,8 @@
 #define CHIP_NAME "gpiochip4"        // Adjust based on your GPIO chip (use `gpiodetect`)
 #define LEFT_REVERSE 6              // GPIO6 as output
 #define RIGHT_REVERSE 5             //
-#define LEFT_SPEED_PULSE 16         // GPIO16 as input
-#define RIGHT_SPEED_PULSE 11        // GPIO11 as input
+#define LEFT_SPEED_PULSE 4         // GPIO16 as input
+#define RIGHT_SPEED_PULSE 14        // GPIO11 as input
 
 #define PWM_FREQUENCY 10000
 
