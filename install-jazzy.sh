@@ -66,7 +66,7 @@ git checkout Dockerfile --quiet
 cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
-    vim \
+    vim libgpiod-dev \
     ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
     ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers ros-${ROS_DISTRO}-ros2-control-cmake \
     v4l-utils \
@@ -88,7 +88,7 @@ RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
 RUN ln -s /root/robot/os/nav2.sh /nav2
 RUN ln -s /root/robot/os/rviz.sh /rviz
-RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/master/os/pigpio/pigpio-install.sh | bash
+RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/rpi_pwm/rpi_pwm-install.sh | bash
 EOF
 
 # Install additional packages on dev machine for navigation simulation
@@ -103,7 +103,7 @@ EOF
 fi
 
 cat >> Dockerfile << EOF
-RUN git clone -b $GIT_CURRENT_BRANCH  https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
+RUN git clone -b ${GIT_CURRENT_BRANCH}  https://github.com/sbluhm/robot /root/robot --quiet && echo $(date)
 RUN /update
 RUN if [[ `uname -m` == "x86_64" ]]; then ln -s /root/robot/os/RPi /lib/python3.12/RPi; fi
 EOF

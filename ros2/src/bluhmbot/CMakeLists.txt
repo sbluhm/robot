@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(bluhmbot LANGUAGES CXX)
 
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /usr/local/src/pigpio/util/ )
-
 find_package(ros2_control_cmake REQUIRED)
 set_compiler_options()
 export_windows_symbols()
@@ -13,7 +11,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   pluginlib
   rclcpp
   rclcpp_lifecycle
-  pigpio
 )
 
 # Specify the required version of ros2_control
@@ -31,8 +28,6 @@ foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
 
-find_library(PIGPIO_LIB pigpio)
-
 ## COMPILE
 add_library(
   bluhmbot
@@ -44,6 +39,9 @@ target_include_directories(bluhmbot PUBLIC
 $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
 $<INSTALL_INTERFACE:include/bluhmbot>
 )
+
+include_directories(/usr/local/src/rpi_pwm)
+
 ament_target_dependencies(
   bluhmbot PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
@@ -51,7 +49,7 @@ ament_target_dependencies(
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
-    ${PIGPIO_LIB}
+    gpiod
 )
 
 # Export hardware plugins
