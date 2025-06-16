@@ -65,7 +65,7 @@ install(
   DESTINATION share/bluhmbot
 )
 install(
-  DIRECTORY bringup/launch  config launch
+  DIRECTORY config launch
   DESTINATION share/bluhmbot
 )
 
