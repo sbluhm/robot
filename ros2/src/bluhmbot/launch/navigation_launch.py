@@ -49,6 +49,7 @@ def generate_launch_description():
         'collision_monitor',
         'bt_navigator',
         'waypoint_follower',
+        'coverage_server'
     ]
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
@@ -236,6 +237,13 @@ def generate_launch_description():
                         name='controller_server',
                         parameters=[configured_params],
                         remappings=remappings + [('cmd_vel', 'cmd_vel_nav')],
+                    ),
+                    ComposableNode(
+                        package='opennav_coverage',
+                        plugin='opennav_coverage::CoverageServer',
+                        name='coverage_server',
+                        parameters=[configured_params],
+                        remappings=remappings
                     ),
                     ComposableNode(
                         package='nav2_smoother',
