@@ -60,7 +60,7 @@ bt_navigator:
     # 'default_coverage_bt_xml' uses defaults:
     # opennav_coverage_bt/behavior_tree/navigate_w_basic_complete_coverage.xml
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
-
+    default_coverage_bt_xml: /root/ros2/opennav_coverage/opennav_coverage_bt/behavior_trees/navigate_w_basic_complete_coverage_nav_to_start.xml
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
     # Built-in plugins are added automatically
     # plugin_lib_names: []

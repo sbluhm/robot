@@ -29,7 +29,7 @@ def is_point_in_polygon(x, y, polygon):
 
 
 
-img = cv.imread("/tmp/house.png")
+img = cv.imread("/root/robot/ros2/src/bluhmbot/maps/house2.png")
 height, width, channels = img.shape
 
 #convert the image to grayscale
