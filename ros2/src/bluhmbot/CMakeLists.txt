@@ -79,6 +79,11 @@ install(
   DESTINATION share/bluhmbot
 )
 
+# Install Python scripts
+install(PROGRAMS
+  src/teleop/teleop.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(TARGETS bluhmbot
   EXPORT export_bluhmbot
