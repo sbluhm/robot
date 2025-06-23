@@ -88,6 +88,8 @@ RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
 RUN ln -s /root/robot/os/nav2.sh /nav2
 RUN ln -s /root/robot/os/rviz.sh /rviz
+RUN ln -s /root/robot/os/joystick.sh /joystick
+RUN ln -s /root/robot/os/keyboard.sh /keyboard
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/rpi_pwm/rpi_pwm-install.sh | bash
 EOF
 

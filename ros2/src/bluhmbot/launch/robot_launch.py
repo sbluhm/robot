@@ -148,6 +148,11 @@ def generate_launch_description():
             executable='status_led',
             name='status_led')
 
+    teleop = Node(
+            package='bluhmbot',
+            executable='teleop.py',
+            name='teleop')
+
     battery_management = Node(
             package='bluhmbot',
             executable='battery_management_node',
@@ -227,6 +232,7 @@ def generate_launch_description():
 #        camera,
         map_server_node,
         localization_launch,
+        teleop,
 #        battery_management,
     ]
 
