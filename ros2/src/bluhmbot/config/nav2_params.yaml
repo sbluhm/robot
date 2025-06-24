@@ -353,7 +353,7 @@ velocity_smoother:
     max_decel: [-2.5, 0.0, -3.2]
     odom_topic: "odom"
     odom_duration: 0.1
-    deadband_velocity: [0.0, 0.0, 0.0]
+    deadband_velocity: [0.02, 0.0, 0.02]
     velocity_timeout: 1.0
     enable_stamped_cmd_vel: true
 
