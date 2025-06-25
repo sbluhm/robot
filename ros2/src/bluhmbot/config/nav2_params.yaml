@@ -346,7 +346,7 @@ velocity_smoother:
   ros__parameters:
     smoothing_frequency: 20.0
     scale_velocities: False
-    feedback: "CLOSED_LOOP"
+    feedback: "OPEN_LOOP"
     max_velocity: [2.5, 0.0, 2.0]
     min_velocity: [-2.5, 0.0, -2.0]
     max_accel: [2.5, 0.0, 3.2]
