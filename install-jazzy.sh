@@ -11,9 +11,18 @@ echo "Preparing ROS Distro $ROS_DISTRO on git branch $GIT_CURRENT_BRANCH"
 git remote update > /dev/null
 git status | grep "Your branch is behind"
 
+# Full installation
+if [ "${SCOPE}" == "full" ]; then
 
-# Only works on 64bit OS (Rasipberry OS 64bit)
-if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
+# Fedora
+if [ `uname -m` == "x86_64" ]; then
+  sudo dnf install docker git
+  sudo systemctl enable docker
+  sudo systemctl start docker
+fi
+
+# Only works on 64bit OS (Raspberry OS 64bit)
+if [ `uname -m` != "x86_64" ]; then
   echo "Update OS"
   sudo apt -y autoremove
   sudo apt-get -y update
@@ -45,6 +54,7 @@ if [ `uname -m` != "x86_64" ] && [ "${SCOPE}" == "full" ]; then
   # Setup Docker container
   echo "Install Git"
   sudo apt-get -y install git
+fi
 fi
 
 echo "Updating Docker Container"
