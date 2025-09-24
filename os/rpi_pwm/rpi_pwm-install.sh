@@ -1,4 +1,4 @@
-set -e
+set -ex
 BRANCH=master
 if [ -n "$1" ]
   then
@@ -8,8 +8,8 @@ fi
 cd /usr/local/src
 git clone https://github.com/berndporr/rpi_pwm.git ||:
 cd rpi_pwm
-curl -O -J -L -s https://github.com/sbluhm/robot/raw/refs/heads/${BRANCH}/os/rpi_pwm/chip.patch
-patch < chip.patch
+git branch bluhmbot dc0d53899cfdfaee84cb2a789d584e985078e4a5
+git switch bluhmbot
 cmake .
 make
 
