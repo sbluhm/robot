@@ -2,7 +2,7 @@
 01 - 3v3    - lsm6ds3 vcc gelb
 02 - 5v     - Raspberry Power in orange
 03 - SDA    - lsm6ds3 smbus data lila
-04 - 5v     - irf3205 blau
+04 - 5v     - 
 05 - SCL    - lsm6ds3 smbus clock blau
 06 - GND    - Raspberry ground gelb
 07 - GPIO4  - 
@@ -17,14 +17,14 @@
 16 - GPIO23 - 
 17 - 3v3    - level shifter vcc braun 
 18 - GPIO24 - 
-19 - GPIO10 - irf3205/ZK-BM1 PWM1 FWD grün
+19 - GPIO10 - ZK-BM1 IN1 FWD (PWM1) grün
 20 - GND    - level shifter gnd schwarz
-21 - GPIO9  - l298n/irf3205 PWM1/ZK-BM1 PWM1 REV gelb 
+21 - GPIO9  - ZK-BM1 IN2 REV (PWM1) gelb 
 22 - GPIO25 - right ZS_x11 brake braun
 23 - GPIO11 - 
-24 - GPIO8  - l298n/irf3205 DIR2/ZK-BM1 PWM2 FWD orange
-25 - GND    - irf3205/ZK-BM1 braun
-26 - GPIO7  - l298n/irf3205 DIR1/ZK-BM1 PWM1 FWD grün
+24 - GPIO8  - ZK-BM1 IN3 FWD (PWM2) orange
+25 - GND    - ZK-BM1 braun
+26 - GPIO7  - 
 27 - GPIO0  - l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
 28 - GPIO1  - l298n/delete? gelb
 29 - GPIO5  - right zs_x11 reverse weiss
@@ -33,7 +33,7 @@
 32 - GPIO12 - right zs_x11 PWM0 speed lila
 33 - GPIO13 - left zs_x11 PWM1 speed weiss
 34 - GND    - left zs_x11 ground schwarz
-35 - GPIO19 - l298b/irf3205 PWM2/ZK-BM1 PWM2 REV rot
+35 - GPIO19 - ZK-BM1 IN4 REV (PWM2) rot
 36 - GPIO16 - left zs_x11 brake lila 
 37 - GPIO26 - left zs_x11 speed pulse lila 
 38 - GPIO20 - right speed pulse weiss
