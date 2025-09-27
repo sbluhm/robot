@@ -64,8 +64,10 @@ git clone https://github.com/osrf/docker_images/ --quiet
 #git submodule update
 if [[ `uname -m` == "x86_64" ]]; then
   cd docker_images/ros/${ROS_DISTRO}/ubuntu/${UBUNTU_DISTRO}/desktop-full
+  touch pinctrl
 else
   cd docker_images/ros/${ROS_DISTRO}/ubuntu/${UBUNTU_DISTRO}/perception
+  cp /usr/bin/pinctrl .
 fi
 git checkout Dockerfile --quiet
 
@@ -101,6 +103,7 @@ RUN ln -s /root/robot/os/rviz.sh /rviz
 RUN ln -s /root/robot/os/joystick.sh /joystick
 RUN ln -s /root/robot/os/keyboard.sh /keyboard
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/rpi_pwm/rpi_pwm-install.sh | bash
+COPY pinctrl /usr/bin/pinctrl
 EOF
 
 # Install additional packages on dev machine for navigation simulation
