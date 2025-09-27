@@ -136,6 +136,18 @@ def generate_launch_description():
         ],
     )
 
+    brush_spawner = Node(
+        package='controller_manager', executable='spawner',
+        arguments=['brush_effort_controller', '--controller-manager', '/controller_manager'],
+        output='screen',
+    )
+
+    cutter_spawner = Node(
+        package='controller_manager', executable='spawner',
+        arguments=['cutter_effort_controller', '--controller-manager', '/controller_manager'],
+        output='screen',
+    )
+
     odom_map_tf = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
@@ -162,11 +174,6 @@ def generate_launch_description():
             package='lsm6ds3',
             executable='lsm6ds3_node',
             name='lsm6ds3_node')
-
-    utility_motors = Node(
-            package='l298n',
-            executable='l298n',
-            name='l298n')
 
     camera = Node(
             package='v4l2_camera',
@@ -226,6 +233,8 @@ def generate_launch_description():
 #        imu,
         robot_state_publisher_node,
         robot_controller_spawner,
+        brush_spawner,
+        cutter_spawner,
         odom_map_tf,
         delay_joint_state_broadcaster_after_robot_controller_spawner,
 #        utility_motors,

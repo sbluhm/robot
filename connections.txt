@@ -6,34 +6,34 @@
 05 - SCL    - lsm6ds3 smbus clock blau
 06 - GND    - Raspberry ground gelb
 07 - GPIO4  - 
-08 - GPIO14 - future GPS RX
+08 - PWM0_CHAN2/GPIO14 - ZK-BM1 IN2 motor a reverse alt0 gelb
 09 - GND    - lsm6ds3 ground grün
-10 - GPIO15 - future GPS TX
+10 - PWM0_CHAN3/GPIO15 - ZK-BM1 IN3 motor b forward alt0 orange
 11 - GPIO17 - 
-12 - GPIO18 - 
+12 - PWM0_CHAN2/GPIO18 - ZK-BM1 IN1 motor a forward alt3 grün
 13 - GPIO27 - status led anode grün
 14 - GND    - status led ground weiss
 15 - GPIO22 - 
 16 - GPIO23 - 
 17 - 3v3    - level shifter vcc braun 
 18 - GPIO24 - 
-19 - GPIO10 - ZK-BM1 IN1 FWD (PWM1) grün
+19 - GPIO10 - 
 20 - GND    - level shifter gnd schwarz
-21 - GPIO9  - ZK-BM1 IN2 REV (PWM1) gelb 
+21 - UART3_RX/GPIO9  - Future GPS RX3 alt2
 22 - GPIO25 - right ZS_x11 brake braun
 23 - GPIO11 - 
-24 - GPIO8  - ZK-BM1 IN3 FWD (PWM2) orange
-25 - GND    - ZK-BM1 braun
+24 - UART3_TX/GPIO8  - Future GPS TX3 alt2
+25 - GND    - ZK-BM1 GND braun
 26 - GPIO7  - 
-27 - GPIO0  - l298n/delete? braun NOT RECOMMENDED!!! used for auto configuration
-28 - GPIO1  - l298n/delete? gelb
+27 - GPIO0  - 
+28 - GPIO1  - 
 29 - GPIO5  - right zs_x11 reverse weiss
 30 - GND    - right zs_x11 ground grau
 31 - GPIO6  - left zs_x11 reverse grau
-32 - GPIO12 - right zs_x11 PWM0 speed lila
-33 - GPIO13 - left zs_x11 PWM1 speed weiss
+32 - PWM0_CHAN0/GPIO12 - right zs_x11 PWM0 speed lila
+33 - PWM0_CHAN1/GPIO13 - left zs_x11 PWM1 speed weiss
 34 - GND    - left zs_x11 ground schwarz
-35 - GPIO19 - ZK-BM1 IN4 REV (PWM2) rot
+35 - PWM0_CHAN3/GPIO19 - ZK-BM1 IN4 reverse alt3 rot
 36 - GPIO16 - left zs_x11 brake lila 
 37 - GPIO26 - left zs_x11 speed pulse lila 
 38 - GPIO20 - right speed pulse weiss

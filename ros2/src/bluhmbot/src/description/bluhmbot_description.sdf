@@ -184,6 +184,46 @@
       <pose relative_to="base_link">${caster_xoff} 0.0 ${-(base_height/2)} 0 0 0</pose>
     </joint>
 
+    <link name="brush_motor_link">
+      <!-- Optional visuals to see something in RViz -->
+      <visual name="brush_motor_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><cylinder radius="0.02" length="0.05"/></geometry>
+        <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
+      </visual>
+    </link>
+
+    <!-- The joint the controller and plugin will operate -->
+    <joint name="brush_motor" type="continuous">
+      <parent>base_link</parent>
+      <child>brush_motor_link</child>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <!-- Limits/dynamics are optional here but nice to have -->
+      <limit effort="10.0" velocity="1000.0"/>
+      <dynamics friction="0.0" damping="0.0"/>
+    </joint>
+
+    <link name="cutter_motor_link">
+      <!-- Optional visuals to see something in RViz -->
+      <visual name="utility_motor2_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><cylinder radius="0.02" length="0.05"/></geometry>
+        <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
+      </visual>
+    </link>
+
+    <!-- The joint the controller and plugin will operate -->
+    <joint name="cutter_motor" type="continuous">
+      <parent>base_link</parent>
+      <child>cutter_motor_link</child>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <!-- Limits/dynamics are optional here but nice to have -->
+      <limit effort="10.0" velocity="1000.0"/>
+      <dynamics friction="0.0" damping="0.0"/>
+    </joint>
+
     <joint name='imu_joint' type='fixed'>
       <parent>base_link</parent>
       <child>imu_link</child>
@@ -428,5 +468,9 @@
 
   <xacro:diffbot_ros2_control
 	  name="DiffBot" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+
+  <xacro:utility_motors_ros2_control
+	  name="UtilityMotors" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+
   </model>
 </sdf>

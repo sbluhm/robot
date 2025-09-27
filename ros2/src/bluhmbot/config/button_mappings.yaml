@@ -1,0 +1,25 @@
+button_mappings:
+  enable_brush:
+    button_index: 11  # Cross button up
+    topic: "/brush_effort_controller/commands"
+    message_type: "std_msgs/msg/Float64MultiArray"
+    message_data: -0.5
+
+  disable_brush:
+    button_index: 12  # Cross button down
+    topic: "/brush_effort_controller/commands"
+    message_type: "std_msgs/msg/Float64MultiArray"
+    message_data: 0.0
+
+  enable_cutter:
+    button_index: 14  # Cross button right
+    topic: "/cutter_effort_controller/commands"
+    message_type: "std_msgs/msg/Float64MultiArray"
+    message_data: 100.0
+
+  disable_cutter:
+    button_index: 13  # Cross button left
+    topic: "/cutter_effort_controller/commands"
+    message_type: "std_msgs/msg/Float64MultiArray"
+    message_data: 0.0
+

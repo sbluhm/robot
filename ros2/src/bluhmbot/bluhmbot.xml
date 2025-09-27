@@ -6,4 +6,13 @@
       The ros2_control DiffBot example using a system hardware interface-type. It uses velocity command and position state interface. The example is the starting point to implement a hardware interface for differential-drive mobile robots.
     </description>
   </class>
+
+  <class name="bluhmbot/UtilityMotorHardware"
+         type="bluhmbot::UtilityMotorHardware"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Utility motor hardware
+    </description>
+  </class>
+
 </library>
