@@ -77,7 +77,7 @@ cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim libgpiod-dev \
-    ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
+    ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy ros-jazzy-teleop-twist-keyboard \
     ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers ros-${ROS_DISTRO}-ros2-control-cmake \
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
