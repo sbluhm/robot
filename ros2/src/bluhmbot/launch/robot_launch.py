@@ -165,6 +165,11 @@ def generate_launch_description():
             executable='teleop.py',
             name='teleop')
 
+    button_mappings = Node(
+            package='bluhmbot',
+            executable='button_mappings.py',
+            name='button_mappings')
+
     battery_management = Node(
             package='bluhmbot',
             executable='battery_management_node',
@@ -242,6 +247,7 @@ def generate_launch_description():
         map_server_node,
         localization_launch,
         teleop,
+        button_mappings,
 #        battery_management,
     ]
 
