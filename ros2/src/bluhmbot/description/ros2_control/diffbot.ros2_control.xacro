@@ -53,7 +53,8 @@
 
       <joint name="${prefix}brush_motor">
         <command_interface name="effort"/>
-        <state_interface name="effort"/>
+	<state_interface name="effort"/>
+	<state_interface name="position"/>
       </joint>
     </ros2_control>
 
@@ -80,7 +81,8 @@
 
       <joint name="${prefix}cutter_motor">
         <command_interface name="effort"/>
-        <state_interface name="effort"/>
+	<state_interface name="effort"/>
+	<state_interface name="position"/>
       </joint>
     </ros2_control>
 
