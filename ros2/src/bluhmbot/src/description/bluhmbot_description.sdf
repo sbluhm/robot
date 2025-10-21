@@ -188,7 +188,7 @@
       <!-- Optional visuals to see something in RViz -->
       <visual name="brush_motor_visual">
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry><cylinder radius="0.02" length="0.05"/></geometry>
+	<geometry><cylinder><radius>0.02</radius><length>0.05</length></cylinder></geometry>
         <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
       </visual>
     </link>
@@ -208,7 +208,7 @@
       <!-- Optional visuals to see something in RViz -->
       <visual name="utility_motor2_visual">
         <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry><cylinder radius="0.02" length="0.05"/></geometry>
+        <geometry><cylinder><radius>0.02</radius><length>0.05</length></cylinder></geometry>
         <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
       </visual>
     </link>
