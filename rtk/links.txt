@@ -1,0 +1,7 @@
+Install RTK:
+https://github.com/Stefal/rtkbase
+
+GPS on ESP32
+https://www.gricad-gitlab.univ-grenoble-alpes.fr/Projets-INFO4/24-25/11/lch29_quectel_rtk/-/blob/main/Scripts/Centipede/Centipederover/rover/rover.ino
+
+

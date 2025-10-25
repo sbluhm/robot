@@ -33,6 +33,7 @@ add_library(
   bluhmbot
   SHARED
   hardware/diffbot_system.cpp
+  hardware/utility_motors.cpp
 )
 target_compile_features(bluhmbot PUBLIC cxx_std_17)
 target_include_directories(bluhmbot PUBLIC
@@ -82,6 +83,7 @@ install(
 # Install Python scripts
 install(PROGRAMS
   src/teleop/teleop.py
+  src/teleop/button_mappings.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

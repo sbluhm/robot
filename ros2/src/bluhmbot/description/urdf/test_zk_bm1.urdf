@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot name="bluhmbot">
+  <link name="base_link"/>
+  <link name="brush_link"/>
+  <link name="cutter_link"/>
+
+  <joint name="brush_motor" type="continuous">
+    <parent link="base_link"/>
+    <child link="brush_link"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="cutter_motor" type="continuous">
+    <parent link="base_link"/>
+    <child link="cutter_link"/>
+    <axis xyz="0 0 -1"/>
+  </joint>
+
+
+  <ros2_control name="brush" type="system">
+    <hardware>
+      <plugin>bluhmbot/UtilityMotorHardware</plugin>
+      <!-- Raspberry Pi PWM sysfs params (adjust to your board setup) -->
+      <param name="pwm_in1">18</param>
+      <param name="pwm_in2">14</param>
+      <param name="frequency">2000</param> <!-- 2 kHz -->
+      <param name="invert_dir">false</param>
+
+      <!-- Effort mapping + simple sim -->
+      <param name="min_effort">0.0</param>
+      <param name="max_effort">0.5</param>
+    </hardware>
+
+    <joint name="brush_motor">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+  <ros2_control name="cutter" type="system">
+    <hardware>
+      <plugin>bluhmbot/UtilityMotorHardware</plugin>
+      <!-- Raspberry Pi PWM sysfs params (adjust to your board setup) -->
+      <param name="pwm_in1">19</param>
+      <param name="pwm_in2">15</param>
+      <param name="frequency">2000</param> <!-- 2 kHz -->
+      <param name="invert_dir">false</param>
+
+      <!-- Effort mapping + simple sim -->
+      <param name="min_effort">0.0</param>
+      <param name="max_effort">100.0</param>
+    </hardware>
+
+    <joint name="cutter_motor">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+</robot>
+

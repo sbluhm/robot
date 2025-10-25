@@ -64,8 +64,10 @@ git clone https://github.com/osrf/docker_images/ --quiet
 #git submodule update
 if [[ `uname -m` == "x86_64" ]]; then
   cd docker_images/ros/${ROS_DISTRO}/ubuntu/${UBUNTU_DISTRO}/desktop-full
+  touch pinctrl
 else
   cd docker_images/ros/${ROS_DISTRO}/ubuntu/${UBUNTU_DISTRO}/perception
+  cp /usr/bin/pinctrl .
 fi
 git checkout Dockerfile --quiet
 
@@ -77,7 +79,7 @@ cat >> Dockerfile << EOF
 SHELL ["/bin/bash", "-c"]
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-recommends \
     vim libgpiod-dev \
-    ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy\
+    ros-${ROS_DISTRO}-joy ros-jazzy-teleop-twist-joy ros-jazzy-teleop-twist-keyboard \
     ros-${ROS_DISTRO}-ros2-control ros-${ROS_DISTRO}-ros2-controllers ros-${ROS_DISTRO}-ros2-control-cmake \
     v4l-utils \
     ros-${ROS_DISTRO}-v4l2-camera \
@@ -101,6 +103,7 @@ RUN ln -s /root/robot/os/rviz.sh /rviz
 RUN ln -s /root/robot/os/joystick.sh /joystick
 RUN ln -s /root/robot/os/keyboard.sh /keyboard
 RUN curl https://raw.githubusercontent.com/sbluhm/robot/refs/heads/${GIT_CURRENT_BRANCH}/os/rpi_pwm/rpi_pwm-install.sh | bash
+COPY pinctrl /usr/bin/pinctrl
 EOF
 
 # Install additional packages on dev machine for navigation simulation

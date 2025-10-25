@@ -72,7 +72,7 @@
     <link name='base_link'>
       <xacro:box_inertia m="${base_mass}" w="${base_width}" d="${base_length}" h="${base_height}"/>
       <visual name="base_link_visual">
-        <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+	<pose>0 0 ${base_height/2} 0 0 0</pose>
         <geometry>
           <box><size>
             ${base_length} ${base_width} ${base_height}
@@ -85,7 +85,7 @@
       </visual>
 
       <collision name="base_link_collision">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <box><size>
             ${base_length} ${base_width} ${base_height}
@@ -182,6 +182,62 @@
       <parent>base_link</parent>
       <child>front_caster</child>
       <pose relative_to="base_link">${caster_xoff} 0.0 ${-(base_height/2)} 0 0 0</pose>
+    </joint>
+
+    <link name="brush_motor_link">
+      <!-- Optional visuals to see something in RViz -->
+      <visual name="brush_motor_visual">
+        <pose>0 0 0 0 0 0</pose>
+	<geometry><cylinder><radius>0.02</radius><length>0.05</length></cylinder></geometry>
+        <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
+      </visual>
+    </link>
+
+    <!-- The joint the controller and plugin will operate -->
+    <joint name="brush_motor" type="continuous">
+      <parent>base_link</parent>
+      <child>brush_motor_link</child>
+      <pose>0 0 0.05 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+      <!-- Limits/dynamics are optional here but nice to have -->
+	<limit>
+	  <effort>10.0</effort>
+	  <velocity>1000.0</velocity>
+	</limit>
+	<dynamics>
+	  <friction>0.0</friction>
+	  <damping>0.0</damping>
+        </dynamics>
+      </axis>
+    </joint>
+
+    <link name="cutter_motor_link">
+      <!-- Optional visuals to see something in RViz -->
+      <visual name="utility_motor2_visual">
+	<pose>0 0 0 0 0 0</pose>
+        <geometry><cylinder><radius>0.02</radius><length>0.05</length></cylinder></geometry>
+        <material name="gray"><color rgba="0.7 0.7 0.7 1.0"/></material>
+      </visual>
+    </link>
+
+    <!-- The joint the controller and plugin will operate -->
+    <joint name="cutter_motor" type="continuous">
+      <parent>base_link</parent>
+      <child>cutter_motor_link</child>
+      <pose>0 0 0.05 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+      <!-- Limits/dynamics are optional here but nice to have -->
+        <limit>
+          <effort>10.0</effort>
+          <velocity>1000.0</velocity>
+        </limit>
+        <dynamics>
+          <friction>0.0</friction>
+          <damping>0.0</damping>
+        </dynamics>
+      </axis>
     </joint>
 
     <joint name='imu_joint' type='fixed'>
@@ -401,15 +457,17 @@
             <near>0.05</near>
             <far>3</far>
           </clip>
+	  <distortion>
+	    <k1>0</k1>
+            <k2>0</k2>
+            <k3>0</k3>
+            <p1>0</p1>
+            <p2>0</p2>
+	  </distortion>
         </camera>
         <baseline>0.2</baseline>
         <pointCloudCutoff>0.5</pointCloudCutoff>
         <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
-        <distortionK1>0</distortionK1>
-        <distortionK2>0</distortionK2>
-        <distortionK3>0</distortionK3>
-        <distortionT1>0</distortionT1>
-        <distortionT2>0</distortionT2>
         <CxPrime>0</CxPrime>
         <Cx>0</Cx>
         <Cy>0</Cy>
@@ -428,5 +486,9 @@
 
   <xacro:diffbot_ros2_control
 	  name="DiffBot" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+
+  <xacro:utility_motors_ros2_control
+	  name="UtilityMotors" prefix="$(arg prefix)" use_mock_hardware="$(arg use_mock_hardware)"/>
+
   </model>
 </sdf>
