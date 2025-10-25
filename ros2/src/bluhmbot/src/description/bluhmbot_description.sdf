@@ -226,7 +226,7 @@
       <parent>base_link</parent>
       <child>cutter_motor_link</child>
       <pose>0 0 0.05 0 0 0</pose>
-      <axis> 
+      <axis>
         <xyz>0 0 1</xyz>
       <!-- Limits/dynamics are optional here but nice to have -->
         <limit>
