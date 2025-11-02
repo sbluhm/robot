@@ -22,6 +22,7 @@ RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'alias cdb="cd ~/robot/ros2/src/bluhmbot"' >> /root/.bashrc
 RUN echo 'source "/opt/ros/jazzy/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
+RUN echo 'test -e /dev/input/js0 && echo "Joystick connected"' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN if [ "$(uname -m)" = "x86_64" ]; then ln -sf /root/robot/os/start-mock.sh /start; else ln -s /root/robot/os/start.sh /start; fi

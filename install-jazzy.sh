@@ -95,6 +95,7 @@ RUN echo "export ROS_DOMAIN_ID=10" >> /root/.bashrc
 RUN echo 'alias cdb="cd ~/robot/ros2/src/bluhmbot"' >> /root/.bashrc
 RUN echo 'source "/opt/ros/$ROS_DISTRO/setup.bash" --' >> /root/.bashrc
 RUN echo 'source "/root/robot/ros2/install/setup.bash" --' >> /root/.bashrc
+RUN echo 'test -e /dev/input/js0 && echo "Joystick connected"' >> /root/.bashrc
 RUN sed -i 's/exec/source "\/root\/robot\/ros2\/install\/setup.bash" --\nexport ROS_DOMAIN_ID=10\nexec/' /ros_entrypoint.sh
 RUN ln -s /root/robot/os/update.sh /update
 RUN ln -s /root/robot/os/start.sh /start
